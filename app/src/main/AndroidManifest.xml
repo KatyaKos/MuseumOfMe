@@ -29,6 +29,10 @@
         <activity
             android:name=".MainActivity"
             android:theme="@style/AppTheme"></activity>
+
+        <activity
+            android:name=".ProfileActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
