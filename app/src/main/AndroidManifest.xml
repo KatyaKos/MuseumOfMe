@@ -60,9 +60,12 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
 
-
         <activity
             android:name=".MoviesActivity"
+            android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".BooksActivity"
             android:theme="@style/AppTheme" />
     </application>
 
