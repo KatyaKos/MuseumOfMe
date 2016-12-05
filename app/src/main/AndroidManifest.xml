@@ -33,10 +33,14 @@
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/AppTheme" />
-
         <activity
             android:name=".ProfileSettingsActivity"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".FriendsActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden" />
     </application>
 
 </manifest>
