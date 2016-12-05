@@ -28,7 +28,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:theme="@style/AppTheme"></activity>
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".ProfileActivity"
@@ -48,6 +48,10 @@
 
         <activity
             android:name=".DiaryActivity"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".AddNoteActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
     </application>
