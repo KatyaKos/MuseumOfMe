@@ -33,6 +33,10 @@
         <activity
             android:name=".ProfileActivity"
             android:theme="@style/AppTheme" />
+
+        <activity
+            android:name=".ProfileSettingsActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>
