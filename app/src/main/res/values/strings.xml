@@ -6,4 +6,11 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Movies and Books Spinner -->
+    <string-array name="spinner_list">
+        <item>Sort by name</item>
+        <item>Sort by rating</item>
+        <item>Sort by date</item>
+    </string-array>
 </resources>
