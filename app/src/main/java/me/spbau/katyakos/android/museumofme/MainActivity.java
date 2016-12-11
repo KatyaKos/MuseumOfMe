@@ -8,13 +8,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-/**
- * Created by KatyaKos on 14.11.2016.
- */
-
 public class MainActivity extends Activity {
-
-    private static final int REQUEST_CHANGE = 0;
 
     private Intent intentMain;
     private Intent intentProfile;
@@ -29,20 +23,44 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        initialization();
+        registerButton(MainActivity.class, R.id.main_button_menu);
+        registerButtonForResult(ProfileActivity.class, R.id.main_button_profile);
+        registerButton(FriendsActivity.class, R.id.main_button_friends);
+        registerButton(DiaryActivity.class, R.id.main_button_diary);
+        registerButton(MapActivity.class, R.id.main_button_map);
+        registerButton(MoviesActivity.class, R.id.main_button_movies);
+        registerButton(BooksActivity.class, R.id.main_button_books);
+
         fieldsInitialization();
 
-        buttonsListener();
+        //buttonsListeners();
     }
 
-    private void initialization() {
-        intentMain = new Intent(getApplicationContext(), MainActivity.class);
-        intentProfile = new Intent(getApplicationContext(), ProfileActivity.class);
-        intentFriends = new Intent(getApplicationContext(), FriendsActivity.class);
-        intentDiary = new Intent(getApplicationContext(), DiaryActivity.class);
-        intentMap = new Intent(getApplicationContext(), MapActivity.class);
-        intentMovies = new Intent(getApplicationContext(), MoviesActivity.class);
-        intentBooks = new Intent(getApplicationContext(), BooksActivity.class);
+    private void registerButton(final Class<?> clazz, int id) {
+        final Intent intent = new Intent(getApplicationContext(), clazz);
+        Button button = (Button) findViewById(id);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                if (clazz.equals(MainActivity.class)) {
+                    finish();
+                }
+                startActivity(intent);
+            }
+        });
+    }
+
+    private void registerButtonForResult(Class<?> clazz, int id) {
+        final Intent intent = new Intent(getApplicationContext(), clazz);
+        Button button = (Button) findViewById(id);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                startActivityForResult(intent, 1);
+            }
+        });
     }
 
     private void fieldsInitialization() {
@@ -50,92 +68,16 @@ public class MainActivity extends Activity {
         TextView userNickname = (TextView) findViewById(R.id.main_user_nickname);
         TextView userName = (TextView) findViewById(R.id.main_user_name);
 
-        int id = getResources().getIdentifier(UserInformation.getUserPhoto(), "drawable", getPackageName());
-        userPhoto.setImageResource(id);
+        int idUserPhoto = getResources().getIdentifier(UserInformation.getUserPhoto(), "drawable", getPackageName());
+        userPhoto.setImageResource(idUserPhoto);
         userNickname.setText(UserInformation.getUserNickname());
         userName.setText(UserInformation.getUserName());
     }
 
-    private void buttonsListener() {
-        Button profileButton = (Button) findViewById(R.id.main_button_profile);
-        Button friendsButton = (Button) findViewById(R.id.main_button_friends);
-        Button diaryButton = (Button) findViewById(R.id.main_button_diary);
-        Button mapButton = (Button) findViewById(R.id.main_button_map);
-        Button moviesButton = (Button) findViewById(R.id.main_button_movies);
-        Button booksButton = (Button) findViewById(R.id.main_button_books);
-        Button menuButton = (Button) findViewById(R.id.main_button_menu);
-
-        menuButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to MainActivity
-                finish();
-                startActivity(intentMain);
-            }
-        });
-
-        profileButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to ProfileActivity
-                startActivityForResult(intentProfile, REQUEST_CHANGE);
-            }
-        });
-
-        friendsButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to FriendsActivity
-                startActivity(intentFriends);
-            }
-        });
-
-        diaryButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to DiaryActivity
-                startActivity(intentDiary);
-            }
-        });
-
-        mapButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to MapActivity
-                startActivity(intentMap);
-            }
-        });
-
-        moviesButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to MoviesActivity
-                startActivity(intentMovies);
-            }
-        });
-
-        booksButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Go to BooksActivity
-                startActivity(intentBooks);
-            }
-        });
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_CHANGE) {
-            if (resultCode == RESULT_OK) {
-                fieldsInitialization();
-            }
+        if (resultCode == RESULT_OK) {
+            fieldsInitialization();
         }
     }
 }

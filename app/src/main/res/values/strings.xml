@@ -1,17 +1,26 @@
 <resources>
     <string name="app_name">Museum Of Me</string>
     <string name="app_logo">MOM logo</string>
+    <string name="home">Home</string>
+    <string name="user_default_photo">User default photo</string>
 
     <!-- Strings related to login and signup-->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-
     <string name="login_email">Email</string>
     <string name="login_password">Password</string>
     <string name="login_signIn">Sign in</string>
     <string name="login_signUp">No account yet? Create one</string>
+
+    <!-- Strings related to Main-->
+    <string name="main_profile">Profile</string>
+    <string name="main_friends">Friends</string>
+    <string name="main_diary">Diary</string>
+    <string name="main_map">Map</string>
+    <string name="main_movies">Movies\nand\nSeries</string>
+    <string name="main_books">Books\nand\ncomics</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">
