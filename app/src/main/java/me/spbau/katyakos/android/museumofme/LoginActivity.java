@@ -1,6 +1,5 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +11,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import static android.util.Patterns.EMAIL_ADDRESS;
 
 /**
  * A login screen that offers login via email/password.
@@ -26,29 +30,31 @@ public class LoginActivity extends AppCompatActivity {
             "foo@example.com:hello", "bar@example.com:world"
     };
 
-    private static final int REQUEST_SIGNUP = 0;
-
-    // UI references.
-    private EditText emailText;
-    private EditText passwordText;
-    private Button loginButton;
-    private TextView signupLink;
+    @InjectView(R.id.login_email)
+    EditText emailText;
+    @InjectView(R.id.login_password)
+    EditText passwordText;
+    @InjectView(R.id.login_link_signup)
+    TextView signupLink;
+    @InjectView(R.id.login_button)
+    Button loginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        ButterKnife.inject(this);
 
-        emailText = (EditText) findViewById(R.id.login_email);
-        passwordText = (EditText) findViewById(R.id.login_password);
-        signupLink = (TextView) findViewById(R.id.login_link_signup);
-        loginButton = (Button) findViewById(R.id.login_button);
+        buttonsListener();
 
+    }
+
+    private void buttonsListener() {
         passwordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    login();
+                    loginAttempt();
                     return true;
                 }
                 return false;
@@ -58,7 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                login();
+                loginAttempt();
             }
         });
 
@@ -68,56 +74,73 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Start the SignupActivity
                 Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
+                startActivityForResult(intent, 1);
             }
         });
-
     }
 
 
-    public void login() {
+    private void loginAttempt() {
+        loginAttemptUI();
+        loginAttemptLogic();
+    }
 
-        if (!validate()) {
+    private void loginAttemptUI() {
+        int validateResult = validate();
+        if (validateResult > 0) {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
             loginButton.setEnabled(true);
+
+            if (validateResult == 1) {
+                emailText.setError("enter a valid email address");
+                emailText.requestFocus();
+            } else {
+                passwordText.setError("between 4 and 10 alphanumeric characters");
+                passwordText.requestFocus();
+            }
+
             return;
         }
 
         loginButton.setEnabled(false);
+    }
 
-        final ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this, R.style.AppTheme);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setMessage("Authenticating...");
-        progressDialog.show();
+    private void loginAttemptLogic() {
+        String email = getStringTextView(emailText);
+        String password = getStringTextView(passwordText);
 
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        // TODO: Implement your own authentication logic here.
+        // TODO: Implement authentication logic here.
 
         if (checkEmailPassword(email, password)) {
-            progressDialog.cancel();
-            this.finish();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-            startActivity(intent);
+            startMainActivity();
         } else {
-            progressDialog.cancel();
             passwordText.setError(getString(R.string.error_incorrect_password));
             passwordText.requestFocus();
         }
     }
 
+    private int validate() {
+        int isValid = 0;
+
+        String email = getStringTextView(emailText);
+        String password = getStringTextView(passwordText);
+
+        if (email.isEmpty() || !EMAIL_ADDRESS.matcher(email).matches()) {
+            isValid = 1;
+        }
+
+        if (password.length() < 4 || password.length() > 10) {
+            isValid = 2;
+        }
+        return isValid;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-
-                // TODO: Implement successful signup logic here
-                this.finish();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
+        if (resultCode == RESULT_OK) {
+            // TODO: Implement successful signup logic here
+            startMainActivity();
         }
     }
 
@@ -138,29 +161,14 @@ public class LoginActivity extends AppCompatActivity {
         moveTaskToBack(true);
     }
 
-    private boolean validate() {
-        boolean valid = true;
+    private void startMainActivity() {
+        this.finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+    }
 
-        String email = emailText.getText().toString();
-        String password = passwordText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            emailText.setError("enter a valid email address");
-            emailText.requestFocus();
-            valid = false;
-        } else {
-            emailText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
-            passwordText.requestFocus();
-            valid = false;
-        } else {
-            passwordText.setError(null);
-        }
-
-        return valid;
+    private String getStringTextView(TextView textView) {
+        return textView.getText().toString();
     }
 
 }

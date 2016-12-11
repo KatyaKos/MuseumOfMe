@@ -12,7 +12,8 @@
         android:layout_width="wrap_content"
         android:layout_height="70dp"
         android:layout_marginBottom="25dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_logo" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
@@ -22,8 +23,8 @@
             android:id="@+id/login_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email"
-            android:inputType="textEmailAddress" />
+            android:hint="@string/login_email"
+            android:inputType="textEmailAddress|textNoSuggestions" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -35,11 +36,11 @@
             android:id="@+id/login_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Password"
+            android:hint="@string/login_password"
             android:imeActionId="@+id/login"
             android:imeActionLabel="Sign in"
             android:imeOptions="actionUnspecified"
-            android:inputType="textPassword" />
+            android:inputType="textPassword|textNoSuggestions" />
 
     </android.support.design.widget.TextInputLayout>
 
@@ -49,7 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Sign in"
+        android:text="@string/login_signIn"
         android:textStyle="bold" />
 
     <TextView
@@ -57,8 +58,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:text="No account yet? Create one"
+        android:text="@string/login_signUp"
         android:gravity="center"
-        android:textSize="16dip" />
+        android:textSize="16sp" />
 
 </LinearLayout>
