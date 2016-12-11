@@ -81,11 +81,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
     private void loginAttempt() {
-        loginAttemptUI();
+        if (loginAttemptUI() == 0) {
+            return;
+        }
         loginAttemptLogic();
     }
 
-    private void loginAttemptUI() {
+    private int loginAttemptUI() {
         int validateResult = validate();
         if (validateResult > 0) {
             Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
@@ -99,10 +101,11 @@ public class LoginActivity extends AppCompatActivity {
                 passwordText.requestFocus();
             }
 
-            return;
+            return 0;
         }
 
         loginButton.setEnabled(false);
+        return 1;
     }
 
     private void loginAttemptLogic() {
