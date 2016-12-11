@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/user_header_default">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/user_header_default">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp">
+
+            <Button
+                android:text="Menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/diary_button_menu"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+
+            <ImageView
+                android:id="@+id/diary_user_photo"
+                android:src="@drawable/user_photo_default"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_below="@+id/diary_button_menu"
+                android:layout_marginBottom="15dp" />
+
+            <TextView
+                android:id="@+id/diary_user_nickname"
+                android:text="User Nickname"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/diary_user_photo"
+                android:layout_marginTop="30dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/diary_user_photo" />
+
+            <TextView
+                android:id="@+id/diary_user_name"
+                android:text="User Name"
+                android:textSize="20sp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/diary_user_nickname"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="15dp"
+                android:layout_toRightOf="@+id/diary_user_photo" />
+
+
+            <Button
+                android:text="Add new"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/diary_button_add"
+                android:layout_marginBottom="20dp"
+                android:layout_below="@+id/diary_user_photo" />
+
+            <EditText
+                android:id="@+id/diary_search_field"
+                android:hint="Enter tag:"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/diary_button_add"
+                android:layout_toRightOf="@id/diary_button_add"
+                android:layout_marginTop="15dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="25dp"
+                android:textSize="17sp"
+                android:background="#fff"
+                android:clickable="true" />
+
+            <LinearLayout
+                android:id="@+id/diary_note_list"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/diary_button_add">
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>
