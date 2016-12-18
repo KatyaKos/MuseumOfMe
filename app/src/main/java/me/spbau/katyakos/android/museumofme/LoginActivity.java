@@ -11,15 +11,6 @@ import android.widget.TextView;
 
 public class LoginActivity extends AbstractLoginActivity {
 
-    /*public LoginActivity() {
-        emailText = (EditText) findViewById(R.id.login_email);
-        passwordText = (EditText) findViewById(R.id.login_password);
-        link = (TextView) findViewById(R.id.login_link_signup);
-        button = (Button) findViewById(R.id.login_button);
-        activityId = R.layout.activity_login;
-        onVerificationFailMessage = "Login failed";
-    }*/
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_login;
