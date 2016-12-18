@@ -14,19 +14,20 @@ public class SignupActivity extends AbstractLoginActivity {
     @InjectView(R.id.signup_input_name)
     EditText nameText;
 
-    public SignupActivity() {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        activityId = R.layout.activity_signup;
+        super.onCreate(savedInstanceState);
+        ButterKnife.inject(this);
+    }
+
+    @Override
+    void fieldsInitialization() {
         emailText = (EditText) findViewById(R.id.signup_input_email);
         passwordText = (EditText) findViewById(R.id.signup_input_password);
         link = (TextView) findViewById(R.id.signup_link_login);
         button = (Button) findViewById(R.id.signup_button);
-        activityId = R.layout.activity_signup;
         onVerificationFailMessage = "Signing up failed";
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ButterKnife.inject(this);
     }
 
     @Override

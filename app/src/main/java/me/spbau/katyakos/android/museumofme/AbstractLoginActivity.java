@@ -27,13 +27,12 @@ abstract class AbstractLoginActivity extends AppCompatActivity {
             new Pair<>("foo@example.com", "hello"), new Pair<>("bar@example.com", "world")
     ));
 
-    public AbstractLoginActivity() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activityId);
+
+        fieldsInitialization();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,6 +48,8 @@ abstract class AbstractLoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    abstract void fieldsInitialization();
 
     abstract void linkClick();
 
