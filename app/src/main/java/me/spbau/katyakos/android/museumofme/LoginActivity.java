@@ -70,6 +70,13 @@ public class LoginActivity extends AbstractLoginActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            onVerificationSuccess();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         moveTaskToBack(true);
     }
