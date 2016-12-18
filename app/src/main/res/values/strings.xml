@@ -29,6 +29,13 @@
     <string name="profile_about">About me:\n</string>
     <string name="profile_header">User profile header</string>
     <string name="profile_photo">User profile photo</string>
+    <string name="profile_sets_back">Back to profile</string>
+    <string name="profile_sets_nickname">Nickname:</string>
+    <string name="profile_sets_bio">Bio:</string>
+    <string name="profile_sets_name">Name:</string>
+    <string name="profile_sets_birth">Date of birth:</string>
+    <string name="profile_sets_about">About me:</string>
+    <string name="profile_sets_save">Save changes</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">

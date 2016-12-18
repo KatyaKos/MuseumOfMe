@@ -9,10 +9,10 @@
         android:id="@+id/profile_sets_back_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:text="Back to profile"
+        android:layout_gravity="end"
+        android:text="@string/profile_sets_back"
         android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="15dp"
         android:layout_marginBottom="20dp" />
 
     <ScrollView
@@ -33,7 +33,7 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="10dp"
-                android:hint="Nickname: " />
+                android:hint="@string/profile_sets_nickname" />
 
             <EditText
                 android:id="@+id/profile_sets_bio_field"
@@ -43,7 +43,7 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="10dp"
-                android:hint="Bio: " />
+                android:hint="@string/profile_sets_bio" />
 
 
             <EditText
@@ -54,7 +54,7 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="10dp"
-                android:hint="Name: " />
+                android:hint="@string/profile_sets_name" />
 
             <EditText
                 android:id="@+id/profile_sets_birth_field"
@@ -64,7 +64,7 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="10dp"
-                android:hint="Date of birth: " />
+                android:hint="@string/profile_sets_birth" />
 
             <EditText
                 android:id="@+id/profile_sets_about_field"
@@ -74,11 +74,11 @@
                 android:background="#fff"
                 android:clickable="true"
                 android:padding="10dp"
-                android:hint="About me: " />
+                android:hint="@string/profile_sets_about" />
 
             <Button
                 android:id="@+id/profile_sets_save_button"
-                android:text="Save changes"
+                android:text="@string/profile_sets_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
