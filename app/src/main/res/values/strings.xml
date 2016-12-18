@@ -4,7 +4,7 @@
     <string name="home">Home</string>
     <string name="user_default_photo">User default photo</string>
 
-    <!-- Strings related to login and signup-->
+    <!-- Strings related to Login and Signup-->
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
@@ -21,6 +21,14 @@
     <string name="main_map">Map</string>
     <string name="main_movies">Movies\nand\nSeries</string>
     <string name="main_books">Books\nand\ncomics</string>
+
+    <!-- Strings related to Profile and ProfileSettings-->
+    <string name="profile_settings">Settings</string>
+    <string name="profile_name">Name:</string>
+    <string name="profile_age">Age:</string>
+    <string name="profile_about">About me:\n</string>
+    <string name="profile_header">User profile header</string>
+    <string name="profile_photo">User profile photo</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">
