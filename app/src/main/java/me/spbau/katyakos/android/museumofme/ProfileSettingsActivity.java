@@ -57,11 +57,11 @@ public class ProfileSettingsActivity extends Activity {
                     Toast.makeText(getBaseContext(), "Change nickname", Toast.LENGTH_LONG).show();
                     return;
                 }
-                UserInformation.setUserNickname(nicknameText.getText().toString());
-                UserInformation.setUserBio(bioText.getText().toString());
-                UserInformation.setUserName(nameText.getText().toString());
-                UserInformation.setUserBirth(birthText.getText().toString());
-                UserInformation.setUserAbout(aboutText.getText().toString());
+                UserInformation.setUserNickname(getStringEditText(nicknameText));
+                UserInformation.setUserBio(getStringEditText(bioText));
+                UserInformation.setUserName(getStringEditText(nameText));
+                UserInformation.setUserBirth(getStringEditText(birthText));
+                UserInformation.setUserAbout(getStringEditText(aboutText));
                 setResult(RESULT_OK);
                 finish();
             }
@@ -69,26 +69,28 @@ public class ProfileSettingsActivity extends Activity {
     }
 
     private boolean validate() {
-        String nickname = nicknameText.getText().toString();
+        String nickname = getStringEditText(nicknameText);
         if (nickname.length() < 3) {
             nicknameText.setError("nickname is too short");
             return false;
         } else if (nickname.contains("@")) {
-            nicknameText.setError("don't use \"@\" symbols");
+            nicknameText.setError("avoid using \"@\" symbols");
             return false;
         } else if (nickname.contains(" ")) {
-            nicknameText.setError("don't use spaces");
+            nicknameText.setError("avoid using spaces");
             return false;
         } else {
             nickname = "@" + nickname;
             if (!nickname.equals(UserInformation.getUserNickname()) && AllUsersInformation.usersContain(nickname)) {
-                nicknameText.setError("nickname is busy");
+                nicknameText.setError("nickname is taken");
                 return false;
-            } else {
-                nicknameText.setError(null);
             }
         }
 
         return true;
+    }
+
+    protected String getStringEditText(EditText textView) {
+        return textView.getText().toString();
     }
 }
