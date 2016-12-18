@@ -23,27 +23,32 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        registerButton(MainActivity.class, R.id.main_button_menu);
-        registerButtonForResult(ProfileActivity.class, R.id.main_button_profile);
-        registerButton(FriendsActivity.class, R.id.main_button_friends);
-        registerButton(DiaryActivity.class, R.id.main_button_diary);
-        registerButton(MapActivity.class, R.id.main_button_map);
-        registerButton(MoviesActivity.class, R.id.main_button_movies);
-        registerButton(BooksActivity.class, R.id.main_button_books);
+        intentMain = new Intent(getApplicationContext(), MainActivity.class);
+        intentProfile = new Intent(getApplicationContext(), ProfileActivity.class);
+        intentFriends = new Intent(getApplicationContext(), FriendsActivity.class);
+        intentDiary = new Intent(getApplicationContext(), DiaryActivity.class);
+        intentMap = new Intent(getApplicationContext(), MapActivity.class);
+        intentMovies = new Intent(getApplicationContext(), MoviesActivity.class);
+        intentBooks = new Intent(getApplicationContext(), BooksActivity.class);
+
+        registerButton(intentMain, R.id.main_button_menu);
+        registerButtonForResult(intentProfile, R.id.main_button_profile);
+        registerButton(intentFriends, R.id.main_button_friends);
+        registerButton(intentDiary, R.id.main_button_diary);
+        registerButton(intentMap, R.id.main_button_map);
+        registerButton(intentMovies, R.id.main_button_movies);
+        registerButton(intentBooks, R.id.main_button_books);
 
         fieldsInitialization();
-
-        //buttonsListeners();
     }
 
-    private void registerButton(final Class<?> clazz, int id) {
-        final Intent intent = new Intent(getApplicationContext(), clazz);
+    private void registerButton(final Intent intent, int id) {
         Button button = (Button) findViewById(id);
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (clazz.equals(MainActivity.class)) {
+                if (intent.equals(intentMain)) {
                     finish();
                 }
                 startActivity(intent);
@@ -51,8 +56,7 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void registerButtonForResult(Class<?> clazz, int id) {
-        final Intent intent = new Intent(getApplicationContext(), clazz);
+    private void registerButtonForResult(final Intent intent, int id) {
         Button button = (Button) findViewById(id);
         button.setOnClickListener(new View.OnClickListener() {
 
