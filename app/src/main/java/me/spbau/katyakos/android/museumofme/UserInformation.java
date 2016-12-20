@@ -85,14 +85,6 @@ public class UserInformation {
         return books;
     }
 
-    boolean setUserNickname(String nickname) {
-        if (nickname.length() < 3 || nickname.contains("@") || nickname.contains(" ")) {
-            return false;
-        }
-        userNickname = "@" + nickname;
-        return true;
-    }
-
     boolean setUserPhoto(String photo) {
         userPhoto = photo;
         return true;
