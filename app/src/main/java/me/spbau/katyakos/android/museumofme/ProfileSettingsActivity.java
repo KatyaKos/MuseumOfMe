@@ -1,93 +1,52 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ProfileSettingsActivity extends Activity {
+public class ProfileSettingsActivity extends AbstractProfileActivity {
 
-    @InjectView(R.id.profile_sets_back_button)
-    Button backButton;
     @InjectView(R.id.profile_sets_save_button)
     Button saveButton;
-
-    @InjectView(R.id.profile_sets_nickname_field)
-    EditText nicknameText;
-    @InjectView(R.id.profile_sets_bio_field)
-    EditText bioText;
-
-    @InjectView(R.id.profile_sets_name_field)
-    EditText nameText;
-    @InjectView(R.id.profile_sets_birth_field)
-    EditText birthText;
-    @InjectView(R.id.profile_sets_about_field)
-    EditText aboutText;
+    @InjectView(R.id.profile_sets_change_photo)
+    Button changePhoto;
+    @InjectView(R.id.profile_sets_change_header)
+    Button changeHeader;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        activityId = R.layout.activity_profile_settings;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_settings);
         ButterKnife.inject(this);
-
-        nicknameText.setText(UserInformation.getUserNickname().substring(1));
-        bioText.setText(UserInformation.getUserBio());
-        nameText.setText(UserInformation.getUserName());
-        birthText.setText(UserInformation.getUserBirth());
-        aboutText.setText(UserInformation.getUserAbout());
-
-        backButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (!validate()) {
-                    Toast.makeText(getBaseContext(), "Change nickname", Toast.LENGTH_LONG).show();
-                    return;
-                }
-                UserInformation.setUserNickname(getStringEditText(nicknameText));
-                UserInformation.setUserBio(getStringEditText(bioText));
-                UserInformation.setUserName(getStringEditText(nameText));
-                UserInformation.setUserBirth(getStringEditText(birthText));
-                UserInformation.setUserAbout(getStringEditText(aboutText));
+                user.setUserBio(getStringEditText(userBio));
+                user.setUserName(getStringEditText(nameField));
+                user.setUserBirth(getStringEditText(birthField));
+                user.setUserAbout(getStringEditText(userAbout));
                 setResult(RESULT_OK);
                 finish();
             }
         });
     }
 
-    private boolean validate() {
-        String nickname = getStringEditText(nicknameText);
-        if (nickname.length() < 3) {
-            nicknameText.setError("nickname is too short");
-            return false;
-        } else if (nickname.contains("@")) {
-            nicknameText.setError("avoid using \"@\" symbols");
-            return false;
-        } else if (nickname.contains(" ")) {
-            nicknameText.setError("avoid using spaces");
-            return false;
-        } else {
-            nickname = "@" + nickname;
-            if (!nickname.equals(UserInformation.getUserNickname()) && AllUsersInformation.usersContain(nickname)) {
-                nicknameText.setError("nickname is taken");
-                return false;
-            }
-        }
-
-        return true;
+    @Override
+    void fieldsInitialization() {
+        backButton = (Button) findViewById(R.id.profile_sets_back_button);
+        headerImage = (ImageView) findViewById(R.id.profile_sets_header);
+        profileImage = (ImageView) findViewById(R.id.profile_sets_photo);
+        userBio = (EditText) findViewById(R.id.profile_sets_bio_field);
+        nameField = (EditText) findViewById(R.id.profile_sets_name_field);
+        birthField = (EditText) findViewById(R.id.profile_sets_birth_field);
+        userAbout = (EditText) findViewById(R.id.profile_sets_about_field);
     }
 
     protected String getStringEditText(EditText textView) {

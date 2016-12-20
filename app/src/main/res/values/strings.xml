@@ -32,6 +32,8 @@
     <string name="profile_sets_birth">Date of birth:</string>
     <string name="profile_sets_about">About me:</string>
     <string name="profile_sets_save">Save changes</string>
+    <string name="profile_sets_change_photo">Change photo</string>
+    <string name="profile_sets_change_header">Change header</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">

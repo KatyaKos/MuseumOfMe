@@ -1,78 +1,54 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class ProfileActivity extends Activity {
+public class ProfileActivity extends AbstractProfileActivity {
 
     @InjectView(R.id.profile_button_sets)
     Button setsButton;
-    @InjectView(R.id.profile_button_menu)
-    Button menuButton;
-
-    @InjectView(R.id.profile_header)
-    ImageView headerImage;
-    @InjectView(R.id.profile_photo)
-    ImageView profileImage;
     @InjectView(R.id.profile_user_nickname)
-    TextView userNickname;
-    @InjectView(R.id.profile_user_bio)
-    TextView userBio;
+    EditText userNickname;
 
-    @InjectView(R.id.profile_name_field)
-    TextView nameField;
-    @InjectView(R.id.profile_age_field)
-    TextView birthField;
-    @InjectView(R.id.profile_about_field)
-    TextView userAbout;
-
+    @Override
     public void onCreate(Bundle savedInstanceState) {
+        activityId = R.layout.activity_profile;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
         ButterKnife.inject(this);
-
-        fieldsInitialization();
-
-        menuButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
 
         setsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getApplicationContext(), ProfileSettingsActivity.class);
+                intent.putExtra("userId", userId);
                 startActivityForResult(intent, 1);
             }
         });
     }
 
-    private void fieldsInitialization() {
-        registerImage(headerImage, UserInformation.getUserHeader());
-        registerImage(profileImage, UserInformation.getUserPhoto());
-
-        userNickname.setText(UserInformation.getUserNickname());
-        userBio.setText(UserInformation.getUserBio());
-        nameField.setText(UserInformation.getUserName());
-        birthField.setText(UserInformation.getUserBirth());
-        userAbout.setText(UserInformation.getUserAbout());
+    @Override
+    void fieldsInitialization() {
+        backButton = (Button) findViewById(R.id.profile_button_menu);
+        headerImage = (ImageView) findViewById(R.id.profile_header);
+        profileImage = (ImageView) findViewById(R.id.profile_photo);
+        userBio = (EditText) findViewById(R.id.profile_user_bio);
+        nameField = (EditText) findViewById(R.id.profile_name_field);
+        birthField = (EditText) findViewById(R.id.profile_age_field);
+        userAbout = (EditText) findViewById(R.id.profile_about_field);
     }
 
-    private void registerImage(ImageView image, String name) {
-        int imageId = getResources().getIdentifier(name, "drawable", getPackageName());
-        image.setImageResource(imageId);
+    @Override
+    protected void fieldsRegistration() {
+        super.fieldsRegistration();
+        userNickname.setText(user.getUserNickname());
     }
 
     @Override
