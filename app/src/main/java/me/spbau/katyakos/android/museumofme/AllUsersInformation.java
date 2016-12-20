@@ -38,27 +38,32 @@ class AllUsersInformation {
     }
 
     static Integer getIdByEmail(String email) {
-        return credentials.get(email).second;
+        return getCredential(email).second;
     }
 
     static String getNicknameById(Integer id) {
-        return usersListById.get(id).getUserNickname();
+        return getUserById(id).getUserNickname();
     }
 
     static boolean containsByNickname(String nickname) {
         return usersListByNickname.containsKey(nickname);
     }
 
+    static HashMap<String, String> getUserSimpleInformation(Integer id) {
+        UserInformation user = getUserById(id);
+        HashMap<String, String> userSimpleInformation = new HashMap<>();
+        userSimpleInformation.put("nickname", user.getUserNickname());
+        userSimpleInformation.put("name", user.getUserName());
+        userSimpleInformation.put("photo", user.getUserPhoto());
+        return userSimpleInformation;
+    }
+
     static boolean containsByEmail(String email) {
         return credentials.containsKey(email);
     }
 
-    public static UserInformation findUserByNickname(String nickname) {
-        return usersListByNickname.get(nickname);
-    }
-
     static boolean checkEmailPasswordPair(String email, String password) {
-        return credentials.containsKey(email) && credentials.get(email).first.equals(password);
+        return credentials.containsKey(email) && getCredential(email).first.equals(password);
     }
 
     static void addUser(String userNickname, String userEmail, String userPassword) {
@@ -70,7 +75,7 @@ class AllUsersInformation {
     }
 
     static boolean changeUserName(Integer userId, String newName) {
-        UserInformation user = usersListById.get(userId);
+        UserInformation user = getUserById(userId);
         String userNickname = user.getUserNickname();
         if (!user.setUserName(newName)) {
             return false;
@@ -78,5 +83,13 @@ class AllUsersInformation {
         usersListByNickname.put(userNickname, user);
         usersListById.put(userId, user);
         return true;
+    }
+
+    private static UserInformation getUserById(Integer id) {
+        return usersListById.get(id);
+    }
+
+    private static Pair<String, Integer> getCredential(String email) {
+        return credentials.get(email);
     }
 }

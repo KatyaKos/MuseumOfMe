@@ -48,6 +48,7 @@ public class LoginActivity extends AbstractLoginActivity {
         Integer userId = AllUsersInformation.getIdByEmail(email);
         this.finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("userId", userId);
         startActivity(intent);
     }
 

@@ -8,28 +8,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 public class MainActivity extends Activity {
 
-    private Intent intentMain;
-    private Intent intentProfile;
-    private Intent intentFriends;
-    private Intent intentDiary;
-    private Intent intentMap;
-    private Intent intentMovies;
-    private Intent intentBooks;
+    private Intent intentMain = registerIntent(MainActivity.class);
+    private Intent intentProfile = registerIntent(ProfileActivity.class);
+    private Intent intentFriends = registerIntent(FriendsActivity.class);
+    private Intent intentDiary = registerIntent(DiaryActivity.class);
+    private Intent intentMap = registerIntent(MapActivity.class);
+    private Intent intentMovies = registerIntent(MoviesActivity.class);
+    private Intent intentBooks = registerIntent(BooksActivity.class);
+
+    private Integer userId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        intentMain = new Intent(getApplicationContext(), MainActivity.class);
-        intentProfile = new Intent(getApplicationContext(), ProfileActivity.class);
-        intentFriends = new Intent(getApplicationContext(), FriendsActivity.class);
-        intentDiary = new Intent(getApplicationContext(), DiaryActivity.class);
-        intentMap = new Intent(getApplicationContext(), MapActivity.class);
-        intentMovies = new Intent(getApplicationContext(), MoviesActivity.class);
-        intentBooks = new Intent(getApplicationContext(), BooksActivity.class);
+        Intent thisIntent = getIntent();
+        userId = thisIntent.getIntExtra("userId", 0);
 
         registerButton(intentMain, R.id.main_button_menu);
         registerButtonForResult(intentProfile, R.id.main_button_profile);
@@ -40,6 +39,12 @@ public class MainActivity extends Activity {
         registerButton(intentBooks, R.id.main_button_books);
 
         fieldsInitialization();
+    }
+
+    private Intent registerIntent(Class<?> clazz) {
+        Intent intent = new Intent(getApplicationContext(), clazz);
+        intent.putExtra("userId", userId);
+        return intent;
     }
 
     private void registerButton(final Intent intent, int id) {
@@ -68,14 +73,16 @@ public class MainActivity extends Activity {
     }
 
     private void fieldsInitialization() {
-        ImageView userPhoto = (ImageView) findViewById(R.id.main_user_photo);
-        TextView userNickname = (TextView) findViewById(R.id.main_user_nickname);
-        TextView userName = (TextView) findViewById(R.id.main_user_name);
+        HashMap<String, String> userSimpleInformation = AllUsersInformation.getUserSimpleInformation(userId);
 
-        int idUserPhoto = getResources().getIdentifier(UserInformation.getUserPhoto(), "drawable", getPackageName());
+        ImageView userPhoto = (ImageView) findViewById(R.id.main_user_photo);
+        int idUserPhoto = getResources().getIdentifier(userSimpleInformation.get("photo"), "drawable", getPackageName());
         userPhoto.setImageResource(idUserPhoto);
-        userNickname.setText(UserInformation.getUserNickname());
-        userName.setText(UserInformation.getUserName());
+
+        TextView userNickname = (TextView) findViewById(R.id.main_user_nickname);
+        userNickname.setText(userSimpleInformation.get("nickname"));
+        TextView userName = (TextView) findViewById(R.id.main_user_name);
+        userName.setText(userSimpleInformation.get("name"));
     }
 
     @Override
