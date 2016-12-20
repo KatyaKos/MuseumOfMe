@@ -8,8 +8,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 public class MainActivity extends Activity {
 
     private Intent intentMain = registerIntent(MainActivity.class);
@@ -21,6 +19,7 @@ public class MainActivity extends Activity {
     private Intent intentBooks = registerIntent(BooksActivity.class);
 
     private Integer userId;
+    private UserInformation user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +28,7 @@ public class MainActivity extends Activity {
 
         Intent thisIntent = getIntent();
         userId = thisIntent.getIntExtra("userId", 0);
+        user = AllUsersInformation.getUserById(userId);
 
         registerButton(intentMain, R.id.main_button_menu);
         registerButtonForResult(intentProfile, R.id.main_button_profile);
@@ -73,16 +73,14 @@ public class MainActivity extends Activity {
     }
 
     private void fieldsInitialization() {
-        HashMap<String, String> userSimpleInformation = AllUsersInformation.getUserSimpleInformation(userId);
-
         ImageView userPhoto = (ImageView) findViewById(R.id.main_user_photo);
-        int idUserPhoto = getResources().getIdentifier(userSimpleInformation.get("photo"), "drawable", getPackageName());
+        int idUserPhoto = getResources().getIdentifier(user.getUserPhoto(), "drawable", getPackageName());
         userPhoto.setImageResource(idUserPhoto);
 
         TextView userNickname = (TextView) findViewById(R.id.main_user_nickname);
-        userNickname.setText(userSimpleInformation.get("nickname"));
+        userNickname.setText(user.getUserNickname());
         TextView userName = (TextView) findViewById(R.id.main_user_name);
-        userName.setText(userSimpleInformation.get("name"));
+        userName.setText(user.getUserName());
     }
 
     @Override

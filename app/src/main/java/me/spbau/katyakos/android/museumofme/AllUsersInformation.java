@@ -49,15 +49,6 @@ class AllUsersInformation {
         return usersListByNickname.containsKey(nickname);
     }
 
-    static HashMap<String, String> getUserSimpleInformation(Integer id) {
-        UserInformation user = getUserById(id);
-        HashMap<String, String> userSimpleInformation = new HashMap<>();
-        userSimpleInformation.put("nickname", user.getUserNickname());
-        userSimpleInformation.put("name", user.getUserName());
-        userSimpleInformation.put("photo", user.getUserPhoto());
-        return userSimpleInformation;
-    }
-
     static boolean containsByEmail(String email) {
         return credentials.containsKey(email);
     }
@@ -85,7 +76,7 @@ class AllUsersInformation {
         return true;
     }
 
-    private static UserInformation getUserById(Integer id) {
+    static UserInformation getUserById(Integer id) {
         return usersListById.get(id);
     }
 
