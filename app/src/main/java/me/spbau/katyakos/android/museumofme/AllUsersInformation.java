@@ -1,56 +1,82 @@
 package me.spbau.katyakos.android.museumofme;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.ListIterator;
+import android.util.Pair;
 
-/**
- * Created by KatyaKos on 27.11.2016.
- */
+import java.util.HashMap;
+import java.util.TreeMap;
 
-public class AllUsersInformation {
-    private static ArrayList<String> DUMMY_USERS = new ArrayList<>(Arrays.asList(
-            "@garyOldman::Gary Oldman::user_photo_default",
-            "@thehughjackman::Hugh Jackman::user_photo_default",
-            "@jMcAvoy::James McAvoy::user_photo_default",
-            "@fassy::Michael Fassbender::user_photo_default",
-            "@jude_law::Jude Law::user_photo_default"
-    ));
+class AllUsersInformation {
+    private static TreeMap<Integer, UserInformation> usersListById = new TreeMap<Integer, UserInformation>() {{
+        put(0, new UserInformation(0, "@katyakos_", "me@test.com", "go"));
+        put(1, new UserInformation(1, "@user1", "user1@test.com", "hello"));
+        put(2, new UserInformation(2, "@user2", "user2@test.com", "hi"));
+        put(3, new UserInformation(3, "@user3", "user3@test.com", "you"));
+        put(4, new UserInformation(4, "@user4", "user4@test.com", "me"));
+    }};
+    private static TreeMap<String, UserInformation> usersListByNickname = new TreeMap<String, UserInformation>() {{
+        put("@katyakos_", new UserInformation(0, "@katyakos_", "me@test.com", "go"));
+        put("@user1", new UserInformation(1, "@user1", "user1@test.com", "hello"));
+        put("@user2", new UserInformation(2, "@user2", "user2@test.com", "hi"));
+        put("@user3", new UserInformation(3, "@user3", "user3@test.com", "you"));
+        put("@user4", new UserInformation(4, "@user4", "user4@test.com", "me"));
+    }};
 
-    public static ArrayList<String> getUsers() {
-        return DUMMY_USERS;
+    private static HashMap<String, Pair<String, Integer>> credentials = new HashMap<String, Pair<String, Integer>>() {{
+        put("me@test.com", new Pair<>("go", 0));
+        put("user1@test.com", new Pair<>("hello", 1));
+        put("user2@test.com", new Pair<>("hi", 2));
+        put("user3@test.com", new Pair<>("you", 3));
+        put("user4@test.com", new Pair<>("me", 4));
+    }};
+
+    static TreeMap<String, UserInformation> getUsersListByNickname() {
+        return usersListByNickname;
     }
 
-    public static boolean usersContain(String nickname) {
-        for (String user : DUMMY_USERS) {
-            String[] pieces = user.split("::");
-            if (pieces[0].equals(nickname)) {
-                return true;
-            }
-        }
-        return false;
+    static TreeMap<Integer, UserInformation> getUsersListById() {
+        return usersListById;
     }
 
-    public static void changeUserNickname(String oldNick, String newNick) {
-        ListIterator<String> iterator = DUMMY_USERS.listIterator();
-        while (iterator.hasNext()) {
-            String user = iterator.next();
-            String[] pieces = user.split("::");
-            if (pieces[0].equals(oldNick)) {
-                String userPart = user.substring(oldNick.length());
-                iterator.set(newNick + userPart);
-            }
-        }
+    static Integer getIdByEmail(String email) {
+        return credentials.get(email).second;
     }
 
-    public static void changeUserName(String nickname, String newName) {
-        ListIterator<String> iterator = DUMMY_USERS.listIterator();
-        while (iterator.hasNext()) {
-            String user = iterator.next();
-            String[] pieces = user.split("::");
-            if (pieces[0].equals(nickname)) {
-                iterator.set(pieces[0] + "::" + newName + "::" + pieces[2]);
-            }
+    static String getNicknameById(Integer id) {
+        return usersListById.get(id).getUserNickname();
+    }
+
+    static boolean containsByNickname(String nickname) {
+        return usersListByNickname.containsKey(nickname);
+    }
+
+    static boolean containsByEmail(String email) {
+        return credentials.containsKey(email);
+    }
+
+    public static UserInformation findUserByNickname(String nickname) {
+        return usersListByNickname.get(nickname);
+    }
+
+    static boolean checkEmailPasswordPair(String email, String password) {
+        return credentials.containsKey(email) && credentials.get(email).first.equals(password);
+    }
+
+    static void addUser(String userNickname, String userEmail, String userPassword) {
+        Integer userId = usersListById.lastKey() + 1;
+        UserInformation user = new UserInformation(userId, userNickname, userEmail, userPassword);
+        credentials.put(userEmail, new Pair<>(userPassword, userId));
+        usersListByNickname.put(userNickname, user);
+        usersListById.put(userId, user);
+    }
+
+    static boolean changeUserName(Integer userId, String newName) {
+        UserInformation user = usersListById.get(userId);
+        String userNickname = user.getUserNickname();
+        if (!user.setUserName(newName)) {
+            return false;
         }
+        usersListByNickname.put(userNickname, user);
+        usersListById.put(userId, user);
+        return true;
     }
 }
