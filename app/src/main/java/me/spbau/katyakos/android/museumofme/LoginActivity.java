@@ -2,7 +2,6 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -45,6 +44,8 @@ public class LoginActivity extends AbstractLoginActivity {
 
     @Override
     void onVerificationSuccess() {
+        String email = getStringTextView(emailText);
+        Integer userId = AllUsersInformation.getIdByEmail(email);
         this.finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(intent);
@@ -54,19 +55,14 @@ public class LoginActivity extends AbstractLoginActivity {
     boolean checkFields() {
         String email = getStringTextView(emailText);
         String password = getStringTextView(passwordText);
-        for (Pair<String, String> credential : DUMMY_CREDENTIALS) {
-            String emailCredential = credential.first;
-            String passwordCredential = credential.second;
-            if (emailCredential.equals(email)) {
-                return passwordCredential.equals(password);
-            }
-        }
-        return false;
+        return AllUsersInformation.checkEmailPasswordPair(email, password);
     }
 
     @Override
     void onCheckFail() {
-        passwordText.setError(getString(R.string.error_incorrect_password));
+        emailText.setError("Check email address");
+        emailText.requestFocus();
+        passwordText.setError("Check password");
         passwordText.requestFocus();
     }
 

@@ -2,15 +2,11 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static android.util.Patterns.EMAIL_ADDRESS;
 
@@ -22,10 +18,6 @@ abstract class AbstractLoginActivity extends AppCompatActivity {
 
     protected int activityId;
     protected String onVerificationFailMessage;
-
-    protected static final ArrayList<Pair<String, String>> DUMMY_CREDENTIALS = new ArrayList<>(Arrays.asList(
-            new Pair<>("foo@example.com", "hello"), new Pair<>("bar@example.com", "world")
-    ));
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -93,7 +85,7 @@ abstract class AbstractLoginActivity extends AppCompatActivity {
             emailText.setError("enter a valid email address");
             emailText.requestFocus();
         } else if (result == 2) {
-            passwordText.setError("between 4 and 10 alphanumeric characters");
+            passwordText.setError("between 4 and 15 alphanumeric characters");
             passwordText.requestFocus();
         }
     }
@@ -109,7 +101,7 @@ abstract class AbstractLoginActivity extends AppCompatActivity {
 
         if (email.isEmpty() || !EMAIL_ADDRESS.matcher(email).matches()) {
             isValid = 1;
-        } else if (password.length() < 4 || password.length() > 10) {
+        } else if (password.length() < 4 || password.length() > 15) {
             isValid = 2;
         }
         return isValid;

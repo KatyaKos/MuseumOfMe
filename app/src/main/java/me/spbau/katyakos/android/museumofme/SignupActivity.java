@@ -1,7 +1,6 @@
 package me.spbau.katyakos.android.museumofme;
 
 import android.os.Bundle;
-import android.util.Pair;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -38,6 +37,10 @@ public class SignupActivity extends AbstractLoginActivity {
 
     @Override
     void onVerificationSuccess() {
+        String email = getStringTextView(emailText);
+        String password = getStringTextView(passwordText);
+        String nickname = "@" + getStringTextView(nameText);
+        AllUsersInformation.addUser(nickname, email, password);
         setResult(RESULT_OK);
         finish();
     }
@@ -45,13 +48,7 @@ public class SignupActivity extends AbstractLoginActivity {
     @Override
     boolean checkFields() {
         String email = getStringTextView(emailText);
-        for (Pair<String, String> credential : DUMMY_CREDENTIALS) {
-            String emailCredential = credential.first;
-            if (emailCredential.equals(email)) {
-                return false;
-            }
-        }
-        return true;
+        return AllUsersInformation.containsByEmail(email);
     }
 
     @Override
@@ -65,15 +62,20 @@ public class SignupActivity extends AbstractLoginActivity {
         if (result == 3) {
             nameText.setError("at least 3 characters");
             nameText.requestFocus();
+        } else if (result == 4) {
+            nameText.setError("shouldn't contain spaces or '@' characters");
+            nameText.requestFocus();
         }
     }
 
     @Override
     protected int validate() {
         int isValid = super.validate();
-        String name = getStringTextView(nameText);
-        if (name.length() < 3) {
+        String nickname = getStringTextView(nameText);
+        if (nickname.length() < 3) {
             isValid = 3;
+        } else if (nickname.contains("@") || nickname.contains(" ")) {
+            isValid = 4;
         }
         return isValid;
     }
