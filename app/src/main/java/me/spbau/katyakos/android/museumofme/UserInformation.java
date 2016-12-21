@@ -27,7 +27,7 @@ public class UserInformation {
     private String userBirth = "";
     private String userAbout = "";
 
-    private TreeMap<String, Integer> friends = new TreeMap<>();
+    private TreeMap<String, UserInformation> friends = new TreeMap<>();
 
     private SparseArray<Trip> trips = new SparseArray<>();
 
@@ -36,6 +36,10 @@ public class UserInformation {
     private SparseArray<Interest> movies = new SparseArray<>();
 
     private SparseArray<Interest> books = new SparseArray<>();
+
+    Integer getUserId() {
+        return userId;
+    }
 
     String getUserNickname() {
         return userNickname;
@@ -65,7 +69,7 @@ public class UserInformation {
         return userAbout;
     }
 
-    TreeMap<String, Integer> getUserFriends() {
+    TreeMap<String, UserInformation> getUserFriends() {
         return friends;
     }
 
@@ -118,18 +122,24 @@ public class UserInformation {
         return true;
     }
 
+    boolean hasFriend(String friendNickname) {
+        return friends.containsKey(friendNickname);
+    }
+
     boolean addFriend(Integer friendId) {
-        String friendNickname = AllUsersInformation.getNicknameById(friendId);
-        if (userId.equals(friendId) || friends.containsValue(friendId)) {
+        UserInformation friend = AllUsersInformation.getUserById(friendId);
+        String friendNickname = friend.getUserNickname();
+        if (userId.equals(friendId) || friends.containsKey(friendNickname)) {
             return false;
         }
-        friends.put(friendNickname, friendId);
+        friends.put(friendNickname, friend);
         return true;
     }
 
     boolean removeFriend(Integer friendId) {
-        String friendNickname = AllUsersInformation.getNicknameById(friendId);
-        if (userId.equals(friendId) || !friends.containsValue(friendId)) {
+        UserInformation friend = AllUsersInformation.getUserById(friendId);
+        String friendNickname = friend.getUserNickname();
+        if (userId.equals(friendId) || !friends.containsKey(friendNickname)) {
             return false;
         }
         friends.remove(friendNickname);

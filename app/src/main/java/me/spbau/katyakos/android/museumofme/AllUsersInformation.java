@@ -15,9 +15,9 @@ class AllUsersInformation {
     }};
     private static TreeMap<String, UserInformation> usersListByNickname = new TreeMap<String, UserInformation>() {{
         put("@katyakos_", new UserInformation(0, "@katyakos_", "me@test.com", "go"));
-        put("@user1", new UserInformation(1, "@user1", "user1@test.com", "hello"));
-        put("@user2", new UserInformation(2, "@user2", "user2@test.com", "hi"));
         put("@user3", new UserInformation(3, "@user3", "user3@test.com", "you"));
+        put("@user2", new UserInformation(2, "@user2", "user2@test.com", "hi"));
+        put("@user1", new UserInformation(1, "@user1", "user1@test.com", "hello"));
         put("@user4", new UserInformation(4, "@user4", "user4@test.com", "me"));
     }};
 
