@@ -33,18 +33,28 @@ public class FriendsActivity extends AbstractFriendActivity {
     }
 
     @Override
+    void addFriend(Integer id) {
+        user.addFriend(id);
+    }
+
+    @Override
+    void removeFriend(Integer id) {
+        user.removeFriend(id);
+    }
+
+    @Override
     void fieldsInitialization() {
         backButton = (Button) findViewById(R.id.friends_button_menu);
-        userSearch = (EditText) findViewById(R.id.friends_search_field);
-        usersListLayout = (LinearLayout) findViewById(R.id.friends_list);
-        usersList = user.getUserFriends();
+        search = (EditText) findViewById(R.id.friends_search_field);
+        listLayout = (LinearLayout) findViewById(R.id.friends_list);
+        list = user.getUserFriends();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
-            usersList = user.getUserFriends();
-            usersListLayout.removeAllViews();
+            list = user.getUserFriends();
+            listLayout.removeAllViews();
             listCreate();
         }
     }

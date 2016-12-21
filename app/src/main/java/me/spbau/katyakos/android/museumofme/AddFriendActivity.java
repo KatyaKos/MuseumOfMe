@@ -20,10 +20,10 @@ public class AddFriendActivity extends AbstractFriendActivity {
 
     @Override
     void fieldsInitialization() {
-        userSearch = (EditText) findViewById(R.id.add_friends_search_field);
+        search = (EditText) findViewById(R.id.add_friends_search_field);
         backButton = (Button) findViewById(R.id.add_friends_button_back);
-        usersList = AllUsersInformation.getUsersListByNickname();
-        usersListLayout = (LinearLayout) findViewById(R.id.add_friends_list);
+        list = AllUsersInformation.getUsersListByNickname();
+        listLayout = (LinearLayout) findViewById(R.id.add_friends_list);
     }
 
     @Override
@@ -44,13 +44,13 @@ public class AddFriendActivity extends AbstractFriendActivity {
 
     @Override
     protected void addFriend(Integer id) {
-        super.addFriend(id);
+        user.addFriend(id);
         setResult(RESULT_OK);
     }
 
     @Override
     protected void removeFriend(Integer id) {
-        super.removeFriend(id);
+        user.removeFriend(id);
         setResult(RESULT_OK);
     }
 
