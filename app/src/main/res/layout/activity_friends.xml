@@ -6,40 +6,41 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/user_header_default">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <Button
-                android:text="Menu"
+                android:text="@string/home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/friends_button_menu"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="15dp" />
+                android:layout_marginEnd="15dp" />
 
             <Button
-                android:text="Add new"
+                android:text="@string/friend_add"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/friends_button_add"
                 android:layout_marginBottom="20dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_below="@+id/friends_button_menu" />
 
             <EditText
-                android:hint="Who do you want to find?"
+                android:hint="@string/friend_search"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/friends_button_add"
-                android:layout_toRightOf="@id/friends_button_add"
+                android:layout_toEndOf="@id/friends_button_add"
                 android:layout_marginTop="15dp"
-                android:layout_marginRight="15dp"
-                android:layout_marginLeft="25dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="25dp"
                 android:textSize="17sp"
                 android:id="@+id/friends_search_field"
                 android:background="#fff"

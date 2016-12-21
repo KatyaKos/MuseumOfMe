@@ -35,6 +35,10 @@
     <string name="profile_sets_change_photo">Change photo</string>
     <string name="profile_sets_change_header">Change header</string>
 
+    <!-- Strings related to Friends and AddFriend-->
+    <string name="friend_add">Add new</string>
+    <string name="friend_search">Who do you want to find?</string>
+
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">
         <item>Sort by name</item>
