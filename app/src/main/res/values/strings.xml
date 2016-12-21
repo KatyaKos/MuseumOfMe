@@ -3,6 +3,7 @@
     <string name="app_logo">MOM logo</string>
     <string name="home">Home</string>
     <string name="user_default_photo">User default photo</string>
+    <string name="add_new">Add new</string>
 
     <!-- Strings related to Login and Signup-->
     <string name="login_email">Email</string>
@@ -36,14 +37,16 @@
     <string name="profile_sets_change_header">Change header</string>
 
     <!-- Strings related to Friends and AddFriend-->
-    <string name="friend_add">Add new</string>
     <string name="friend_search">Who do you want to find?</string>
     <string name="friends_add_back">Back to friends</string>
 
+    <!--Strings related to Diary and AddNote-->
+    <string name="diary_search">Enter tag:</string>
+
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">
+        <item>Sort by date</item>
         <item>Sort by name</item>
         <item>Sort by rating</item>
-        <item>Sort by date</item>
     </string-array>
 </resources>

@@ -3,6 +3,8 @@ package me.spbau.katyakos.android.museumofme;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.TreeMap;
 
 public class UserInformation {
@@ -29,13 +31,13 @@ public class UserInformation {
 
     private TreeMap<String, UserInformation> friends = new TreeMap<>();
 
-    private SparseArray<Trip> trips = new SparseArray<>();
+    private HashMap<Integer, Trip> trips = new HashMap<>();
 
-    private SparseArray<Note> notes = new SparseArray<>();
+    private HashMap<Integer, Note> notes = new HashMap<>();
 
-    private SparseArray<Interest> movies = new SparseArray<>();
+    private HashMap<Integer, Interest> movies = new HashMap<>();
 
-    private SparseArray<Interest> books = new SparseArray<>();
+    private HashMap<Integer, Interest> books = new HashMap<>();
 
     Integer getUserId() {
         return userId;
@@ -73,19 +75,19 @@ public class UserInformation {
         return friends;
     }
 
-    SparseArray<Trip> getUserMap() {
+    HashMap<Integer, Trip> getUserMap() {
         return trips;
     }
 
-    SparseArray<Note> getUserNotes() {
+    HashMap<Integer, Note> getUserNotes() {
         return notes;
     }
 
-    SparseArray<Interest> getUserMovies() {
+    HashMap<Integer, Interest> getUserMovies() {
         return movies;
     }
 
-    SparseArray<Interest> getUserBooks() {
+    HashMap<Integer, Interest> getUserBooks() {
         return books;
     }
 
@@ -146,16 +148,16 @@ public class UserInformation {
         return true;
     }
 
-    private <T> boolean addToMuseum(SparseArray<T> museumSection, Integer id, T argument) {
-        if (museumSection.indexOfKey(id) >= 0) {
+    private <T> boolean addToMuseum(HashMap<Integer, T> museumSection, Integer id, T argument) {
+        if (museumSection.containsKey(id)) {
             return false;
         }
         museumSection.put(id, argument);
         return true;
     }
 
-    private <T> boolean removeFromMuseum(SparseArray<T> museumSection, Integer id) {
-        if (museumSection.indexOfKey(id) < 0) {
+    private <T> boolean removeFromMuseum(HashMap<Integer, T> museumSection, Integer id) {
+        if (!museumSection.containsKey(id)) {
             return false;
         }
         museumSection.remove(id);
@@ -171,7 +173,7 @@ public class UserInformation {
     }
 
     boolean addPlace(Integer groupId, Integer placeId, String placeName) {
-        if (trips.indexOfKey(groupId) < 0) {
+        if (!trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
@@ -183,7 +185,7 @@ public class UserInformation {
     }
 
     boolean removePlace(Integer groupId, Integer placeId) {
-        if (trips.indexOfKey(groupId) < 0) {
+        if (!trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
@@ -194,7 +196,8 @@ public class UserInformation {
         return true;
     }
 
-    boolean addNote(Integer noteId, ArrayList<String> note) {
+    boolean addNote(HashMap<String, String> note) {
+        Integer noteId = Collections.max(notes.keySet()) + 1;
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
@@ -218,7 +221,7 @@ public class UserInformation {
         return removeFromMuseum(books, bookId);
     }
 
-    private static class Trip {
+    class Trip {
         private Integer groupId;
         private String groupName;
         private SparseArray<String> places;
@@ -246,21 +249,38 @@ public class UserInformation {
         }
     }
 
-    private static class Note {
+    class Note {
         private Integer id;
         private String date;
+        private String name;
         private String content;
         private String tags;
+        private HashMap<String, String> note = new HashMap<>();
 
-        private Note(Integer id, ArrayList<String> note) {
+        private Note(Integer id, HashMap<String, String> note) {
             this.id = id;
-            date = note.get(0);
-            content = note.get(1);
-            tags = note.get(2);
+            note.put("id", id.toString());
+            this.note = note;
+            date = note.get("date");
+            name = note.get("name");
+            content = note.get("text");
+            tags = note.get("tags");
+        }
+
+        String getTags() {
+            return tags;
+        }
+
+        Integer getId() {
+            return id;
+        }
+
+        HashMap<String, String> getNote() {
+            return note;
         }
     }
 
-    private static class Interest {
+    class Interest {
         private Integer id;
         private String name;
         private String authorName;
