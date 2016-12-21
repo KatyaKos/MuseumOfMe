@@ -38,6 +38,7 @@
     <!-- Strings related to Friends and AddFriend-->
     <string name="friend_add">Add new</string>
     <string name="friend_search">Who do you want to find?</string>
+    <string name="friends_add_back">Back to friends</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">
