@@ -42,6 +42,11 @@
 
     <!--Strings related to Diary and AddNote-->
     <string name="diary_search">Enter tag:</string>
+    <string name="add_note_back">Back to diary</string>
+    <string name="add_note_name">Name:</string>
+    <string name="add_note_content">Content:</string>
+    <string name="add_note_tag">Tags:</string>
+    <string name="add_note_save">Save note</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">

@@ -1,6 +1,7 @@
 package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -8,37 +9,39 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 
-/**
- * Created by KatyaKos on 26.11.2016.
- */
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+
+import static java.text.DateFormat.SHORT;
 
 public class AddNoteActivity extends Activity {
 
-    private Button backButton;
-    private Button addButton;
-    private EditText nameText;
-    private EditText contentText;
-    private EditText tagsText;
-    private String note;
+    @InjectView(R.id.add_note_back_button)
+    Button backButton;
+    @InjectView(R.id.add_note_add_button)
+    Button addButton;
+    @InjectView(R.id.add_note_name_field)
+    EditText nameText;
+    @InjectView(R.id.add_note_content_field)
+    EditText contentText;
+    @InjectView(R.id.add_note_tags_field)
+    EditText tagsText;
+
+    private UserInformation user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_note);
+        ButterKnife.inject(this);
 
-        backButton = (Button) findViewById(R.id.add_note_back_button);
-        addButton = (Button) findViewById(R.id.add_note_add_button);
-        nameText = (EditText) findViewById(R.id.add_note_name_field);
-        contentText = (EditText) findViewById(R.id.add_note_content_field);
-        tagsText = (EditText) findViewById(R.id.add_note_tags_field);
+        Intent thisIntent = getIntent();
+        Integer userId = thisIntent.getIntExtra("userId", 0);
+        user = AllUsersInformation.getUserById(userId);
 
-        buttonsListener();
-    }
-
-    private void buttonsListener() {
         backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -51,43 +54,58 @@ public class AddNoteActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                if (!validate()) {
-                    Toast.makeText(getBaseContext(), "Check all fields", Toast.LENGTH_LONG).show();
+                if (!isNoteValid()) {
                     return;
                 }
-                DateFormat df = new SimpleDateFormat("yy.MM.dd 'at' HH:mm");
-                String date = df.format(Calendar.getInstance().getTime());
-                note = date + "::" + nameText.getText().toString() +
-                        "::" + contentText.getText().toString() + "::" + tagsText.getText().toString() + "\0";
-                UserInformation.addNote(note);
-                setResult(RESULT_OK);
+                addNoteLogic();
                 finish();
             }
         });
     }
 
+    private boolean isNoteValid() {
+        if (!validate()) {
+            Toast.makeText(getBaseContext(), "Check all fields", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
+
+    private void addNoteLogic() {
+        DateFormat df = DateFormat.getDateTimeInstance(SHORT, SHORT);
+        String date = df.format(Calendar.getInstance().getTime());
+
+        HashMap<String, String> note = new HashMap<>();
+        note.put("date", date);
+        note.put("name", getStringEditText(nameText));
+        note.put("text", getStringEditText(contentText));
+        note.put("tags", getStringEditText(tagsText));
+        user.addNote(note);
+        setResult(RESULT_OK);
+    }
+
+    private String getStringEditText(EditText textView) {
+        return textView.getText().toString();
+    }
+
     private boolean validate() {
         boolean valid = true;
 
-        if (nameText.getText().toString().isEmpty()) {
-            nameText.setError("name is required");
+        String name = getStringEditText(nameText);
+        if (name.length() < 3 || name.length() > 15) {
+            nameText.setError("from 3 to 15 characters");
             valid = false;
-        } else {
-            nameText.setError(null);
         }
 
-        if (contentText.getText().toString().isEmpty()) {
-            contentText.setError("write something");
+        if (getStringEditText(contentText).isEmpty()) {
+            contentText.setError("shouldn't be empty");
             valid = false;
-        } else {
-            contentText.setError(null);
         }
 
-        if (tagsText.getText().toString().isEmpty()) {
-            tagsText.setError(null);
+        if (getStringEditText(tagsText).isEmpty()) {
             return valid;
         }
-        String[] tags = tagsText.getText().toString().trim().split("\\s+");
+        String[] tags = getStringEditText(tagsText).trim().split("\\s+");
         boolean tagsValid = true;
         for (String tag : tags) {
             if (!tag.equals("") && !tag.startsWith("#")) {
@@ -97,8 +115,6 @@ public class AddNoteActivity extends Activity {
         if (!tagsValid) {
             tagsText.setError("all tags should start with '#'");
             valid = false;
-        } else {
-            tagsText.setError(null);
         }
 
         return valid;
