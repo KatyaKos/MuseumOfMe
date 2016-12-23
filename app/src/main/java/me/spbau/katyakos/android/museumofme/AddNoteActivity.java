@@ -10,7 +10,7 @@ import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Calendar;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -75,7 +75,7 @@ public class AddNoteActivity extends Activity {
         DateFormat df = DateFormat.getDateTimeInstance(SHORT, SHORT);
         String date = df.format(Calendar.getInstance().getTime());
 
-        HashMap<String, String> note = new HashMap<>();
+        TreeMap<String, String> note = new TreeMap<>();
         note.put("date", date);
         note.put("name", getStringEditText(nameText));
         note.put("text", getStringEditText(contentText));

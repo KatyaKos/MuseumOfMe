@@ -11,15 +11,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
-abstract class AbstractListViewActivity<E, T, C extends Map<E, T>> extends Activity {
+abstract class AbstractListViewActivity<E, T> extends Activity {
     protected Button backButton;
     protected EditText search;
     protected LinearLayout listLayout;
-    protected C list;
+    protected TreeMap<E, T> list;
 
     protected Integer userId;
     protected UserInformation user;
@@ -37,8 +37,6 @@ abstract class AbstractListViewActivity<E, T, C extends Map<E, T>> extends Activ
         user = AllUsersInformation.getUserById(userId);
 
         fieldsInitialization();
-
-        HashMap<String, Integer> hm = new HashMap<>();
 
         backButton.setOnClickListener(new View.OnClickListener() {
 

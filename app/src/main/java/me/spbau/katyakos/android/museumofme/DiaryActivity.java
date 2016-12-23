@@ -9,12 +9,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
-public class DiaryActivity extends AbstractListViewActivity<Integer, UserInformation.Note, HashMap<Integer, UserInformation.Note>> {
+public class DiaryActivity extends AbstractListViewActivity<Integer, UserInformation.Note> {
 
     @InjectView(R.id.diary_button_add)
     Button addButton;
@@ -61,7 +61,7 @@ public class DiaryActivity extends AbstractListViewActivity<Integer, UserInforma
 
     @Override
     void setListFields(UserInformation.Note note, View item) {
-        HashMap<String, String> noteContent = note.getNote();
+        TreeMap<String, String> noteContent = note.getNote();
         TextView title = (TextView) item.findViewById(R.id.diary_note_title);
         title.setText(noteContent.get("name"));
         TextView date = (TextView) item.findViewById(R.id.diary_note_date);

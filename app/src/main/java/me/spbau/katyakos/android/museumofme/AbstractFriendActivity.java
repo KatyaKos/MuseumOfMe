@@ -7,12 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.TreeMap;
-
 import static android.graphics.Color.GRAY;
 import static android.graphics.Color.GREEN;
 
-abstract class AbstractFriendActivity extends AbstractListViewActivity<String, UserInformation, TreeMap<String, UserInformation>> {
+abstract class AbstractFriendActivity extends AbstractListViewActivity<String, UserInformation> {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
