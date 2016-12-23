@@ -3,8 +3,6 @@ package me.spbau.katyakos.android.museumofme;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.TreeMap;
 
 public class UserInformation {
@@ -31,13 +29,13 @@ public class UserInformation {
 
     private TreeMap<String, UserInformation> friends = new TreeMap<>();
 
-    private HashMap<Integer, Trip> trips = new HashMap<>();
+    private TreeMap<Integer, Trip> trips = new TreeMap<>();
 
-    private HashMap<Integer, Note> notes = new HashMap<>();
+    private TreeMap<Integer, Note> notes = new TreeMap<>();
 
-    private HashMap<Integer, Interest> movies = new HashMap<>();
+    private TreeMap<Integer, Interest> movies = new TreeMap<>();
 
-    private HashMap<Integer, Interest> books = new HashMap<>();
+    private TreeMap<Integer, Interest> books = new TreeMap<>();
 
     Integer getUserId() {
         return userId;
@@ -75,19 +73,19 @@ public class UserInformation {
         return friends;
     }
 
-    HashMap<Integer, Trip> getUserMap() {
+    TreeMap<Integer, Trip> getUserMap() {
         return trips;
     }
 
-    HashMap<Integer, Note> getUserNotes() {
+    TreeMap<Integer, Note> getUserNotes() {
         return notes;
     }
 
-    HashMap<Integer, Interest> getUserMovies() {
+    TreeMap<Integer, Interest> getUserMovies() {
         return movies;
     }
 
-    HashMap<Integer, Interest> getUserBooks() {
+    TreeMap<Integer, Interest> getUserBooks() {
         return books;
     }
 
@@ -148,7 +146,7 @@ public class UserInformation {
         return true;
     }
 
-    private <T> boolean addToMuseum(HashMap<Integer, T> museumSection, Integer id, T argument) {
+    private <T> boolean addToMuseum(TreeMap<Integer, T> museumSection, Integer id, T argument) {
         if (museumSection.containsKey(id)) {
             return false;
         }
@@ -156,7 +154,7 @@ public class UserInformation {
         return true;
     }
 
-    private <T> boolean removeFromMuseum(HashMap<Integer, T> museumSection, Integer id) {
+    private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id) {
         if (!museumSection.containsKey(id)) {
             return false;
         }
@@ -164,7 +162,8 @@ public class UserInformation {
         return true;
     }
 
-    boolean addGroupToMap(Integer groupId, String groupName) {
+    boolean addGroup(String groupName) {
+        Integer groupId = trips.lastKey();
         return addToMuseum(trips, groupId, new Trip(groupId, groupName));
     }
 
@@ -196,8 +195,8 @@ public class UserInformation {
         return true;
     }
 
-    boolean addNote(HashMap<String, String> note) {
-        Integer noteId = Collections.max(notes.keySet()) + 1;
+    boolean addNote(TreeMap<String, String> note) {
+        Integer noteId = notes.lastKey();
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
@@ -205,7 +204,8 @@ public class UserInformation {
         return removeFromMuseum(notes, noteId);
     }
 
-    boolean addMovie(Integer movieId, ArrayList<String> content, Integer rating, ArrayList<String> characters) {
+    boolean addMovie(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
+        Integer movieId = movies.lastKey();
         return addToMuseum(movies, movieId, new Interest(movieId, content, rating, characters));
     }
 
@@ -213,7 +213,8 @@ public class UserInformation {
         return removeFromMuseum(movies, movieId);
     }
 
-    boolean addBook(Integer bookId, ArrayList<String> content, Integer rating, ArrayList<String> characters) {
+    boolean addBook(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
+        Integer bookId = books.lastKey();
         return addToMuseum(books, bookId, new Interest(bookId, content, rating, characters));
     }
 
@@ -255,9 +256,9 @@ public class UserInformation {
         private String name;
         private String content;
         private String tags;
-        private HashMap<String, String> note = new HashMap<>();
+        private TreeMap<String, String> note = new TreeMap<>();
 
-        private Note(Integer id, HashMap<String, String> note) {
+        private Note(Integer id, TreeMap<String, String> note) {
             this.id = id;
             note.put("id", id.toString());
             this.note = note;
@@ -275,7 +276,7 @@ public class UserInformation {
             return id;
         }
 
-        HashMap<String, String> getNote() {
+        TreeMap<String, String> getNote() {
             return note;
         }
     }

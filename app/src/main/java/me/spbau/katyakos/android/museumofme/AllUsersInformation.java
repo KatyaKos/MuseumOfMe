@@ -2,7 +2,6 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.util.Pair;
 
-import java.util.HashMap;
 import java.util.TreeMap;
 
 class AllUsersInformation {
@@ -21,7 +20,7 @@ class AllUsersInformation {
         put("@user4", new UserInformation(4, "@user4", "user4@test.com", "me"));
     }};
 
-    private static HashMap<String, Pair<String, Integer>> credentials = new HashMap<String, Pair<String, Integer>>() {{
+    private static TreeMap<String, Pair<String, Integer>> credentials = new TreeMap<String, Pair<String, Integer>>() {{
         put("me@test.com", new Pair<>("go", 0));
         put("user1@test.com", new Pair<>("hello", 1));
         put("user2@test.com", new Pair<>("hi", 2));
