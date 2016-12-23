@@ -6,8 +6,7 @@
     android:id="@+id/map_place_row">
 
     <TextView
-        android:id="@+id/map_name"
-        android:text="Name"
+        android:id="@+id/map_place_name"
         android:textSize="20sp"
         android:textColor="#444"
         android:layout_alignParentStart="true"
@@ -17,15 +16,14 @@
         android:layout_marginStart="20dp" />
 
     <TextView
-        android:id="@+id/map_date"
-        android:text="DATE"
+        android:id="@+id/map_place_id"
         android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/map_delete_place"
-        android:text="—"
+        android:text="@string/minus"
         android:layout_alignParentEnd="true"
         android:layout_width="35dp"
         android:layout_height="35dp"

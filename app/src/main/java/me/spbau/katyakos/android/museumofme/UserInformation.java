@@ -1,7 +1,5 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.util.SparseArray;
-
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -171,12 +169,12 @@ public class UserInformation {
         return removeFromMuseum(trips, id);
     }
 
-    boolean addPlace(Integer groupId, Integer placeId, String placeName) {
+    boolean addPlace(Integer groupId, String placeName) {
         if (!trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
-        if (!trip.addPlace(placeId, placeName)) {
+        if (!trip.addPlace(placeName)) {
             return false;
         }
         trips.put(groupId, trip);
@@ -225,16 +223,29 @@ public class UserInformation {
     class Trip {
         private Integer groupId;
         private String groupName;
-        private SparseArray<String> places;
+        private TreeMap<Integer, String> places;
 
         private Trip(Integer groupId, String groupName) {
             this.groupId = groupId;
             this.groupName = groupName;
-            places = new SparseArray<>();
+            places = new TreeMap<>();
         }
 
-        private boolean addPlace(Integer id, String name) {
-            if (places.indexOfKey(id) >= 0) {
+        TreeMap<Integer, String> getPlaces() {
+            return places;
+        }
+
+        Integer getGroupId() {
+            return groupId;
+        }
+
+        String getGroupName() {
+            return groupName;
+        }
+
+        private boolean addPlace(String name) {
+            Integer id = places.lastKey();
+            if (places.containsKey(id)) {
                 return false;
             }
             places.put(id, name);
@@ -242,7 +253,7 @@ public class UserInformation {
         }
 
         private boolean removePlace(Integer id) {
-            if (places.indexOfKey(id) < 0) {
+            if (!places.containsKey(id)) {
                 return false;
             }
             places.remove(id);

@@ -4,6 +4,8 @@
     <string name="home">Home</string>
     <string name="user_default_photo">User default photo</string>
     <string name="add_new">Add new</string>
+    <string name="minus">—</string>
+    <string name="plus">+</string>
 
     <!-- Strings related to Login and Signup-->
     <string name="login_email">Email</string>
@@ -47,6 +49,11 @@
     <string name="add_note_content">Content:</string>
     <string name="add_note_tag">Tags:</string>
     <string name="add_note_save">Save note</string>
+
+    <!--String related to Map-->
+    <string name="map_add_group_field">Enter group name:</string>
+    <string name="map_add_group_button">Add group</string>
+    <string name="map_add_place_field">Enter place and click \'+\'</string>
 
     <!-- Movies and Books Spinner -->
     <string-array name="spinner_list">

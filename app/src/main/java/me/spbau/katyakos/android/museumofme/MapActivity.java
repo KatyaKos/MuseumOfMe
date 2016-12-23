@@ -2,13 +2,13 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.view.WindowManager;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,85 +16,50 @@ import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+import java.util.TreeMap;
 
-/**
- * Created by KatyaKos on 21.11.2016.
- */
+import butterknife.ButterKnife;
+import butterknife.InjectView;
+import me.spbau.katyakos.android.museumofme.UserInformation.Trip;
+
+import static android.view.WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN;
 
 public class MapActivity extends Activity {
 
-    private ExpandableListView mapList;
-    private Button menuButton;
-    private EditText addGroupField;
-    private Button addGroupButton;
-    private ArrayList<String> userMap;
+    @InjectView(R.id.map_list)
+    ExpandableListView listLayout;
+    @InjectView(R.id.map_menu_button)
+    Button backButton;
+    @InjectView(R.id.map_add_group_field)
+    EditText addGroupField;
+    @InjectView(R.id.map_add_group_button)
+    Button addGroupButton;
+
+    private TreeMap<Integer, Trip> mapList;
+    private Integer userId;
+    private UserInformation user;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+        ButterKnife.inject(this);
 
-        menuButton = (Button) findViewById(R.id.map_menu_button);
-        mapList = (ExpandableListView) findViewById(R.id.map_list);
-        addGroupField = (EditText) findViewById(R.id.map_add_group_field);
-        addGroupButton = (Button) findViewById(R.id.map_add_group_button);
-        userMap = UserInformation.getUserMap();
+        Intent thisIntent = getIntent();
+        userId = thisIntent.getIntExtra("userId", 0);
+        user = AllUsersInformation.getUserById(userId);
+        mapList = user.getUserMap();
 
-        mapListCreate();
-        buttonsOnClick();
-    }
-
-    private void mapListCreate() {
-        ArrayList<Map<String, String>> groupNames;
-        ArrayList<Map<String, String>> dataItem;
-        ArrayList<ArrayList<Map<String, String>>> dataGroup;
-        Map<String, String> attribute;
-
-        groupNames = new ArrayList<>();
-        for (String trip : userMap) {
-            String[] pieces = trip.split("::");
-            attribute = new HashMap<>();
-            attribute.put("groupDate", pieces[0]);
-            attribute.put("groupName", pieces[1]);
-            groupNames.add(attribute);
-        }
-        String groupFrom[] = new String[]{"groupDate", "groupName"};
-        int groupTo[] = new int[]{R.id.map_date, R.id.map_name};
-
-        dataGroup = new ArrayList<>();
-        for (String trip : userMap) {
-            String[] pieces = trip.split("::");
-            dataItem = new ArrayList<>();
-            for (int i = 2; i < pieces.length; i++) {
-                attribute = new HashMap<>();
-                attribute.put("placeDate", pieces[0]);
-                attribute.put("placeName", pieces[i]);
-                dataItem.add(attribute);
-            }
-            dataGroup.add(dataItem);
-        }
-        String childFrom[] = new String[]{"placeDate", "placeName"};
-        int childTo[] = new int[]{R.id.map_date, R.id.map_name};
-
-        mapList.setAdapter(adapterCreate(this, groupNames, R.layout.item_expandable_listview_group, groupFrom, groupTo,
-                dataGroup, R.layout.item_expandable_listview_place, childFrom, childTo));
-    }
-
-    private void buttonsOnClick() {
-        menuButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                // Go to MainActivity
                 finish();
-                /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);*/
             }
         });
 
@@ -122,15 +87,59 @@ public class MapActivity extends Activity {
 
             @Override
             public void onClick(View v) {
-                DateFormat df = new SimpleDateFormat("yyyy.MM.dd 'at' HH:mm:ss");
-                String date = df.format(Calendar.getInstance().getTime());
-                UserInformation.addGroup(date + "::" + addGroupField.getText().toString());
-                mapList.setAdapter((BaseExpandableListAdapter) null);
+                user.addGroup(getString(addGroupField));
+                listLayout.setAdapter((BaseExpandableListAdapter) null);
                 mapListCreate();
                 addGroupField.setText("");
-                getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             }
         });
+
+        mapListCreate();
+    }
+
+    private <T extends TextView> String getString(T textView) {
+        return textView.getText().toString();
+    }
+
+    private void mapListCreate() {
+        ArrayList<Map<String, String>> groupNames;
+        ArrayList<Map<String, String>> dataItem;
+        ArrayList<ArrayList<Map<String, String>>> dataGroup;
+        Map<String, String> attribute;
+
+        groupNames = new ArrayList<>();
+        dataGroup = new ArrayList<>();
+        Set<Entry<Integer, Trip>> usersEntry = mapList.entrySet();
+        for (Entry<Integer, Trip> entry : usersEntry) {
+            Trip group = entry.getValue();
+            attribute = new HashMap<>();
+            attribute.put("groupId", group.getGroupId().toString());
+            attribute.put("groupName", group.getGroupName());
+            groupNames.add(attribute);
+
+            dataItem = new ArrayList<>();
+            TreeMap<Integer, String> places = group.getPlaces();
+            Set<Entry<Integer, String>> placesEntry = places.entrySet();
+            for (Entry<Integer, String> placeEntry : placesEntry) {
+                attribute = new HashMap<>();
+                attribute.put("placeId", placeEntry.getKey().toString());
+                attribute.put("placeName", placeEntry.getValue());
+                dataItem.add(attribute);
+            }
+            dataGroup.add(dataItem);
+        }
+        String groupFrom[] = new String[]{"groupId", "groupName"};
+        int groupTo[] = new int[]{R.id.map_group_id, R.id.map_group_name};
+        String childFrom[] = new String[]{"placeId", "placeName"};
+        int childTo[] = new int[]{R.id.map_place_id, R.id.map_place_name};
+
+        listLayout.setAdapter(adapterCreate(this, groupNames, R.layout.item_expandable_listview_group, groupFrom, groupTo,
+                dataGroup, R.layout.item_expandable_listview_place, childFrom, childTo));
+    }
+
+    private Integer getIntegerFromParentView(ViewParent view, int id) {
+        return Integer.getInteger(getString(((TextView) ((View) view).findViewById(id))));
     }
 
     private SimpleExpandableListAdapter adapterCreate(Context context, List<? extends Map<String, ?>> groupData,
@@ -152,10 +161,10 @@ public class MapActivity extends Activity {
                         public void onClick(View view) {
                             Button clicked = (Button) view;
                             ViewParent item = clicked.getParent();
-                            String date = ((TextView) ((View) item).findViewById(R.id.map_date)).getText().toString();
-                            UserInformation.removeGroup(date);
-                            userMap = UserInformation.getUserMap();
-                            mapList.setAdapter((BaseExpandableListAdapter) null);
+                            Integer id = getIntegerFromParentView(item, R.id.map_group_id);
+                            user.removeGroup(id);
+                            mapList = user.getUserMap();
+                            listLayout.setAdapter((BaseExpandableListAdapter) null);
                             mapListCreate();
                         }
                     });
@@ -163,34 +172,34 @@ public class MapActivity extends Activity {
                     addButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
-                            String newPlace = addPlaceField.getText().toString();
+                            String newPlace = getString(addPlaceField);
                             if (newPlace.isEmpty()) {
                                 return;
                             }
                             Button clicked = (Button) view;
                             ViewParent item = clicked.getParent();
-                            String date = ((TextView) ((View) item).findViewById(R.id.map_date)).getText().toString();
-                            UserInformation.addPlace(date, newPlace);
-                            userMap = UserInformation.getUserMap();
-                            mapList.setAdapter((BaseExpandableListAdapter) null);
+                            Integer id = getIntegerFromParentView(item, R.id.map_group_id);
+                            user.addPlace(id, newPlace);
+                            mapList = user.getUserMap();
+                            listLayout.setAdapter((BaseExpandableListAdapter) null);
                             mapListCreate();
                             addPlaceField.setText("");
-                            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+                            getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_HIDDEN);
                         }
                     });
                 }
 
                 String content = getGroup(groupPosition).toString();
-                TextView nameText = (TextView) convertView.findViewById(R.id.map_name);
-                TextView dateText = (TextView) convertView.findViewById(R.id.map_date);
+                TextView nameText = (TextView) convertView.findViewById(R.id.map_group_name);
+                TextView idText = (TextView) convertView.findViewById(R.id.map_group_id);
                 int nameIndex = content.indexOf("groupName=");
-                int dateIndex = content.indexOf("groupDate=");
-                if (nameIndex < dateIndex) {
-                    nameText.setText(content.substring(nameIndex + 10, dateIndex - 2));
-                    dateText.setText(content.substring(dateIndex + 10, content.length() - 1));
+                int idIndex = content.indexOf("groupId=");
+                if (nameIndex < idIndex) {
+                    nameText.setText(content.substring(nameIndex + 10, idIndex - 2));
+                    idText.setText(content.substring(idIndex + 10, content.length() - 1));
                 } else {
                     nameText.setText(content.substring(nameIndex + 10, content.length() - 1));
-                    dateText.setText(content.substring(dateIndex + 10, nameIndex - 2));
+                    idText.setText(content.substring(idIndex + 10, nameIndex - 2));
                 }
 
                 return convertView;
@@ -207,11 +216,12 @@ public class MapActivity extends Activity {
                         public void onClick(View view) {
                             Button clicked = (Button) view;
                             ViewParent item = clicked.getParent();
-                            String place = ((TextView) ((View) item).findViewById(R.id.map_name)).getText().toString();
-                            String date = ((TextView) ((View) item).findViewById(R.id.map_date)).getText().toString();
-                            UserInformation.removePlace(date, place);
-                            userMap = UserInformation.getUserMap();
-                            mapList.setAdapter((BaseExpandableListAdapter) null);
+                            Integer placeId = getIntegerFromParentView(item, R.id.map_place_id);
+                            item = item.getParent();
+                            Integer groupId = getIntegerFromParentView(item, R.id.map_group_id);
+                            user.removePlace(groupId, placeId);
+                            mapList = user.getUserMap();
+                            listLayout.setAdapter((BaseExpandableListAdapter) null);
                             mapListCreate();
                         }
                     });
@@ -221,7 +231,7 @@ public class MapActivity extends Activity {
                 TextView nameText = (TextView) convertView.findViewById(R.id.map_name);
                 TextView dateText = (TextView) convertView.findViewById(R.id.map_date);
                 int nameIndex = content.indexOf("placeName=");
-                int dateIndex = content.indexOf("placeDate=");
+                int dateIndex = content.indexOf("placeId=");
                 if (nameIndex < dateIndex) {
                     nameText.setText(content.substring(nameIndex + 10, dateIndex - 2));
                     dateText.setText(content.substring(dateIndex + 10, content.length() - 1));
