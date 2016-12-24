@@ -10,13 +10,13 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity {
 
-    private Intent intentMain = registerIntent(MainActivity.class);
-    private Intent intentProfile = registerIntent(ProfileActivity.class);
-    private Intent intentFriends = registerIntent(FriendsActivity.class);
-    private Intent intentDiary = registerIntent(DiaryActivity.class);
-    private Intent intentMap = registerIntent(MapActivity.class);
-    private Intent intentMovies = registerIntent(MoviesActivity.class);
-    private Intent intentBooks = registerIntent(BooksActivity.class);
+    private Intent intentMain;
+    private Intent intentProfile;
+    private Intent intentFriends;
+    private Intent intentDiary;
+    private Intent intentMap;
+    private Intent intentMovies;
+    private Intent intentBooks;
 
     private Integer userId;
     private UserInformation user;
@@ -25,6 +25,14 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        intentMain = registerIntent(MainActivity.class);
+        intentProfile = registerIntent(ProfileActivity.class);
+        intentFriends = registerIntent(FriendsActivity.class);
+        intentDiary = registerIntent(DiaryActivity.class);
+        intentMap = registerIntent(MapActivity.class);
+        intentMovies = registerIntent(MoviesActivity.class);
+        intentBooks = registerIntent(BooksActivity.class);
 
         Intent thisIntent = getIntent();
         userId = thisIntent.getIntExtra("userId", 0);
@@ -41,7 +49,7 @@ public class MainActivity extends Activity {
         fieldsInitialization();
     }
 
-    private Intent registerIntent(Class<?> clazz) {
+    private Intent registerIntent(Class clazz) {
         Intent intent = new Intent(getApplicationContext(), clazz);
         intent.putExtra("userId", userId);
         return intent;

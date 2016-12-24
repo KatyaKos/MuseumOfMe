@@ -6,26 +6,26 @@ import java.util.TreeMap;
 
 class AllUsersInformation {
     private static TreeMap<Integer, UserInformation> usersListById = new TreeMap<Integer, UserInformation>() {{
-        put(0, new UserInformation(0, "@katyakos_", "me@test.com", "go"));
-        put(1, new UserInformation(1, "@user1", "user1@test.com", "hello"));
-        put(2, new UserInformation(2, "@user2", "user2@test.com", "hi"));
-        put(3, new UserInformation(3, "@user3", "user3@test.com", "you"));
-        put(4, new UserInformation(4, "@user4", "user4@test.com", "me"));
+        put(0, new UserInformation(0, "katyakos_", "me@test.com", "gogo"));
+        put(1, new UserInformation(1, "user1", "user1@test.com", "hello"));
+        put(2, new UserInformation(2, "user2", "user2@test.com", "hihi"));
+        put(3, new UserInformation(3, "user3", "user3@test.com", "youyou"));
+        put(4, new UserInformation(4, "user4", "user4@test.com", "meme"));
     }};
     private static TreeMap<String, UserInformation> usersListByNickname = new TreeMap<String, UserInformation>() {{
-        put("@katyakos_", new UserInformation(0, "@katyakos_", "me@test.com", "go"));
-        put("@user3", new UserInformation(3, "@user3", "user3@test.com", "you"));
-        put("@user2", new UserInformation(2, "@user2", "user2@test.com", "hi"));
-        put("@user1", new UserInformation(1, "@user1", "user1@test.com", "hello"));
-        put("@user4", new UserInformation(4, "@user4", "user4@test.com", "me"));
+        put("@katyakos_", new UserInformation(0, "katyakos_", "me@test.com", "gogo"));
+        put("@user3", new UserInformation(3, "user3", "user3@test.com", "youyou"));
+        put("@user2", new UserInformation(2, "user2", "user2@test.com", "hihi"));
+        put("@user1", new UserInformation(1, "user1", "user1@test.com", "hello"));
+        put("@user4", new UserInformation(4, "user4", "user4@test.com", "meme"));
     }};
 
     private static TreeMap<String, Pair<String, Integer>> credentials = new TreeMap<String, Pair<String, Integer>>() {{
-        put("me@test.com", new Pair<>("go", 0));
+        put("me@test.com", new Pair<>("gogo", 0));
         put("user1@test.com", new Pair<>("hello", 1));
-        put("user2@test.com", new Pair<>("hi", 2));
-        put("user3@test.com", new Pair<>("you", 3));
-        put("user4@test.com", new Pair<>("me", 4));
+        put("user2@test.com", new Pair<>("hihi", 2));
+        put("user3@test.com", new Pair<>("youyou", 3));
+        put("user4@test.com", new Pair<>("meme", 4));
     }};
 
     static TreeMap<String, UserInformation> getUsersListByNickname() {
