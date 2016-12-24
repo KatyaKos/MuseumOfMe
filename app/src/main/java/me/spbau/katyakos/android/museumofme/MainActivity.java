@@ -26,6 +26,10 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Intent thisIntent = getIntent();
+        userId = thisIntent.getIntExtra("userId", 0);
+        user = AllUsersInformation.getUserById(userId);
+
         intentMain = registerIntent(MainActivity.class);
         intentProfile = registerIntent(ProfileActivity.class);
         intentFriends = registerIntent(FriendsActivity.class);
@@ -33,10 +37,6 @@ public class MainActivity extends Activity {
         intentMap = registerIntent(MapActivity.class);
         intentMovies = registerIntent(MoviesActivity.class);
         intentBooks = registerIntent(BooksActivity.class);
-
-        Intent thisIntent = getIntent();
-        userId = thisIntent.getIntExtra("userId", 0);
-        user = AllUsersInformation.getUserById(userId);
 
         registerButton(intentMain, R.id.main_button_menu);
         registerButtonForResult(intentProfile, R.id.main_button_profile);

@@ -60,7 +60,7 @@ class AllUsersInformation {
         Integer userId = usersListById.lastKey() + 1;
         UserInformation user = new UserInformation(userId, userNickname, userEmail, userPassword);
         credentials.put(userEmail, new Pair<>(userPassword, userId));
-        usersListByNickname.put(userNickname, user);
+        usersListByNickname.put("@" + userNickname, user);
         usersListById.put(userId, user);
     }
 
