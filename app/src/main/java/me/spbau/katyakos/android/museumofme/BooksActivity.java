@@ -1,116 +1,45 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-
-/**
- * Created by KatyaKos on 22.11.2016.
- */
-
-public class BooksActivity extends Activity {
-
-    private Button menuButton;
-    private Button addButton;
-    private Spinner sortSpinner;
-    private ArrayList<String> userBooks;
-    LinearLayout booksList;
+public class BooksActivity extends AbstractInterestActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        activityId = R.layout.activity_books;
+        //addInterestClass = AddBookActivity.class;
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_books);
-
-        initialize();
-        buttonsListener();
-        booksListCreate();
     }
 
-    private void initialize() {
-        booksList = (LinearLayout) findViewById(R.id.books_list);
-        menuButton = (Button) findViewById(R.id.books_button_menu);
+    @Override
+    void fieldsInitialization() {
+        listLayout = (LinearLayout) findViewById(R.id.books_list);
+        list = user.getUserMovies();
+        backButton = (Button) findViewById(R.id.books_button_menu);
+        search = (EditText) findViewById(R.id.books_search_field);
         addButton = (Button) findViewById(R.id.books_button_add);
         sortSpinner = (Spinner) findViewById(R.id.books_sort);
-
-        userBooks = UserInformation.getUserBooks();
-
-        ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.spinner_list, R.layout.item_spinner);
-        adapter.setDropDownViewResource(R.layout.item_dropdown_spinner);
-        sortSpinner.setAdapter(adapter);
     }
 
-    private void buttonsListener() {
-        menuButton.setOnClickListener(new View.OnClickListener() {
+    @Override
+    void setOnCLickListeners(UserInformation.Interest value, View item) {
+        super.setOnCLickListeners(value, item);
 
+        Button deleteButton = (Button) item.findViewById(R.id.listview_button);
+        final Integer bookId = value.getId();
+        deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Go to MainActivity
-                finish();
-                /*Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);*/
+                user.removeMovie(bookId);
+                list = user.getUserBooks();
+                listLayout.removeAllViews();
+                listCreate();
             }
         });
-
-        addButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), AddMovieActivity.class);
-                //startActivity(intent);
-            }
-        });
-    }
-
-    private void booksListCreate() {
-        LayoutInflater layoutInflater = getLayoutInflater();
-
-        for (String book : userBooks) {
-            String[] pieces = book.split("::");
-            View item = layoutInflater.inflate(R.layout.item_listview, booksList, false);
-
-            ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
-            int id = getResources().getIdentifier(pieces[3], "drawable", getPackageName());
-            photo.setImageResource(id);
-
-            TextView author = (TextView) item.findViewById(R.id.listview_text2);
-            author.setText(pieces[2]);
-
-            TextView name = (TextView) item.findViewById(R.id.listview_text1);
-            name.setText(pieces[1]);
-
-            Button deleteButton = (Button) item.findViewById(R.id.listview_button);
-            deleteButton.setText("—");
-
-            booksList.addView(item);
-
-            final String[] data = {author.getText().toString(), name.getText().toString()};
-            photo.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getBaseContext(), data[1], Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            final String bookDate = pieces[0];
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    UserInformation.removeBook(bookDate);
-                    userBooks = UserInformation.getUserBooks();
-                    booksList.removeAllViews();
-                    booksListCreate();
-                }
-            });
-        }
     }
 }

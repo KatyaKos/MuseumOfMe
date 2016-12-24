@@ -6,7 +6,7 @@
     android:background="@drawable/user_header_default">
 
     <Button
-        android:text="Menu"
+        android:text="@string/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/books_button_menu"
@@ -22,26 +22,31 @@
         android:layout_marginRight="15dp">
 
         <Button
-            android:text="Add new"
+            android:id="@+id/books_button_add"
+            android:text="@string/add_new"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/books_button_add" />
+            android:layout_height="wrap_content" />
 
-        <Button
-            android:text="Find"
+        <Spinner
+            android:id="@+id/books_sort"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@+id/books_button_add"
-            android:id="@+id/books_button_find" />
-
-        <Spinner
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toEndOf="@+id/books_button_find"
-            android:layout_marginStart="5dp"
-            android:id="@+id/books_sort"
+            android:layout_marginStart="25dp"
             android:entries="@array/spinner_list"
             android:layout_marginTop="10dp" />
+
+        <EditText
+            android:id="@+id/books_search_field"
+            android:layout_below="@+id/books_button_add"
+            android:hint="@string/interest_search"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="17sp"
+            android:background="#fff"
+            android:clickable="true" />
     </RelativeLayout>
 
     <ScrollView
