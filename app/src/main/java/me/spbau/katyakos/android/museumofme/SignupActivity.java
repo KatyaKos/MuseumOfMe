@@ -60,7 +60,7 @@ public class SignupActivity extends AbstractLoginActivity {
     protected void onVerificationFail(int result) {
         super.onVerificationFail(result);
         if (result == 3) {
-            nameText.setError("at least 3 characters");
+            nameText.setError("from 3 to 15 characters");
             nameText.requestFocus();
         } else if (result == 4) {
             nameText.setError("shouldn't contain spaces or '@' characters");
@@ -72,7 +72,7 @@ public class SignupActivity extends AbstractLoginActivity {
     protected int validate() {
         int isValid = super.validate();
         String nickname = getStringTextView(nameText);
-        if (nickname.length() < 3) {
+        if (nickname.length() < 3 || nickname.length() > 15) {
             isValid = 3;
         } else if (nickname.contains("@") || nickname.contains(" ")) {
             isValid = 4;
