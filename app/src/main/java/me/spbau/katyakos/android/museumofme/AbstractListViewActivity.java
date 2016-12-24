@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import java.util.Map;
 import java.util.Set;
@@ -85,6 +86,10 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
             listLayout.addView(item);
             setOnCLickListeners(value, item);
         }
+    }
+
+    private <S extends TextView> String getString(S textView) {
+        return textView.getText().toString();
     }
 
     abstract boolean fitsSearch(T value, String sortingString);
