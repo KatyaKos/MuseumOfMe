@@ -228,8 +228,8 @@ public class MapActivity extends Activity {
                 }
 
                 String content = getChild(groupPosition, childPosition).toString();
-                TextView nameText = (TextView) convertView.findViewById(R.id.map_name);
-                TextView dateText = (TextView) convertView.findViewById(R.id.map_date);
+                TextView nameText = (TextView) convertView.findViewById(R.id.map_place_name);
+                TextView dateText = (TextView) convertView.findViewById(R.id.map_place_id);
                 int nameIndex = content.indexOf("placeName=");
                 int dateIndex = content.indexOf("placeId=");
                 if (nameIndex < dateIndex) {
