@@ -53,7 +53,7 @@ public class ProfileActivity extends AbstractProfileActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
             setResult(RESULT_OK);
-            fieldsInitialization();
+            fieldsRegistration();
         }
     }
 }
