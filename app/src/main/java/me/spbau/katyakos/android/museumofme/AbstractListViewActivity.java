@@ -88,7 +88,7 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
         }
     }
 
-    private <S extends TextView> String getString(S textView) {
+    protected <S extends TextView> String getString(S textView) {
         return textView.getText().toString();
     }
 
