@@ -8,6 +8,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import butterknife.ButterKnife;
+
 abstract class AbstractProfileActivity extends Activity {
     protected Button backButton;
 
@@ -28,6 +30,7 @@ abstract class AbstractProfileActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(activityId);
+        ButterKnife.inject(this);
 
         Intent thisIntent = getIntent();
         userId = thisIntent.getIntExtra("userId", 0);

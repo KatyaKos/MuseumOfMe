@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 public class ProfileActivity extends AbstractProfileActivity {
@@ -21,7 +20,6 @@ public class ProfileActivity extends AbstractProfileActivity {
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_profile;
         super.onCreate(savedInstanceState);
-        ButterKnife.inject(this);
 
         setsButton.setOnClickListener(new View.OnClickListener() {
 
