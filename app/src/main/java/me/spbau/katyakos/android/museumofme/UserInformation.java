@@ -11,19 +11,21 @@ public class UserInformation {
         this.userName = userNickname;
         this.userEmail = userEmail;
         this.userPassword = userPassword;
+        userPhoto = "user_photo_default";
+        userHeader = "user_header_default";
     }
 
     private Integer userId;
     private String userEmail;
     private String userPassword;
     private String userNickname;
-    private String userPhoto = "user_photo_default";
-    private String userHeader = "user_header_default";
-    private String userBio = "";
+    private String userPhoto;
+    private String userHeader;
+    private String userBio;
 
     private String userName;
-    private String userBirth = "";
-    private String userAbout = "";
+    private String userBirth;
+    private String userAbout;
 
     private TreeMap<String, UserInformation> friends = new TreeMap<>();
 
@@ -161,7 +163,10 @@ public class UserInformation {
     }
 
     boolean addGroup(String groupName) {
-        Integer groupId = trips.lastKey();
+        Integer groupId = 1;
+        if (!trips.isEmpty()) {
+            groupId = trips.lastKey() + 1;
+        }
         return addToMuseum(trips, groupId, new Trip(groupId, groupName));
     }
 
@@ -194,7 +199,10 @@ public class UserInformation {
     }
 
     boolean addNote(TreeMap<String, String> note) {
-        Integer noteId = notes.lastKey();
+        Integer noteId = 1;
+        if (!notes.isEmpty()) {
+            noteId = notes.lastKey() + 1;
+        }
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
@@ -203,7 +211,10 @@ public class UserInformation {
     }
 
     boolean addMovie(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
-        Integer movieId = movies.lastKey();
+        Integer movieId = 1;
+        if (!movies.isEmpty()) {
+            movieId = movies.lastKey() + 1;
+        }
         return addToMuseum(movies, movieId, new Interest(movieId, content, rating, characters));
     }
 
@@ -212,7 +223,10 @@ public class UserInformation {
     }
 
     boolean addBook(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
-        Integer bookId = books.lastKey();
+        Integer bookId = 1;
+        if (!books.isEmpty()) {
+            bookId = books.lastKey() + 1;
+        }
         return addToMuseum(books, bookId, new Interest(bookId, content, rating, characters));
     }
 
@@ -244,7 +258,10 @@ public class UserInformation {
         }
 
         private boolean addPlace(String name) {
-            Integer id = places.lastKey();
+            Integer id = 1;
+            if (!places.isEmpty()) {
+                id = places.lastKey() + 1;
+            }
             if (places.containsKey(id)) {
                 return false;
             }
