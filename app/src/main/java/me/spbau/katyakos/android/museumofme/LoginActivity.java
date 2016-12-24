@@ -1,6 +1,7 @@
 package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -9,9 +10,18 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class LoginActivity extends AbstractLoginActivity {
+    private final String LOGGED_USER = "logged_user"; //"-1" if no user is in
+    private final String PREF_FILE = "loggedUser";
+    private SharedPreferences sPref;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        String savedText = sPref.getString(LOGGED_USER, "-1");
+        if (!savedText.equals("-1")) {
+            loggedUserSuccess(savedText);
+        }
+
         activityId = R.layout.activity_login;
         super.onCreate(savedInstanceState);
 
@@ -25,6 +35,13 @@ public class LoginActivity extends AbstractLoginActivity {
                 return false;
             }
         });
+    }
+
+    private void loggedUserSuccess(String idString) {
+        this.finish();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.putExtra("userId", Integer.valueOf(idString));
+        startActivity(intent);
     }
 
     @Override

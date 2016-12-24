@@ -2,6 +2,7 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+    private final String LOGGED_USER = "logged_user"; //"-1" if no user is in
+    private final String PREF_FILE = "loggedUser";
+    private SharedPreferences sPref;
 
     private Intent intentMain;
     private Intent intentProfile;
@@ -47,6 +51,15 @@ public class MainActivity extends Activity {
         registerButton(intentBooks, R.id.main_button_books);
 
         fieldsInitialization();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(LOGGED_USER, userId.toString());
+        ed.commit();
     }
 
     private Intent registerIntent(Class clazz) {
