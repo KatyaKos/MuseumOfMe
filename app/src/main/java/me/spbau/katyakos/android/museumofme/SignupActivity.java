@@ -1,5 +1,6 @@
 package me.spbau.katyakos.android.museumofme;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -39,16 +40,19 @@ public class SignupActivity extends AbstractLoginActivity {
     void onVerificationSuccess() {
         String email = getStringTextView(emailText);
         String password = getStringTextView(passwordText);
-        String nickname = "@" + getStringTextView(nameText);
+        String nickname = getStringTextView(nameText);
         AllUsersInformation.addUser(nickname, email, password);
-        setResult(RESULT_OK);
+        Intent intent = new Intent();
+        intent.putExtra("email", email);
+        intent.putExtra("password", password);
+        setResult(RESULT_OK, intent);
         finish();
     }
 
     @Override
     boolean checkFields() {
         String email = getStringTextView(emailText);
-        return AllUsersInformation.containsByEmail(email);
+        return !AllUsersInformation.containsByEmail(email);
     }
 
     @Override

@@ -70,6 +70,10 @@ public class LoginActivity extends AbstractLoginActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK) {
+            String email = data.getStringExtra("email");
+            String password = data.getStringExtra("password");
+            emailText.setText(email);
+            passwordText.setText(password);
             onVerificationSuccess();
         }
     }
