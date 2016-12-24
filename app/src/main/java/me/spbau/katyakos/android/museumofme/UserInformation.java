@@ -295,8 +295,8 @@ public class UserInformation {
     class Interest {
         private Integer id;
         private String name;
-        private String authorName;
-        private String photo;
+        private String authorName; //director for movies
+        private String photo = "interest_photo_default";
         private String review;
         private Integer rating;
         private ArrayList<String> characters; //actors for movies
@@ -309,6 +309,22 @@ public class UserInformation {
             this.review = content.get(3);
             this.characters = characters;
             this.rating = rating;
+        }
+
+        String getName() {
+            return name;
+        }
+
+        String getAuthor() {
+            return authorName;
+        }
+
+        String getPhoto() {
+            return photo;
+        }
+
+        Integer getId() {
+            return id;
         }
     }
 }

@@ -55,7 +55,8 @@
     <string name="map_add_group_button">Add group</string>
     <string name="map_add_place_field">Enter place and click \'+\'</string>
 
-    <!-- Movies and Books Spinner -->
+    <!-- Strings related to Movies and Books -->
+    <string name="interest_search">What do you want to find?</string>
     <string-array name="spinner_list">
         <item>Sort by date</item>
         <item>Sort by name</item>
