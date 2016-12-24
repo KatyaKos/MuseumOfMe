@@ -147,7 +147,7 @@ public class UserInformation {
     }
 
     private <T> boolean addToMuseum(TreeMap<Integer, T> museumSection, Integer id, T argument) {
-        if (museumSection.containsKey(id)) {
+        if (!museumSection.isEmpty() && museumSection.containsKey(id)) {
             return false;
         }
         museumSection.put(id, argument);
@@ -155,7 +155,7 @@ public class UserInformation {
     }
 
     private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id) {
-        if (!museumSection.containsKey(id)) {
+        if (museumSection.isEmpty() || !museumSection.containsKey(id)) {
             return false;
         }
         museumSection.remove(id);
@@ -175,7 +175,7 @@ public class UserInformation {
     }
 
     boolean addPlace(Integer groupId, String placeName) {
-        if (!trips.containsKey(groupId)) {
+        if (!trips.isEmpty() && !trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
@@ -187,7 +187,7 @@ public class UserInformation {
     }
 
     boolean removePlace(Integer groupId, Integer placeId) {
-        if (!trips.containsKey(groupId)) {
+        if (trips.isEmpty() || !trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
@@ -270,7 +270,7 @@ public class UserInformation {
         }
 
         private boolean removePlace(Integer id) {
-            if (!places.containsKey(id)) {
+            if (places.isEmpty() || !places.containsKey(id)) {
                 return false;
             }
             places.remove(id);

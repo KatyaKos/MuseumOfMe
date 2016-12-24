@@ -139,7 +139,7 @@ public class MapActivity extends Activity {
     }
 
     private Integer getIntegerFromParentView(ViewParent view, int id) {
-        return Integer.getInteger(getString(((TextView) ((View) view).findViewById(id))));
+        return Integer.valueOf(getString(((TextView) ((View) view).findViewById(id))));
     }
 
     private SimpleExpandableListAdapter adapterCreate(Context context, List<? extends Map<String, ?>> groupData,
@@ -194,12 +194,14 @@ public class MapActivity extends Activity {
                 TextView idText = (TextView) convertView.findViewById(R.id.map_group_id);
                 int nameIndex = content.indexOf("groupName=");
                 int idIndex = content.indexOf("groupId=");
+                int nameLength = "groupName=".length();
+                int idLength = "groupId=".length();
                 if (nameIndex < idIndex) {
-                    nameText.setText(content.substring(nameIndex + 10, idIndex - 2));
-                    idText.setText(content.substring(idIndex + 10, content.length() - 1));
+                    nameText.setText(content.substring(nameIndex + nameLength, idIndex - 2));
+                    idText.setText(content.substring(idIndex + idLength, content.length() - 1));
                 } else {
-                    nameText.setText(content.substring(nameIndex + 10, content.length() - 1));
-                    idText.setText(content.substring(idIndex + 10, nameIndex - 2));
+                    nameText.setText(content.substring(nameIndex + nameLength, content.length() - 1));
+                    idText.setText(content.substring(idIndex + idLength, nameIndex - 2));
                 }
 
                 return convertView;
@@ -231,13 +233,15 @@ public class MapActivity extends Activity {
                 TextView nameText = (TextView) convertView.findViewById(R.id.map_place_name);
                 TextView dateText = (TextView) convertView.findViewById(R.id.map_place_id);
                 int nameIndex = content.indexOf("placeName=");
-                int dateIndex = content.indexOf("placeId=");
-                if (nameIndex < dateIndex) {
-                    nameText.setText(content.substring(nameIndex + 10, dateIndex - 2));
-                    dateText.setText(content.substring(dateIndex + 10, content.length() - 1));
+                int idIndex = content.indexOf("placeId=");
+                int nameLength = "placeName=".length();
+                int idLength = "placeId=".length();
+                if (nameIndex < idIndex) {
+                    nameText.setText(content.substring(nameIndex + nameLength, idIndex - 2));
+                    dateText.setText(content.substring(idIndex + idLength, content.length() - 1));
                 } else {
-                    nameText.setText(content.substring(nameIndex + 10, content.length() - 1));
-                    dateText.setText(content.substring(dateIndex + 10, nameIndex - 2));
+                    nameText.setText(content.substring(nameIndex + nameLength, content.length() - 1));
+                    dateText.setText(content.substring(idIndex + idLength, nameIndex - 2));
                 }
 
                 return convertView;
