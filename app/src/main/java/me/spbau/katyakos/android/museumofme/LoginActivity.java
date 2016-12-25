@@ -96,7 +96,7 @@ public class LoginActivity extends AbstractLoginActivity {
             String email = data.getStringExtra("email");
             String password = data.getStringExtra("password");
             String nickname = data.getStringExtra("nickname");
-            AllUsersInformation.addUser(dataBase, nickname, email, password);
+            AllUsersInformation.addUser(nickname, email, password);
             emailText.setText(email);
             passwordText.setText(password);
             onVerificationSuccess();
