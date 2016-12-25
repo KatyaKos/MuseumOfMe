@@ -26,6 +26,9 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
 
             @Override
             public void onClick(View v) {
+                if (!validate()) {
+                    return;
+                }
                 user.setUserBio(getStringEditText(userBio));
                 user.setUserName(getStringEditText(nameField));
                 user.setUserBirth(getStringEditText(birthField));
@@ -34,6 +37,15 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                 finish();
             }
         });
+    }
+
+    private boolean validate() {
+        if (getStringEditText(nameField).length() < 3) {
+            nameField.setError("at least 3 letters");
+            nameField.requestFocus();
+            return false;
+        }
+        return true;
     }
 
     @Override
