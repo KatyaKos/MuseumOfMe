@@ -1,51 +1,24 @@
 package me.spbau.katyakos.android.museumofme;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
 import java.util.TreeMap;
 
 class AllUsersInformation {
-    private static TreeMap<Integer, UserInformation> usersListById = new TreeMap<Integer, UserInformation>() {{
-        put(0, new UserInformation(0, "katyakos_", "me@test.com", "gogo"));
-        put(1, new UserInformation(1, "user1", "user1@test.com", "hello"));
-        put(2, new UserInformation(2, "user2", "user2@test.com", "hihi"));
-        put(3, new UserInformation(3, "user3", "user3@test.com", "youyou"));
-        put(4, new UserInformation(4, "user4", "user4@test.com", "meme"));
-    }};
-    private static TreeMap<String, UserInformation> usersListByNickname = new TreeMap<String, UserInformation>() {{
-        put("@katyakos_", new UserInformation(0, "katyakos_", "me@test.com", "gogo"));
-        put("@user3", new UserInformation(3, "user3", "user3@test.com", "youyou"));
-        put("@user2", new UserInformation(2, "user2", "user2@test.com", "hihi"));
-        put("@user1", new UserInformation(1, "user1", "user1@test.com", "hello"));
-        put("@user4", new UserInformation(4, "user4", "user4@test.com", "meme"));
-    }};
+    private static TreeMap<Integer, UserInformation> usersListById = new TreeMap<>();
+    private static TreeMap<String, UserInformation> usersListByNickname = new TreeMap<>();
 
-    private static TreeMap<String, Pair<String, Integer>> credentials = new TreeMap<String, Pair<String, Integer>>() {{
-        put("me@test.com", new Pair<>("gogo", 0));
-        put("user1@test.com", new Pair<>("hello", 1));
-        put("user2@test.com", new Pair<>("hihi", 2));
-        put("user3@test.com", new Pair<>("youyou", 3));
-        put("user4@test.com", new Pair<>("meme", 4));
-    }};
+    private static TreeMap<String, Pair<String, Integer>> credentials = new TreeMap<>();
 
     static TreeMap<String, UserInformation> getUsersListByNickname() {
         return usersListByNickname;
     }
 
-    static TreeMap<Integer, UserInformation> getUsersListById() {
-        return usersListById;
-    }
-
     static Integer getIdByEmail(String email) {
         return getCredential(email).second;
-    }
-
-    static String getNicknameById(Integer id) {
-        return getUserById(id).getUserNickname();
-    }
-
-    static boolean containsByNickname(String nickname) {
-        return usersListByNickname.containsKey(nickname);
     }
 
     static boolean containsByEmail(String email) {
@@ -56,30 +29,64 @@ class AllUsersInformation {
         return credentials.containsKey(email) && getCredential(email).first.equals(password);
     }
 
-    static void addUser(String userNickname, String userEmail, String userPassword) {
-        Integer userId = usersListById.lastKey() + 1;
-        UserInformation user = new UserInformation(userId, userNickname, userEmail, userPassword);
-        credentials.put(userEmail, new Pair<>(userPassword, userId));
-        usersListByNickname.put("@" + userNickname, user);
-        usersListById.put(userId, user);
-    }
-
-    static boolean changeUserName(Integer userId, String newName) {
-        UserInformation user = getUserById(userId);
-        String userNickname = user.getUserNickname();
-        if (!user.setUserName(newName)) {
-            return false;
-        }
-        usersListByNickname.put(userNickname, user);
-        usersListById.put(userId, user);
-        return true;
-    }
-
     static UserInformation getUserById(Integer id) {
         return usersListById.get(id);
     }
 
     private static Pair<String, Integer> getCredential(String email) {
         return credentials.get(email);
+    }
+
+    static void addUser(SQLiteDatabase dataBase, String userNickname, String userEmail, String userPassword) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("email", userEmail);
+        contentValues.put("password", userPassword);
+        contentValues.put("nickname", userNickname);
+        contentValues.put("photo", "user_photo_default");
+        contentValues.put("header", "user_header_default");
+        Integer userId = (int) dataBase.insertOrThrow("userInfo", null, contentValues);
+        UserInformation user = new UserInformation(dataBase, userId, userNickname);
+        credentials.put(userEmail, new Pair<>(userPassword, userId));
+        usersListByNickname.put("@" + userNickname, user);
+        usersListById.put(userId, user);
+    }
+
+    private static Cursor cursor;
+
+    static void loadDataBase(SQLiteDatabase dataBase) {
+        cursor = dataBase.query("userInfo", null, null, null, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Integer userId = getIntegerFromColumn("id");
+                String userNickname = getStringFromColumn("nickname");
+                credentials.put(getStringFromColumn("email"), new Pair<>(getStringFromColumn("password"), userId));
+                UserInformation user = new UserInformation(dataBase, userId, userNickname);
+                setUserFields(user);
+                usersListById.put(userId, user);
+                usersListByNickname.put(userNickname, user);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+    }
+
+    private static void setUserFields(UserInformation user) {
+        user.setUserName(getStringFromColumn("name"));
+        user.setUserPhoto(getStringFromColumn("photo"));
+        user.setUserHeader(getStringFromColumn("header"));
+        user.setUserBirth(getStringFromColumn("birth"));
+        user.setUserBio(getStringFromColumn("bio"));
+        user.setUserAbout(getStringFromColumn("about"));
+    }
+
+    private static Integer getIntegerFromColumn(String columnName) {
+        return cursor.getInt(getColumnId(columnName));
+    }
+
+    private static String getStringFromColumn(String columnName) {
+        return cursor.getString(getColumnId(columnName));
+    }
+
+    private static int getColumnId(String columnName) {
+        return cursor.getColumnIndex(columnName);
     }
 }

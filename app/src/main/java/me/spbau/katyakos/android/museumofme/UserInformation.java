@@ -1,23 +1,27 @@
 package me.spbau.katyakos.android.museumofme;
 
+import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
+
 import java.util.ArrayList;
 import java.util.TreeMap;
 
 public class UserInformation {
 
-    public UserInformation(Integer userId, String userNickname, String userEmail, String userPassword) {
+    public UserInformation(SQLiteDatabase dataBase, Integer userId, String userNickname) {
+        this.dataBase = dataBase;
         this.userId = userId;
+        userIdString = userId.toString();
         this.userNickname = "@" + userNickname;
         this.userName = userNickname;
-        this.userEmail = userEmail;
-        this.userPassword = userPassword;
         userPhoto = "user_photo_default";
         userHeader = "user_header_default";
     }
 
+    private SQLiteDatabase dataBase;
+
     private Integer userId;
-    private String userEmail;
-    private String userPassword;
+    private String userIdString;
     private String userNickname;
     private String userPhoto;
     private String userHeader;
@@ -89,36 +93,48 @@ public class UserInformation {
         return books;
     }
 
+    private void updateDataBaseColumn(String columnName, String value) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(columnName, value);
+        dataBase.update("userInfo", contentValues, "id = ?", new String[]{userIdString});
+    }
+
     boolean setUserPhoto(String photo) {
         userPhoto = photo;
+        updateDataBaseColumn("photo", photo);
         return true;
     }
 
     boolean setUserHeader(String photo) {
         userHeader = photo;
+        updateDataBaseColumn("header", photo);
         return true;
     }
 
     boolean setUserBio(String text) {
         userBio = text;
+        updateDataBaseColumn("bio", text);
         return true;
     }
 
     boolean setUserName(String name) {
-        if (name.length() < 4) {
+        if (name == null || name.length() < 4) {
             return false;
         }
         userName = name;
+        updateDataBaseColumn("name", name);
         return true;
     }
 
     boolean setUserBirth(String birth) {
         userBirth = birth;
+        updateDataBaseColumn("birth", birth);
         return true;
     }
 
     boolean setUserAbout(String text) {
         userAbout = text;
+        updateDataBaseColumn("about", text);
         return true;
     }
 
