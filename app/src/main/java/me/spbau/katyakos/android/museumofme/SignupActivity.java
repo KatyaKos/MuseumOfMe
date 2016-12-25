@@ -41,10 +41,10 @@ public class SignupActivity extends AbstractLoginActivity {
         String email = getStringTextView(emailText);
         String password = getStringTextView(passwordText);
         String nickname = getStringTextView(nameText);
-        AllUsersInformation.addUser(nickname, email, password);
         Intent intent = new Intent();
         intent.putExtra("email", email);
         intent.putExtra("password", password);
+        intent.putExtra("nickname", nickname);
         setResult(RESULT_OK, intent);
         finish();
     }
