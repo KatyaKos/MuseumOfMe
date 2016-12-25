@@ -15,6 +15,11 @@ class UserDataBaseHelper extends SQLiteOpenHelper {
                 + "id integer primary key autoincrement," + "email text," + "password text,"
                 + "nickname text," + "name text," + "photo text," + "header text,"
                 + "bio text," + "birth text," + "about text" + ");");
+        db.execSQL("create table userTripsGroups ("
+                + "groupId integer primary key autoincrement," + "groupName text" + ");");
+        db.execSQL("create table userTripsPlaces ("
+                + "id integer primary key autoincrement," + "placeId integer," + "groupId integer,"
+                + "placeName text" + ");");
     }
 
     @Override

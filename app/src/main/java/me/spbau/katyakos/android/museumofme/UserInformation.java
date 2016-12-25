@@ -93,48 +93,48 @@ public class UserInformation {
         return books;
     }
 
-    private void updateDataBaseColumn(String columnName, String value) {
+    private void updateDataBaseColumn(String tableName, String columnName, String value) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(columnName, value);
-        dataBase.update("userInfo", contentValues, "id = ?", new String[]{userIdString});
+        dataBase.update(tableName, contentValues, "id = ?", new String[]{userIdString});
     }
 
     boolean setUserPhoto(String photo) {
         userPhoto = photo;
-        updateDataBaseColumn("photo", photo);
+        updateDataBaseColumn("userInfo", "photo", photo);
         return true;
     }
 
     boolean setUserHeader(String photo) {
         userHeader = photo;
-        updateDataBaseColumn("header", photo);
+        updateDataBaseColumn("userInfo", "header", photo);
         return true;
     }
 
     boolean setUserBio(String text) {
         userBio = text;
-        updateDataBaseColumn("bio", text);
+        updateDataBaseColumn("userInfo", "bio", text);
         return true;
     }
 
     boolean setUserName(String name) {
-        if (name == null || name.length() < 4) {
+        if (name == null || name.length() < 3) {
             return false;
         }
         userName = name;
-        updateDataBaseColumn("name", name);
+        updateDataBaseColumn("userInfo", "name", name);
         return true;
     }
 
     boolean setUserBirth(String birth) {
         userBirth = birth;
-        updateDataBaseColumn("birth", birth);
+        updateDataBaseColumn("userInfo", "birth", birth);
         return true;
     }
 
     boolean setUserAbout(String text) {
         userAbout = text;
-        updateDataBaseColumn("about", text);
+        updateDataBaseColumn("userInfo", "about", text);
         return true;
     }
 
@@ -178,11 +178,14 @@ public class UserInformation {
         return true;
     }
 
+    void loadGroup(Integer groupId, String groupName) {
+        trips.put(groupId, new Trip(groupId, groupName));
+    }
+
     boolean addGroup(String groupName) {
-        Integer groupId = 1;
-        if (!trips.isEmpty()) {
-            groupId = trips.lastKey() + 1;
-        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("groupName", groupName);
+        Integer groupId = (int) dataBase.insertOrThrow("userTripsGroups", null, contentValues);
         return addToMuseum(trips, groupId, new Trip(groupId, groupName));
     }
 
@@ -190,14 +193,25 @@ public class UserInformation {
         return removeFromMuseum(trips, id);
     }
 
+    void loadPlace(Integer groupId, Integer placeId, String placeName) {
+        Trip trip = trips.get(groupId);
+        trip.loadPlace(placeId, placeName);
+    }
+
     boolean addPlace(Integer groupId, String placeName) {
         if (!trips.isEmpty() && !trips.containsKey(groupId)) {
             return false;
         }
         Trip trip = trips.get(groupId);
-        if (!trip.addPlace(placeName)) {
+        int placeId = trip.addPlace(placeName);
+        if (placeId == -1) {
             return false;
         }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("placeId", placeId);
+        contentValues.put("placeName", placeName);
+        contentValues.put("groupId", groupId);
+        dataBase.insertOrThrow("userTripsPlaces", null, contentValues);
         trips.put(groupId, trip);
         return true;
     }
@@ -273,16 +287,20 @@ public class UserInformation {
             return groupName;
         }
 
-        private boolean addPlace(String name) {
+        private void loadPlace(Integer placeId, String placeName) {
+            places.put(placeId, placeName);
+        }
+
+        private int addPlace(String name) {
             Integer id = 1;
             if (!places.isEmpty()) {
                 id = places.lastKey() + 1;
             }
             if (places.containsKey(id)) {
-                return false;
+                return -1;
             }
             places.put(id, name);
-            return true;
+            return id;
         }
 
         private boolean removePlace(Integer id) {

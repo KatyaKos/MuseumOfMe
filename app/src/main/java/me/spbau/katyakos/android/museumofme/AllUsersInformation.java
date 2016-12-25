@@ -37,7 +37,9 @@ class AllUsersInformation {
         return credentials.get(email);
     }
 
-    static void addUser(SQLiteDatabase dataBase, String userNickname, String userEmail, String userPassword) {
+    private static SQLiteDatabase dataBase;
+
+    static void addUser(String userNickname, String userEmail, String userPassword) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("email", userEmail);
         contentValues.put("password", userPassword);
@@ -51,17 +53,16 @@ class AllUsersInformation {
         usersListById.put(userId, user);
     }
 
-    private static Cursor cursor;
-
-    static void loadDataBase(SQLiteDatabase dataBase) {
-        cursor = dataBase.query("userInfo", null, null, null, null, null, null);
+    static void loadDataBase(SQLiteDatabase db) {
+        dataBase = db;
+        Cursor cursor = dataBase.query("userInfo", null, null, null, null, null, null);
         if (cursor.moveToFirst()) {
             do {
-                Integer userId = getIntegerFromColumn("id");
-                String userNickname = getStringFromColumn("nickname");
-                credentials.put(getStringFromColumn("email"), new Pair<>(getStringFromColumn("password"), userId));
+                Integer userId = getIntegerFromColumn(cursor, "id");
+                String userNickname = getStringFromColumn(cursor, "nickname");
+                credentials.put(getStringFromColumn(cursor, "email"), new Pair<>(getStringFromColumn(cursor, "password"), userId));
                 UserInformation user = new UserInformation(dataBase, userId, userNickname);
-                setUserFields(user);
+                setUserFields(cursor, user);
                 usersListById.put(userId, user);
                 usersListByNickname.put(userNickname, user);
             } while (cursor.moveToNext());
@@ -69,24 +70,48 @@ class AllUsersInformation {
         cursor.close();
     }
 
-    private static void setUserFields(UserInformation user) {
-        user.setUserName(getStringFromColumn("name"));
-        user.setUserPhoto(getStringFromColumn("photo"));
-        user.setUserHeader(getStringFromColumn("header"));
-        user.setUserBirth(getStringFromColumn("birth"));
-        user.setUserBio(getStringFromColumn("bio"));
-        user.setUserAbout(getStringFromColumn("about"));
+    private static void setUserFields(Cursor cursor, UserInformation user) {
+        user.setUserName(getStringFromColumn(cursor, "name"));
+        user.setUserPhoto(getStringFromColumn(cursor, "photo"));
+        user.setUserHeader(getStringFromColumn(cursor, "header"));
+        user.setUserBirth(getStringFromColumn(cursor, "birth"));
+        user.setUserBio(getStringFromColumn(cursor, "bio"));
+        user.setUserAbout(getStringFromColumn(cursor, "about"));
+
+        readTrips(user);
     }
 
-    private static Integer getIntegerFromColumn(String columnName) {
-        return cursor.getInt(getColumnId(columnName));
+    private static void readTrips(UserInformation user) {
+        Cursor cursorTrips = dataBase.query("userTripsGroups", null, null, null, null, null, null);
+        if (cursorTrips.moveToFirst()) {
+            do {
+                Integer groupId = getIntegerFromColumn(cursorTrips, "groupId");
+                String groupName = getStringFromColumn(cursorTrips, "groupName");
+                user.loadGroup(groupId, groupName);
+            } while (cursorTrips.moveToNext());
+        }
+        cursorTrips.close();
+        cursorTrips = dataBase.query("userTripsPlaces", null, null, null, null, null, null);
+        if (cursorTrips.moveToFirst()) {
+            do {
+                Integer groupId = getIntegerFromColumn(cursorTrips, "groupId");
+                String placeName = getStringFromColumn(cursorTrips, "placeName");
+                Integer placeId = getIntegerFromColumn(cursorTrips, "placeId");
+                user.loadPlace(groupId, placeId, placeName);
+            } while (cursorTrips.moveToNext());
+        }
+        cursorTrips.close();
     }
 
-    private static String getStringFromColumn(String columnName) {
-        return cursor.getString(getColumnId(columnName));
+    private static Integer getIntegerFromColumn(Cursor cursor, String columnName) {
+        return cursor.getInt(getColumnId(cursor, columnName));
     }
 
-    private static int getColumnId(String columnName) {
+    private static String getStringFromColumn(Cursor cursor, String columnName) {
+        return cursor.getString(getColumnId(cursor, columnName));
+    }
+
+    private static int getColumnId(Cursor cursor, String columnName) {
         return cursor.getColumnIndex(columnName);
     }
 }
