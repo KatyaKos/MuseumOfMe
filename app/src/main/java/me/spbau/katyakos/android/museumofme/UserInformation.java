@@ -2,7 +2,10 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.TreeMap;
 
@@ -246,11 +249,41 @@ public class UserInformation {
         return removeFromMuseum(notes, noteId);
     }
 
-    boolean addMovie(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
-        Integer movieId = 1;
-        if (!movies.isEmpty()) {
-            movieId = movies.lastKey() + 1;
+    private byte[] serializeArrayList(ArrayList<String> array) {
+        byte[] result = {};
+        try {
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            ObjectOutputStream out = new ObjectOutputStream(bos);
+            out.writeObject(array);
+            out.flush();
+            result = bos.toByteArray();
+            bos.close();
+            out.close();
+        } catch (Exception e) {
+            Log.d("myLogs", "serialization error");
         }
+        return result;
+    }
+
+    private Integer addInterestToTable(TreeMap<String, String> content, Float rating, ArrayList<String> characters, String type) {
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("authorName", content.get("authorName"));
+        contentValues.put("name", content.get("name"));
+        contentValues.put("rating", rating);
+        contentValues.put("review", content.get("review"));
+        contentValues.put("photo", content.get("photo"));
+        contentValues.put("type", type);
+        byte[] charactersBytes = serializeArrayList(characters);
+        contentValues.put("characters", charactersBytes);
+        return (int) dataBase.insertOrThrow("userInterests", null, contentValues);
+    }
+
+    void loadMovie(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+        movies.put(id, new Interest(id, content, rating, characters));
+    }
+
+    boolean addMovie(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+        Integer movieId = addInterestToTable(content, rating, characters, "movie");
         return addToMuseum(movies, movieId, new Interest(movieId, content, rating, characters));
     }
 
@@ -258,11 +291,12 @@ public class UserInformation {
         return removeFromMuseum(movies, movieId);
     }
 
-    boolean addBook(ArrayList<String> content, Integer rating, ArrayList<String> characters) {
-        Integer bookId = 1;
-        if (!books.isEmpty()) {
-            bookId = books.lastKey() + 1;
-        }
+    void loadBook(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+        books.put(id, new Interest(id, content, rating, characters));
+    }
+
+    boolean addBook(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+        Integer bookId = addInterestToTable(content, rating, characters, "book");
         return addToMuseum(books, bookId, new Interest(bookId, content, rating, characters));
     }
 
@@ -349,15 +383,15 @@ public class UserInformation {
         private String authorName; //director for movies
         private String photo = "interest_photo_default";
         private String review;
-        private Integer rating;
+        private Float rating;
         private ArrayList<String> characters; //actors for movies
 
-        private Interest(Integer id, ArrayList<String> content, Integer rating, ArrayList<String> characters) {
+        private Interest(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
             this.id = id;
-            this.name = content.get(0);
-            this.authorName = content.get(1);
-            this.photo = content.get(2);
-            this.review = content.get(3);
+            this.name = content.get("name");
+            this.authorName = content.get("authorName");
+            this.photo = content.get("photo");
+            this.review = content.get("review");
             this.characters = characters;
             this.rating = rating;
         }

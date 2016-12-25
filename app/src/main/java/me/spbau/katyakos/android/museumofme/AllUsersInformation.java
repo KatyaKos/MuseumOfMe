@@ -3,8 +3,13 @@ package me.spbau.katyakos.android.museumofme;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 import android.util.Pair;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.TreeMap;
 
 class AllUsersInformation {
@@ -80,6 +85,7 @@ class AllUsersInformation {
 
         readTrips(user);
         readNotes(user);
+        readInterests(user);
     }
 
     private static void readTrips(UserInformation user) {
@@ -118,6 +124,47 @@ class AllUsersInformation {
             } while (cursorNotes.moveToNext());
         }
         cursorNotes.close();
+    }
+
+    private static ArrayList<String> deserializeBytesArray(byte[] bytes) {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+            ObjectInput in = new ObjectInputStream(bis);
+            Object object = in.readObject();
+            result = (ArrayList<String>) object;
+            in.close();
+        } catch (Exception e) {
+            Log.d("myLogs", "deserialization error");
+        }
+        return result;
+    }
+
+    private static void readInterests(UserInformation user) {
+        Cursor cursorInterests = dataBase.query("userInterests", null, null, null, null, null, null);
+        if (cursorInterests.moveToFirst()) {
+            do {
+                Integer id = getIntegerFromColumn(cursorInterests, "id");
+                Float rating = cursorInterests.getFloat(getColumnId(cursorInterests, "rating"));
+                String type = getStringFromColumn(cursorInterests, "type");
+
+                TreeMap<String, String> content = new TreeMap<>();
+                content.put("name", getStringFromColumn(cursorInterests, "name"));
+                content.put("authorName", getStringFromColumn(cursorInterests, "authorName"));
+                content.put("photo", getStringFromColumn(cursorInterests, "photo"));
+                content.put("review", getStringFromColumn(cursorInterests, "review"));
+
+                byte[] bytes = cursorInterests.getBlob(getColumnId(cursorInterests, "characters"));
+                ArrayList<String> characters = deserializeBytesArray(bytes);
+
+                if (type.equals("movie")) {
+                    user.loadMovie(id, content, rating, characters);
+                } else {
+                    user.loadBook(id, content, rating, characters);
+                }
+            } while (cursorInterests.moveToNext());
+        }
+        cursorInterests.close();
     }
 
     private static Integer getIntegerFromColumn(Cursor cursor, String columnName) {

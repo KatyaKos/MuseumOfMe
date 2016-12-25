@@ -25,6 +25,10 @@ class UserDataBaseHelper extends SQLiteOpenHelper {
         db.execSQL("create table userNotes ("
                 + "id integer primary key autoincrement," + "date text," + "name text,"
                 + "content text," + "tags text" + ");");
+
+        db.execSQL("create table userInterests ("
+                + "id integer primary key autoincrement," + "authorName text," + "name text,"
+                + "photo text," + "review text," + "rating real," + "characters blob," + "type text" + ");");
     }
 
     @Override
