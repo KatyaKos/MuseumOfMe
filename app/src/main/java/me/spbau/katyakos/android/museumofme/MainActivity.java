@@ -34,6 +34,11 @@ public class MainActivity extends Activity {
         userId = thisIntent.getIntExtra("userId", 0);
         user = AllUsersInformation.getUserById(userId);
 
+        sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+        SharedPreferences.Editor ed = sPref.edit();
+        ed.putString(LOGGED_USER, userId.toString());
+        ed.apply();
+
         intentMain = registerIntent(MainActivity.class);
         intentProfile = registerIntent(ProfileActivity.class);
         intentFriends = registerIntent(FriendsActivity.class);
@@ -51,15 +56,6 @@ public class MainActivity extends Activity {
         registerButton(intentBooks, R.id.main_button_books);
 
         fieldsInitialization();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(LOGGED_USER, userId.toString());
-        ed.commit();
     }
 
     private Intent registerIntent(Class clazz) {
