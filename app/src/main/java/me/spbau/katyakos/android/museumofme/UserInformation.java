@@ -228,11 +228,17 @@ public class UserInformation {
         return true;
     }
 
+    void loadNote(Integer id, TreeMap<String, String> note) {
+        notes.put(id, new Note(id, note));
+    }
+
     boolean addNote(TreeMap<String, String> note) {
-        Integer noteId = 1;
-        if (!notes.isEmpty()) {
-            noteId = notes.lastKey() + 1;
-        }
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", note.get("name"));
+        contentValues.put("date", note.get("date"));
+        contentValues.put("content", note.get("text"));
+        contentValues.put("tags", note.get("tags"));
+        Integer noteId = (int) dataBase.insertOrThrow("userNotes", null, contentValues);
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
@@ -314,9 +320,6 @@ public class UserInformation {
 
     class Note {
         private Integer id;
-        private String date;
-        private String name;
-        private String content;
         private String tags;
         private TreeMap<String, String> note = new TreeMap<>();
 
@@ -324,9 +327,6 @@ public class UserInformation {
             this.id = id;
             note.put("id", id.toString());
             this.note = note;
-            date = note.get("date");
-            name = note.get("name");
-            content = note.get("text");
             tags = note.get("tags");
         }
 

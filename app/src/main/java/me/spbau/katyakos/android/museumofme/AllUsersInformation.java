@@ -79,6 +79,7 @@ class AllUsersInformation {
         user.setUserAbout(getStringFromColumn(cursor, "about"));
 
         readTrips(user);
+        readNotes(user);
     }
 
     private static void readTrips(UserInformation user) {
@@ -101,6 +102,22 @@ class AllUsersInformation {
             } while (cursorTrips.moveToNext());
         }
         cursorTrips.close();
+    }
+
+    private static void readNotes(UserInformation user) {
+        Cursor cursorNotes = dataBase.query("userNotes", null, null, null, null, null, null);
+        if (cursorNotes.moveToFirst()) {
+            do {
+                TreeMap<String, String> note = new TreeMap<>();
+                Integer id = getIntegerFromColumn(cursorNotes, "id");
+                note.put("name", getStringFromColumn(cursorNotes, "name"));
+                note.put("date", getStringFromColumn(cursorNotes, "date"));
+                note.put("text", getStringFromColumn(cursorNotes, "content"));
+                note.put("tags", getStringFromColumn(cursorNotes, "tags"));
+                user.loadNote(id, note);
+            } while (cursorNotes.moveToNext());
+        }
+        cursorNotes.close();
     }
 
     private static Integer getIntegerFromColumn(Cursor cursor, String columnName) {
