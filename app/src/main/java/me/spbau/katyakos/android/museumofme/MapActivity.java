@@ -114,7 +114,8 @@ public class MapActivity extends Activity {
         for (Entry<Integer, Trip> entry : usersEntry) {
             Trip group = entry.getValue();
             attribute = new HashMap<>();
-            attribute.put("groupId", group.getGroupId().toString());
+            String groupId = group.getGroupId().toString();
+            attribute.put("groupId", groupId);
             attribute.put("groupName", group.getGroupName());
             groupNames.add(attribute);
 
@@ -123,7 +124,7 @@ public class MapActivity extends Activity {
             Set<Entry<Integer, String>> placesEntry = places.entrySet();
             for (Entry<Integer, String> placeEntry : placesEntry) {
                 attribute = new HashMap<>();
-                attribute.put("placeId", placeEntry.getKey().toString());
+                attribute.put("placeId", placeEntry.getKey().toString() + ", " + groupId);
                 attribute.put("placeName", placeEntry.getValue());
                 dataItem.add(attribute);
             }
@@ -218,9 +219,9 @@ public class MapActivity extends Activity {
                         public void onClick(View view) {
                             Button clicked = (Button) view;
                             ViewParent item = clicked.getParent();
-                            Integer placeId = getIntegerFromParentView(item, R.id.map_place_id);
-                            item = item.getParent();
-                            Integer groupId = getIntegerFromParentView(item, R.id.map_group_id);
+                            String[] ids = getString(((TextView) ((View) item).findViewById(R.id.map_place_id))).split(", ");
+                            Integer placeId = Integer.valueOf(ids[0]);
+                            Integer groupId = Integer.valueOf(ids[1]);
                             user.removePlace(groupId, placeId);
                             mapList = user.getUserMap();
                             listLayout.setAdapter((BaseExpandableListAdapter) null);
