@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/user_header_default">
+
+    <Button
+        android:id="@+id/add_book_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/add_book_back"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp">
+
+                <ImageView
+                    android:id="@+id/add_book_photo"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:elevation="5dp"
+                    android:src="@drawable/user_photo_default"
+                    android:contentDescription="@string/profile_photo" />
+
+                <Button
+                    android:id="@+id/add_book_change_photo"
+                    android:layout_width="140dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_interest_change_photo"
+                    android:layout_toEndOf="@+id/add_book_photo"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginTop="40dp" />
+            </RelativeLayout>
+
+            <EditText
+                android:id="@+id/add_book_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:hint="@string/add_book_name" />
+
+            <EditText
+                android:id="@+id/add_book_author"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:hint="@string/add_book_author" />
+
+            <EditText
+                android:id="@+id/add_book_characters"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:hint="@string/add_book_characters" />
+
+            <EditText
+                android:id="@+id/add_book_review"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:hint="@string/add_interest_review" />
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="35dp"
+                android:layout_marginRight="15dp"
+                android:layout_marginLeft="15dp">
+
+                <TextView
+                    android:id="@+id/add_book_rating_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_interest_rating"
+                    android:layout_marginEnd="25dp"
+                    android:textSize="18sp" />
+
+                <Spinner
+                    android:id="@+id/add_book_rating"
+                    android:layout_toEndOf="@+id/add_book_rating_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:entries="@array/rating_list"
+                    android:layout_marginBottom="15dp" />
+
+            </RelativeLayout>
+
+            <Button
+                android:id="@+id/add_book_save_button"
+                android:text="@string/add_interest_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

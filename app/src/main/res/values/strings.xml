@@ -57,6 +57,31 @@
 
     <!-- Strings related to Movies and Books -->
     <string name="interest_search">What do you want to find?</string>
+    <string name="add_interest_change_photo">Change image</string>
+    <string name="add_movie_back">Back to movies</string>
+    <string name="add_movie_name">Enter movie name:</string>
+    <string name="add_movie_author">Enter movie producer:</string>
+    <string name="add_interest_review">Your review:</string>
+    <string name="add_interest_rating">Choose rating:</string>
+    <string name="add_movie_characters">Enter actors names, use \';\' as divider:</string>
+    <string name="add_interest_save">Save</string>
+    <string name="add_book_back">Back to books</string>
+    <string name="add_book_name">Enter book name:</string>
+    <string name="add_book_author">Enter the author name:</string>
+    <string name="add_book_characters">Enter characters names, use \';\' as divider:</string>
+    <string-array name="rating_list">
+        <item>0</item>
+        <item>0.5</item>
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+        <item>2.5</item>
+        <item>3</item>
+        <item>3.5</item>
+        <item>4</item>
+        <item>4.5</item>
+        <item>5</item>
+    </string-array>
     <string-array name="spinner_list">
         <item>Sort by date</item>
         <item>Sort by name</item>
