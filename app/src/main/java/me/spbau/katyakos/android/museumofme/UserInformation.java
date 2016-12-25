@@ -7,6 +7,8 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 public class UserInformation {
@@ -173,10 +175,11 @@ public class UserInformation {
         return true;
     }
 
-    private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id) {
+    private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id, String tableName) {
         if (museumSection.isEmpty() || !museumSection.containsKey(id)) {
             return false;
         }
+        dataBase.delete(tableName, "id = " + id, null);
         museumSection.remove(id);
         return true;
     }
@@ -188,12 +191,20 @@ public class UserInformation {
     boolean addGroup(String groupName) {
         ContentValues contentValues = new ContentValues();
         contentValues.put("groupName", groupName);
-        Integer groupId = (int) dataBase.insertOrThrow("userTripsGroups", null, contentValues);
+        Integer groupId = (int) dataBase.insert("userTripsGroups", null, contentValues);
         return addToMuseum(trips, groupId, new Trip(groupId, groupName));
     }
 
     boolean removeGroup(Integer id) {
-        return removeFromMuseum(trips, id);
+        if (trips.isEmpty() || !trips.containsKey(id)) {
+            return false;
+        }
+        TreeMap<Integer, String> placesIds = trips.get(id).getPlaces();
+        Set<Map.Entry<Integer, String>> usersEntry = placesIds.entrySet();
+        for (Map.Entry<Integer, String> entry : usersEntry) {
+            dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{entry.getKey().toString(), id.toString()});
+        }
+        return removeFromMuseum(trips, id, "userTripsGroups");
     }
 
     void loadPlace(Integer groupId, Integer placeId, String placeName) {
@@ -214,7 +225,7 @@ public class UserInformation {
         contentValues.put("placeId", placeId);
         contentValues.put("placeName", placeName);
         contentValues.put("groupId", groupId);
-        dataBase.insertOrThrow("userTripsPlaces", null, contentValues);
+        dataBase.insert("userTripsPlaces", null, contentValues);
         trips.put(groupId, trip);
         return true;
     }
@@ -227,6 +238,7 @@ public class UserInformation {
         if (!trip.removePlace(placeId)) {
             return false;
         }
+        dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{placeId.toString(), groupId.toString()});
         trips.put(groupId, trip);
         return true;
     }
@@ -241,12 +253,12 @@ public class UserInformation {
         contentValues.put("date", note.get("date"));
         contentValues.put("content", note.get("text"));
         contentValues.put("tags", note.get("tags"));
-        Integer noteId = (int) dataBase.insertOrThrow("userNotes", null, contentValues);
+        Integer noteId = (int) dataBase.insert("userNotes", null, contentValues);
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
     boolean removeNote(Integer noteId) {
-        return removeFromMuseum(notes, noteId);
+        return removeFromMuseum(notes, noteId, "userNotes");
     }
 
     private byte[] serializeArrayList(ArrayList<String> array) {
@@ -275,7 +287,7 @@ public class UserInformation {
         contentValues.put("type", type);
         byte[] charactersBytes = serializeArrayList(characters);
         contentValues.put("characters", charactersBytes);
-        return (int) dataBase.insertOrThrow("userInterests", null, contentValues);
+        return (int) dataBase.insert("userInterests", null, contentValues);
     }
 
     void loadMovie(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
@@ -288,7 +300,7 @@ public class UserInformation {
     }
 
     boolean removeMovie(Integer movieId) {
-        return removeFromMuseum(movies, movieId);
+        return removeFromMuseum(movies, movieId, "userInterests");
     }
 
     void loadBook(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
@@ -301,7 +313,7 @@ public class UserInformation {
     }
 
     boolean removeBook(Integer bookId) {
-        return removeFromMuseum(books, bookId);
+        return removeFromMuseum(books, bookId, "userInterests");
     }
 
     class Trip {
