@@ -92,7 +92,7 @@ class AllUsersInformation {
         Cursor cursorTrips = dataBase.query("userTripsGroups", null, null, null, null, null, null);
         if (cursorTrips.moveToFirst()) {
             do {
-                Integer groupId = getIntegerFromColumn(cursorTrips, "groupId");
+                Integer groupId = getIntegerFromColumn(cursorTrips, "id");
                 String groupName = getStringFromColumn(cursorTrips, "groupName");
                 user.loadGroup(groupId, groupName);
             } while (cursorTrips.moveToNext());
