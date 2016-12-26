@@ -1,6 +1,7 @@
 package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -26,8 +27,7 @@ public class DiaryActivity extends AbstractListViewActivity<Integer, UserInforma
         ButterKnife.inject(this);
 
         ImageView userPhoto = (ImageView) findViewById(R.id.diary_user_photo);
-        int id = getResources().getIdentifier(user.getUserPhoto(), "drawable", getPackageName());
-        userPhoto.setImageResource(id);
+        userPhoto.setImageBitmap(BitmapFactory.decodeFile(user.getUserPhoto()));
         TextView userNickname = (TextView) findViewById(R.id.diary_user_nickname);
         userNickname.setText(user.getUserNickname());
         TextView userName = (TextView) findViewById(R.id.diary_user_name);

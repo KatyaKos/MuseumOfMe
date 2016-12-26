@@ -1,6 +1,7 @@
 package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -53,8 +54,7 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
     @Override
     void setListFields(UserInformation.Interest value, View item) {
         ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
-        int id = getResources().getIdentifier(value.getPhoto(), "drawable", getPackageName());
-        photo.setImageResource(id);
+        photo.setImageBitmap(BitmapFactory.decodeFile(value.getPhoto()));
 
         TextView author = (TextView) item.findViewById(R.id.listview_text2);
         author.setVisibility(View.VISIBLE);

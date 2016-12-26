@@ -2,6 +2,7 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -65,8 +66,7 @@ abstract class AbstractViewInterestActivity extends Activity {
     }
 
     private void registerImage(ImageView image, String name) {
-        int imageId = getResources().getIdentifier(name, "drawable", getPackageName());
-        image.setImageResource(imageId);
+        image.setImageBitmap(BitmapFactory.decodeFile(name));
     }
 
     private void registerText(TextView view, TextView disclaimer, String content) {

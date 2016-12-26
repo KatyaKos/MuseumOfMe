@@ -2,7 +2,11 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -31,6 +35,7 @@ abstract class AbstractAddInterestActivity extends Activity {
     protected String type;
 
     private UserInformation user;
+    private String image;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,16 @@ abstract class AbstractAddInterestActivity extends Activity {
             }
         });
 
+        changePhoto.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                changePhoto.setClickable(false);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, 1);
+            }
+        });
+
         ratingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected, int selectedItemPosition, long selectedId) {
                 String selected = parent.getItemAtPosition(selectedItemPosition).toString();
@@ -72,6 +87,28 @@ abstract class AbstractAddInterestActivity extends Activity {
             public void onNothingSelected(AdapterView<?> parent) {
             }
         });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == RESULT_OK && null != data) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    image = cursor.getString(columnIndex);
+                    cursor.close();
+                    photo.setImageBitmap(BitmapFactory.decodeFile(image));
+                }
+            } else {
+                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Loading went wrong", Toast.LENGTH_LONG).show();
+        }
+        changePhoto.setClickable(true);
     }
 
     abstract void fieldsInitialization();
@@ -89,7 +126,7 @@ abstract class AbstractAddInterestActivity extends Activity {
         interest.put("name", getStringEditText(nameText));
         interest.put("authorName", getStringEditText(author));
         interest.put("review", getStringEditText(review));
-        interest.put("photo", "interest_photo_default");
+        interest.put("photo", image);
         String[] charactersContent = getStringEditText(charactersText).split("; ");
         ArrayList<String> characters = new ArrayList<>(Arrays.asList(charactersContent));
         user.addInterest(type, interest, rating, characters);

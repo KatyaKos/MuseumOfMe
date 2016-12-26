@@ -2,6 +2,7 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -61,7 +62,6 @@ abstract class AbstractProfileActivity extends Activity {
     }
 
     private void registerImage(ImageView image, String name) {
-        int imageId = getResources().getIdentifier(name, "drawable", getPackageName());
-        image.setImageResource(imageId);
+        image.setImageBitmap(BitmapFactory.decodeFile(name));
     }
 }

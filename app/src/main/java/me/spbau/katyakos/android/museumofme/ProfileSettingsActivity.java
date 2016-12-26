@@ -1,10 +1,16 @@
 package me.spbau.katyakos.android.museumofme;
 
+import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import butterknife.InjectView;
 
@@ -16,6 +22,9 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
     Button changePhoto;
     @InjectView(R.id.profile_sets_change_header)
     Button changeHeader;
+
+    private String header = "user_header_default";
+    private String photo = "user_photo_default";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,6 +38,8 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                 if (!validate()) {
                     return;
                 }
+                user.setUserHeader(header);
+                user.setUserPhoto(photo);
                 user.setUserBio(getStringEditText(userBio));
                 user.setUserName(getStringEditText(nameField));
                 user.setUserBirth(getStringEditText(birthField));
@@ -37,6 +48,54 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                 finish();
             }
         });
+
+        /*changeHeader.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeHeader.setClickable(false);
+                changePhoto.setClickable(false);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, 1);
+            }
+        });*/
+
+        changePhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeHeader.setClickable(false);
+                changePhoto.setClickable(false);
+                Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(galleryIntent, 2);
+            }
+        });
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        try {
+            if (resultCode == RESULT_OK && null != data) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
+                if (cursor.moveToFirst()) {
+                    int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                    if (requestCode == 1) {
+                        header = cursor.getString(columnIndex);
+                        headerImage.setImageBitmap(BitmapFactory.decodeFile(header));
+                    } else {
+                        photo = cursor.getString(columnIndex);
+                        profileImage.setImageBitmap(BitmapFactory.decodeFile(photo));
+                    }
+                    cursor.close();
+                }
+            } else {
+                Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            Toast.makeText(this, "Loading went wrong", Toast.LENGTH_LONG).show();
+        }
+        changeHeader.setClickable(true);
+        changePhoto.setClickable(true);
     }
 
     private boolean validate() {
