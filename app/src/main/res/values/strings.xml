@@ -60,7 +60,7 @@
     <string name="add_interest_change_photo">Change image</string>
     <string name="add_movie_back">Back to movies</string>
     <string name="add_movie_name">Enter movie name:</string>
-    <string name="add_movie_author">Enter movie producer:</string>
+    <string name="add_movie_author">Enter movie director:</string>
     <string name="add_interest_review">Your review:</string>
     <string name="add_interest_rating">Choose rating:</string>
     <string name="add_movie_characters">Enter actors names, use \'; \' as divider:</string>
@@ -75,7 +75,7 @@
     <string name="view_interest_review">My review:</string>
     <string name="view_interest_rating">Rating:</string>
     <string name="view_movie_name">Movie name:</string>
-    <string name="view_movie_author">Movie producer:</string>
+    <string name="view_movie_author">Movie director:</string>
     <string name="view_movie_characters">Actors:</string>
     <string-array name="rating_list">
         <item>0</item>
