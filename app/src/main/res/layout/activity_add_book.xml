@@ -98,7 +98,7 @@
                 android:layout_marginLeft="15dp">
 
                 <TextView
-                    android:id="@+id/add_book_rating_spinner"
+                    android:id="@+id/add_book_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/add_interest_rating"
@@ -106,8 +106,8 @@
                     android:textSize="18sp" />
 
                 <Spinner
-                    android:id="@+id/add_book_rating"
-                    android:layout_toEndOf="@+id/add_book_rating_spinner"
+                    android:id="@+id/add_book_rating_spinner"
+                    android:layout_toEndOf="@+id/add_book_rating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:entries="@array/rating_list"

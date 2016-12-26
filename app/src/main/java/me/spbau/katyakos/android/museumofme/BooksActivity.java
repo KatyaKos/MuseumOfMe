@@ -35,7 +35,7 @@ public class BooksActivity extends AbstractInterestActivity {
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                user.removeMovie(bookId);
+                user.removeBook(bookId);
                 list = user.getUserBooks();
                 listLayout.removeAllViews();
                 listCreate();
