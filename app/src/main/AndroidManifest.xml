@@ -68,6 +68,9 @@
             android:name=".AddMovieActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ViewMovieActivity"
+            android:theme="@style/AppTheme" />
 
         <activity
             android:name=".BooksActivity"
@@ -77,6 +80,9 @@
             android:name=".AddBookActivity"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden" />
+        <activity
+            android:name=".ViewBookActivity"
+            android:theme="@style/AppTheme" />
     </application>
 
 </manifest>

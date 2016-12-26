@@ -69,6 +69,14 @@
     <string name="add_book_name">Enter book name:</string>
     <string name="add_book_author">Enter the author name:</string>
     <string name="add_book_characters">Enter characters names, use \'; \' as divider:</string>
+    <string name="view_book_name">Book name:</string>
+    <string name="view_book_author">Book author:</string>
+    <string name="view_book_characters">Characters:</string>
+    <string name="view_interest_review">My review:</string>
+    <string name="view_interest_rating">Rating:</string>
+    <string name="view_movie_name">Movie name:</string>
+    <string name="view_movie_author">Movie producer:</string>
+    <string name="view_movie_characters">Actors:</string>
     <string-array name="rating_list">
         <item>0</item>
         <item>0.5</item>

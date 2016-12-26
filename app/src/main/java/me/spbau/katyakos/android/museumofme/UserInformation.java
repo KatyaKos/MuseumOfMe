@@ -324,6 +324,14 @@ public class UserInformation {
         return removeFromMuseum(books, bookId, "userInterests");
     }
 
+    Interest getInterestById(String type, Integer id) {
+        if (type.equals("movie")) {
+            return movies.get(id);
+        } else {
+            return books.get(id);
+        }
+    }
+
     class Trip {
         private Integer groupId;
         private String groupName;
@@ -430,6 +438,18 @@ public class UserInformation {
 
         Integer getId() {
             return id;
+        }
+
+        ArrayList<String> getCharacters() {
+            return characters;
+        }
+
+        String getReview() {
+            return review;
+        }
+
+        Float getRating() {
+            return rating;
         }
     }
 }
