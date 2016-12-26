@@ -8,12 +8,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer, UserInformation.Interest> {
     protected Button addButton;
     protected Spinner sortSpinner;
     protected Class addInterestClass;
+    protected Class viewInterestClass;
 
     private ArrayAdapter adapter;
 
@@ -68,15 +68,16 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
     }
 
     @Override
-    void setOnCLickListeners(UserInformation.Interest value, View item) {
+    void setOnCLickListeners(final UserInformation.Interest value, View item) {
         ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
-        TextView nameText = (TextView) item.findViewById(R.id.listview_text1);
 
-        final String name = getString(nameText);
         photo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getBaseContext(), name, Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getApplicationContext(), viewInterestClass);
+                intent.putExtra("userId", userId);
+                intent.putExtra("interestId", value.getId());
+                startActivity(intent);
             }
         });
     }

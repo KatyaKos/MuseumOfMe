@@ -13,6 +13,7 @@ public class MoviesActivity extends AbstractInterestActivity {
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_movies;
         addInterestClass = AddMovieActivity.class;
+        viewInterestClass = ViewMovieActivity.class;
         super.onCreate(savedInstanceState);
     }
 

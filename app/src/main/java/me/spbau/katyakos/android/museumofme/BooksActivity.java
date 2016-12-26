@@ -13,6 +13,7 @@ public class BooksActivity extends AbstractInterestActivity {
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_books;
         addInterestClass = AddBookActivity.class;
+        viewInterestClass = ViewBookActivity.class;
         super.onCreate(savedInstanceState);
     }
 
