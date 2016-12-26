@@ -30,9 +30,9 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
 
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(getApplicationContext(), addInterestClass);
-                //intent.putExtra("userId", userId);
-                //startActivityForResult(intent, 1);
+                Intent intent = new Intent(getApplicationContext(), addInterestClass);
+                intent.putExtra("userId", userId);
+                startActivityForResult(intent, 1);
             }
         });
     }
@@ -57,6 +57,7 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
         photo.setImageResource(id);
 
         TextView author = (TextView) item.findViewById(R.id.listview_text2);
+        author.setVisibility(View.VISIBLE);
         author.setText(value.getAuthor());
 
         TextView name = (TextView) item.findViewById(R.id.listview_text1);

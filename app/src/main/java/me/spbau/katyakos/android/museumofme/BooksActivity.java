@@ -12,14 +12,14 @@ public class BooksActivity extends AbstractInterestActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_books;
-        //addInterestClass = AddBookActivity.class;
+        addInterestClass = AddBookActivity.class;
         super.onCreate(savedInstanceState);
     }
 
     @Override
     void fieldsInitialization() {
         listLayout = (LinearLayout) findViewById(R.id.books_list);
-        list = user.getUserMovies();
+        list = user.getUserBooks();
         backButton = (Button) findViewById(R.id.books_button_menu);
         search = (EditText) findViewById(R.id.books_search_field);
         addButton = (Button) findViewById(R.id.books_button_add);
