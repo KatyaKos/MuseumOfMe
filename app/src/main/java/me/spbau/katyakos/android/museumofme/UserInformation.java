@@ -294,7 +294,15 @@ public class UserInformation {
         movies.put(id, new Interest(id, content, rating, characters));
     }
 
-    boolean addMovie(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+    boolean addInterest(String type, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+        if (type.equals("movie")) {
+            return addMovie(content, rating, characters);
+        } else {
+            return addBook(content, rating, characters);
+        }
+    }
+
+    private boolean addMovie(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
         Integer movieId = addInterestToTable(content, rating, characters, "movie");
         return addToMuseum(movies, movieId, new Interest(movieId, content, rating, characters));
     }
@@ -307,7 +315,7 @@ public class UserInformation {
         books.put(id, new Interest(id, content, rating, characters));
     }
 
-    boolean addBook(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+    private boolean addBook(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
         Integer bookId = addInterestToTable(content, rating, characters, "book");
         return addToMuseum(books, bookId, new Interest(bookId, content, rating, characters));
     }
