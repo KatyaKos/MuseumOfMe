@@ -3,6 +3,7 @@ package me.spbau.katyakos.android.museumofme;
 import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -100,7 +101,7 @@ abstract class AbstractAddInterestActivity extends Activity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     image = cursor.getString(columnIndex);
                     cursor.close();
-                    photo.setImageBitmap(BitmapFactory.decodeFile(image));
+                    photo.setImageBitmap(decodeSampledBitmapFromFile(image));
                 }
             } else {
                 Toast.makeText(this, "You haven't picked Image", Toast.LENGTH_LONG).show();
@@ -147,6 +148,36 @@ abstract class AbstractAddInterestActivity extends Activity {
         }
 
         return valid;
+    }
+
+    protected Bitmap decodeSampledBitmapFromFile(String file) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file, options);
+
+        int reqWidth = 140;
+        int reqHeight = 140;
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file, options);
+    }
+
+    private int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
 }

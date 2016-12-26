@@ -2,7 +2,6 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,13 +22,16 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
     @InjectView(R.id.profile_sets_change_header)
     Button changeHeader;
 
-    private String header = "user_header_default";
-    private String photo = "user_photo_default";
+    private String header;
+    private String photo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_profile_settings;
         super.onCreate(savedInstanceState);
+
+        header = user.getUserHeader();
+        photo = user.getUserPhoto();
 
         saveButton.setOnClickListener(new View.OnClickListener() {
 
@@ -49,7 +51,7 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
             }
         });
 
-        /*changeHeader.setOnClickListener(new View.OnClickListener() {
+        changeHeader.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeHeader.setClickable(false);
@@ -57,7 +59,7 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                 Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 startActivityForResult(galleryIntent, 1);
             }
-        });*/
+        });
 
         changePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,10 +83,10 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     if (requestCode == 1) {
                         header = cursor.getString(columnIndex);
-                        headerImage.setImageBitmap(BitmapFactory.decodeFile(header));
+                        headerImage.setImageBitmap(decodeSampledBitmapFromFile(header));
                     } else {
                         photo = cursor.getString(columnIndex);
-                        profileImage.setImageBitmap(BitmapFactory.decodeFile(photo));
+                        profileImage.setImageBitmap(decodeSampledBitmapFromFile(photo));
                     }
                     cursor.close();
                 }
