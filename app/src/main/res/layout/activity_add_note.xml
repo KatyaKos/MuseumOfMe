@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/user_header_default">
+
+    <Button
+        android:id="@+id/add_note_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/add_note_back"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
+
+
+            <EditText
+                android:id="@+id/add_note_name_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="20dp"
+                android:hint="@string/add_note_name" />
+
+            <EditText
+                android:id="@+id/add_note_content_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="20dp"
+                android:hint="@string/add_note_content" />
+
+            <EditText
+                android:id="@+id/add_note_tags_field"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="20dp"
+                android:hint="@string/add_note_tag" />
+
+            <Button
+                android:id="@+id/add_note_add_button"
+                android:text="@string/add_note_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
