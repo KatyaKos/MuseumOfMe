@@ -66,7 +66,7 @@ public class DiaryActivity extends AbstractListViewActivity<Integer, UserInforma
         TextView date = (TextView) item.findViewById(R.id.diary_note_date);
         date.setText(noteContent.get("date"));
         TextView content = (TextView) item.findViewById(R.id.diary_note_text);
-        content.setText(noteContent.get("text") + "\n\n" + noteContent.get("tags"));
+        content.setText(noteContent.get("content") + "\n\n" + noteContent.get("tags"));
     }
 
     @Override

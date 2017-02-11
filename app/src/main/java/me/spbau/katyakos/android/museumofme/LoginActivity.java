@@ -25,11 +25,15 @@ public class LoginActivity extends AbstractLoginActivity {
         dataBase = dataBaseHelper.getWritableDatabase();
         AllUsersInformation.loadDataBase(dataBase);
 
+        AllUsersInformation.downloadBasicInfo();
+
         sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
         String savedText = sPref.getString(LOGGED_USER, "-1");
         if (!savedText.equals("-1")) {
             loggedUserSuccess(savedText);
         }
+
+        AllUsersInformation.downloadAuthInfo();
 
         passwordText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -46,7 +50,7 @@ public class LoginActivity extends AbstractLoginActivity {
     private void loggedUserSuccess(String idString) {
         this.finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-        intent.putExtra("userId", Integer.valueOf(idString));
+        intent.putExtra("userId", idString);
         startActivity(intent);
     }
 
@@ -68,7 +72,7 @@ public class LoginActivity extends AbstractLoginActivity {
     @Override
     void onVerificationSuccess() {
         String email = getStringTextView(emailText);
-        Integer userId = AllUsersInformation.getIdByEmail(email);
+        String userId = AllUsersInformation.getIdByEmail(email);
         this.finish();
         Intent intent = new Intent(getApplicationContext(), MainActivity.class);
         intent.putExtra("userId", userId);

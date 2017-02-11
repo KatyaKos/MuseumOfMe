@@ -36,7 +36,7 @@ abstract class AbstractViewInterestActivity extends Activity {
         setContentView(activityId);
 
         Intent thisIntent = getIntent();
-        Integer userId = thisIntent.getIntExtra("userId", 0);
+        String userId = thisIntent.getStringExtra("userId");
         Integer interestId = thisIntent.getIntExtra("interestId", 0);
         UserInformation user = AllUsersInformation.getUserById(userId);
         interest = user.getInterestById(type, interestId);

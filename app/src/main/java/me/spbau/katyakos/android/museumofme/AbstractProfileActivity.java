@@ -23,7 +23,7 @@ abstract class AbstractProfileActivity extends Activity {
     protected EditText birthField;
     protected EditText userAbout;
 
-    protected Integer userId;
+    protected String userId;
     protected UserInformation user;
 
     protected int activityId;
@@ -35,7 +35,7 @@ abstract class AbstractProfileActivity extends Activity {
         ButterKnife.inject(this);
 
         Intent thisIntent = getIntent();
-        userId = thisIntent.getIntExtra("userId", 0);
+        userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
 
         fieldsInitialization();

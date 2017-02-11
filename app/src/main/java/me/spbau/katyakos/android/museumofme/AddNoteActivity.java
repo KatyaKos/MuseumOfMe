@@ -39,7 +39,7 @@ public class AddNoteActivity extends Activity {
         ButterKnife.inject(this);
 
         Intent thisIntent = getIntent();
-        Integer userId = thisIntent.getIntExtra("userId", 0);
+        String userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
 
         backButton.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class AddNoteActivity extends Activity {
         TreeMap<String, String> note = new TreeMap<>();
         note.put("date", date);
         note.put("name", getStringEditText(nameText));
-        note.put("text", getStringEditText(contentText));
+        note.put("content", getStringEditText(contentText));
         note.put("tags", getStringEditText(tagsText));
         user.addNote(note);
         setResult(RESULT_OK);

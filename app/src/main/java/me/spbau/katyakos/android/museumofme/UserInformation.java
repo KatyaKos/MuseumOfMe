@@ -7,46 +7,84 @@ import android.util.Log;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
 public class UserInformation {
 
-    public UserInformation(SQLiteDatabase dataBase, Integer userId, String userNickname) {
+    private SQLiteDatabase dataBase;
+    private String userId;
+    private String userNickname;
+    private String userPhoto = "user_photo_default";
+    private String userHeader = "user_header_default";
+    private String userBio;
+    private String userName;
+    private String userBirth;
+    private String userAbout;
+    private TreeMap<String, UserInformation> friends = new TreeMap<>();
+    private TreeMap<Integer, Trip> trips = new TreeMap<>();
+    private TreeMap<Integer, Note> notes = new TreeMap<>();
+    private TreeMap<Integer, Interest> movies = new TreeMap<>();
+    private TreeMap<Integer, Interest> books = new TreeMap<>();
+
+    public UserInformation(SQLiteDatabase dataBase, String userId, String userNickname) {
         this.dataBase = dataBase;
         this.userId = userId;
-        userIdString = userId.toString();
         this.userNickname = "@" + userNickname;
         this.userName = userNickname;
         userPhoto = "user_photo_default";
         userHeader = "user_header_default";
     }
 
-    private SQLiteDatabase dataBase;
+    public UserInformation(String id, String nickname, String name) {
+        userId = id;
+        userNickname = nickname;
+        userName = name;
+    }
 
-    private Integer userId;
-    private String userIdString;
-    private String userNickname;
-    private String userPhoto;
-    private String userHeader;
-    private String userBio;
+    public UserInformation(AllUsersInformation.UserInfo user) {
+        userId = user.id;
+        userName = user.name;
+        userNickname = user.nickname;
+        userBio = user.bio;
+        userBirth = user.birth;
+        userAbout = user.about;
+        Set<String> keys = user.notes.keySet();
+        for (String key : keys) {
+            Integer id = Integer.valueOf(key);
+            notes.put(id, new Note(id, user.notes.get(key)));
+        }
+        keys = user.trips.keySet();
+        for (String key : keys) {
+            Integer id = Integer.valueOf(key);
+            Trip trip = new Trip(id, user.trips.get(key).get("name").get(0));
+            ArrayList<String> places = user.trips.get(key).get("places");
+            for (String name : places) {
+                trip.addPlace(name);
+            }
+            trips.put(id, trip);
+        }
+        keys = user.movies.keySet();
+        for (String key : keys) {
+            Integer id = Integer.valueOf(key);
+            Interest movie = new Interest(id, user.movies.get(key));
+            movies.put(id, movie);
+        }
+        keys = user.books.keySet();
+        for (String key : keys) {
+            Integer id = Integer.valueOf(key);
+            Interest book = new Interest(id, user.books.get(key));
+            books.put(id, book);
+        }
 
-    private String userName;
-    private String userBirth;
-    private String userAbout;
+        for (String friendId : user.friends) {
+            friends.put(friendId, AllUsersInformation.getUserById(friendId));
+        }
+    }
 
-    private TreeMap<String, UserInformation> friends = new TreeMap<>();
-
-    private TreeMap<Integer, Trip> trips = new TreeMap<>();
-
-    private TreeMap<Integer, Note> notes = new TreeMap<>();
-
-    private TreeMap<Integer, Interest> movies = new TreeMap<>();
-
-    private TreeMap<Integer, Interest> books = new TreeMap<>();
-
-    Integer getUserId() {
+    String getUserId() {
         return userId;
     }
 
@@ -101,7 +139,7 @@ public class UserInformation {
     private void updateDataBaseColumn(String tableName, String columnName, String value) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(columnName, value);
-        dataBase.update(tableName, contentValues, "id = ?", new String[]{userIdString});
+        dataBase.update(tableName, contentValues, "id = ?", new String[]{userId});
     }
 
     boolean setUserPhoto(String photo) {
@@ -147,7 +185,7 @@ public class UserInformation {
         return friends.containsKey(friendNickname);
     }
 
-    boolean addFriend(Integer friendId) {
+    boolean addFriend(String friendId) {
         UserInformation friend = AllUsersInformation.getUserById(friendId);
         String friendNickname = friend.getUserNickname();
         if (userId.equals(friendId) || friends.containsKey(friendNickname)) {
@@ -157,7 +195,7 @@ public class UserInformation {
         return true;
     }
 
-    boolean removeFriend(Integer friendId) {
+    boolean removeFriend(String friendId) {
         UserInformation friend = AllUsersInformation.getUserById(friendId);
         String friendNickname = friend.getUserNickname();
         if (userId.equals(friendId) || !friends.containsKey(friendNickname)) {
@@ -251,7 +289,7 @@ public class UserInformation {
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", note.get("name"));
         contentValues.put("date", note.get("date"));
-        contentValues.put("content", note.get("text"));
+        contentValues.put("content", note.get("content"));
         contentValues.put("tags", note.get("tags"));
         Integer noteId = (int) dataBase.insert("userNotes", null, contentValues);
         return addToMuseum(notes, noteId, new Note(noteId, note));
@@ -408,11 +446,11 @@ public class UserInformation {
     class Interest {
         private Integer id;
         private String name;
-        private String authorName; //director for movies
+        private String authorName = ""; //director for movies
         private String photo = "interest_photo_default";
-        private String review;
-        private Float rating;
-        private ArrayList<String> characters; //actors for movies
+        private String review = "";
+        private Float rating = 0F;
+        private ArrayList<String> characters = new ArrayList<>(); //actors for movies
 
         private Interest(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
             this.id = id;
@@ -422,6 +460,27 @@ public class UserInformation {
             this.review = content.get("review");
             this.characters = characters;
             this.rating = rating;
+        }
+
+        private Interest(Integer id, HashMap<String, ArrayList<String>> interest) {
+            this.id = id;
+            this.name = interest.get("name").get(0);
+            ArrayList<String> field = interest.get("authorName");
+            if (field != null) {
+                this.authorName = field.get(0);
+            }
+            field = interest.get("review");
+            if (field != null) {
+                this.review = field.get(0);
+            }
+            field = interest.get("characters");
+            if (field != null) {
+                this.characters = field;
+            }
+            field = interest.get("rating");
+            if (field != null) {
+                this.rating = Float.valueOf(field.get(0));
+            }
         }
 
         String getName() {

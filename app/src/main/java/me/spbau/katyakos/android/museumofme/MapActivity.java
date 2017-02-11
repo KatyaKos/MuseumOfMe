@@ -42,7 +42,7 @@ public class MapActivity extends Activity {
     Button addGroupButton;
 
     private TreeMap<Integer, Trip> mapList;
-    private Integer userId;
+    private String userId;
     private UserInformation user;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MapActivity extends Activity {
         ButterKnife.inject(this);
 
         Intent thisIntent = getIntent();
-        userId = thisIntent.getIntExtra("userId", 0);
+        userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
         mapList = user.getUserMap();
 

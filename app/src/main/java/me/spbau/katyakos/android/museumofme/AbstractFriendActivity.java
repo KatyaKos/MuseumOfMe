@@ -54,7 +54,7 @@ abstract class AbstractFriendActivity extends AbstractListViewActivity<String, U
             }
         });
 
-        final Integer currentUserId = currentUser.getUserId();
+        final String currentUserId = currentUser.getUserId();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +72,7 @@ abstract class AbstractFriendActivity extends AbstractListViewActivity<String, U
         });
     }
 
-    abstract void addFriend(Integer id);
+    abstract void addFriend(String id);
 
-    abstract void removeFriend(Integer id);
+    abstract void removeFriend(String id);
 }

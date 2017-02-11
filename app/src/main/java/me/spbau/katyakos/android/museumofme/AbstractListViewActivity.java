@@ -23,7 +23,7 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
     protected LinearLayout listLayout;
     protected TreeMap<E, T> list;
 
-    protected Integer userId;
+    protected String userId;
     protected UserInformation user;
 
     protected int activityId;
@@ -35,7 +35,7 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
         setContentView(activityId);
 
         Intent thisIntent = getIntent();
-        userId = thisIntent.getIntExtra("userId", 0);
+        userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
 
         fieldsInitialization();

@@ -43,13 +43,13 @@ public class AddFriendActivity extends AbstractFriendActivity {
     }
 
     @Override
-    protected void addFriend(Integer id) {
+    protected void addFriend(String id) {
         user.addFriend(id);
         setResult(RESULT_OK);
     }
 
     @Override
-    protected void removeFriend(Integer id) {
+    protected void removeFriend(String id) {
         user.removeFriend(id);
         setResult(RESULT_OK);
     }

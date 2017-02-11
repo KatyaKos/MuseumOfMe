@@ -29,12 +29,10 @@ abstract class AbstractAddInterestActivity extends Activity {
     protected EditText charactersText;
     protected EditText review;
     protected Spinner ratingSpinner;
-    private Float rating;
     protected Button saveButton;
-
     protected int activityId;
     protected String type;
-
+    private Float rating;
     private UserInformation user;
     private String image;
 
@@ -44,7 +42,7 @@ abstract class AbstractAddInterestActivity extends Activity {
         setContentView(activityId);
 
         Intent thisIntent = getIntent();
-        Integer userId = thisIntent.getIntExtra("userId", 0);
+        String userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
 
         fieldsInitialization();

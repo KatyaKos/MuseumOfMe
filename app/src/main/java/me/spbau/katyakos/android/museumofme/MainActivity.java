@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
     private Intent intentMovies;
     private Intent intentBooks;
 
-    private Integer userId;
+    private String userId;
     private UserInformation user;
 
     @Override
@@ -33,12 +33,13 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         Intent thisIntent = getIntent();
-        userId = thisIntent.getIntExtra("userId", 0);
+        userId = thisIntent.getStringExtra("userId");
+        AllUsersInformation.downloadUserById(userId);
         user = AllUsersInformation.getUserById(userId);
 
         sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
         SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(LOGGED_USER, userId.toString());
+        ed.putString(LOGGED_USER, userId);
         ed.apply();
 
         intentMain = registerIntent(MainActivity.class);
