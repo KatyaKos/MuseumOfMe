@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +13,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import retrofit2.Call;
+
 public class UserInformation {
+
+
+    //Server
+    private static UserDataAPI userDataAPI = RetrofitInitializer.getInstance().getAPI();
+    private AllUsersInformation.UserInfo currentUser;
 
     private SQLiteDatabase dataBase;
     private String userId;
@@ -45,6 +53,8 @@ public class UserInformation {
     }
 
     public UserInformation(AllUsersInformation.UserInfo user) {
+        currentUser = user;
+
         userId = user.id;
         userName = user.name;
         userNickname = user.nickname;
@@ -192,6 +202,8 @@ public class UserInformation {
             return false;
         }
         friends.put(friendNickname, friend);
+        currentUser.friends.add(friendId);
+        updateUserOnServer();
         return true;
     }
 
@@ -202,7 +214,28 @@ public class UserInformation {
             return false;
         }
         friends.remove(friendNickname);
+        currentUser.friends.remove(friendId);
+        updateUserOnServer();
         return true;
+    }
+
+    private void updateUserOnServer() {
+        try {
+            final Call<AllUsersInformation.UserInfo> call = userDataAPI.putUser(userId, currentUser);
+            Thread t = new Thread(new Runnable() {
+                public void run() {
+                    try {
+                        call.execute();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+            t.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private <T> boolean addToMuseum(TreeMap<Integer, T> museumSection, Integer id, T argument) {
@@ -210,15 +243,17 @@ public class UserInformation {
             return false;
         }
         museumSection.put(id, argument);
+        updateUserOnServer();
         return true;
     }
 
-    private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id, String tableName) {
+    private <T> boolean removeFromMuseum(TreeMap<Integer, T> museumSection, Integer id) {
         if (museumSection.isEmpty() || !museumSection.containsKey(id)) {
             return false;
         }
-        dataBase.delete(tableName, "id = " + id, null);
+        //dataBase.delete(tableName, "id = " + id, null);
         museumSection.remove(id);
+        updateUserOnServer();
         return true;
     }
 
@@ -242,7 +277,7 @@ public class UserInformation {
         for (Map.Entry<Integer, String> entry : usersEntry) {
             dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{entry.getKey().toString(), id.toString()});
         }
-        return removeFromMuseum(trips, id, "userTripsGroups");
+        return removeFromMuseum(trips, id);
     }
 
     void loadPlace(Integer groupId, Integer placeId, String placeName) {
@@ -286,17 +321,23 @@ public class UserInformation {
     }
 
     boolean addNote(TreeMap<String, String> note) {
-        ContentValues contentValues = new ContentValues();
+        /*ContentValues contentValues = new ContentValues();
         contentValues.put("name", note.get("name"));
         contentValues.put("date", note.get("date"));
         contentValues.put("content", note.get("content"));
         contentValues.put("tags", note.get("tags"));
-        Integer noteId = (int) dataBase.insert("userNotes", null, contentValues);
+        Integer noteId = (int) dataBase.insert("userNotes", null, contentValues);*/
+        Integer noteId = 0;
+        if (!notes.isEmpty()) {
+            noteId = notes.firstKey() - 1;
+        }
+        currentUser.notes.put(noteId.toString(), note);
         return addToMuseum(notes, noteId, new Note(noteId, note));
     }
 
     boolean removeNote(Integer noteId) {
-        return removeFromMuseum(notes, noteId, "userNotes");
+        currentUser.notes.remove(noteId.toString());
+        return removeFromMuseum(notes, noteId);
     }
 
     private byte[] serializeArrayList(ArrayList<String> array) {
@@ -346,7 +387,7 @@ public class UserInformation {
     }
 
     boolean removeMovie(Integer movieId) {
-        return removeFromMuseum(movies, movieId, "userInterests");
+        return removeFromMuseum(movies, movieId);
     }
 
     void loadBook(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
@@ -359,7 +400,7 @@ public class UserInformation {
     }
 
     boolean removeBook(Integer bookId) {
-        return removeFromMuseum(books, bookId, "userInterests");
+        return removeFromMuseum(books, bookId);
     }
 
     Interest getInterestById(String type, Integer id) {
@@ -425,7 +466,7 @@ public class UserInformation {
 
         private Note(Integer id, TreeMap<String, String> note) {
             this.id = id;
-            note.put("id", id.toString());
+            this.note.put("id", id.toString());
             this.note = note;
             tags = note.get("tags");
         }
@@ -456,7 +497,7 @@ public class UserInformation {
             this.id = id;
             this.name = content.get("name");
             this.authorName = content.get("authorName");
-            this.photo = content.get("photo");
+            //this.photo = content.get("photo");
             this.review = content.get("review");
             this.characters = characters;
             this.rating = rating;
