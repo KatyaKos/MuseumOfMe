@@ -32,7 +32,7 @@ abstract class AbstractAddInterestActivity extends Activity {
     protected Button saveButton;
     protected int activityId;
     protected String type;
-    private Float rating;
+    private String rating;
     private UserInformation user;
     private String image;
 
@@ -79,8 +79,7 @@ abstract class AbstractAddInterestActivity extends Activity {
 
         ratingSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View itemSelected, int selectedItemPosition, long selectedId) {
-                String selected = parent.getItemAtPosition(selectedItemPosition).toString();
-                rating = Float.valueOf(selected);
+                rating = parent.getItemAtPosition(selectedItemPosition).toString();
             }
 
             public void onNothingSelected(AdapterView<?> parent) {
@@ -126,9 +125,10 @@ abstract class AbstractAddInterestActivity extends Activity {
         interest.put("authorName", getStringEditText(author));
         interest.put("review", getStringEditText(review));
         interest.put("photo", image);
+        interest.put("rating", rating);
         String[] charactersContent = getStringEditText(charactersText).split("; ");
         ArrayList<String> characters = new ArrayList<>(Arrays.asList(charactersContent));
-        user.addInterest(type, interest, rating, characters);
+        user.addInterest(type, interest, characters);
         setResult(RESULT_OK);
     }
 

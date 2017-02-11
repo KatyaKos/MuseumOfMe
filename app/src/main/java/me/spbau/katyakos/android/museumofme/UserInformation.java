@@ -2,11 +2,8 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -340,7 +337,7 @@ public class UserInformation {
         return removeFromMuseum(notes, noteId);
     }
 
-    private byte[] serializeArrayList(ArrayList<String> array) {
+    /*private byte[] serializeArrayList(ArrayList<String> array) {
         byte[] result = {};
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -367,39 +364,59 @@ public class UserInformation {
         byte[] charactersBytes = serializeArrayList(characters);
         contentValues.put("characters", charactersBytes);
         return (int) dataBase.insert("userInterests", null, contentValues);
-    }
+    }*/
 
     void loadMovie(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        movies.put(id, new Interest(id, content, rating, characters));
+        //movies.put(id, new Interest(id, content, rating, characters));
     }
 
-    boolean addInterest(String type, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
+    boolean addInterest(String type, TreeMap<String, String> content, ArrayList<String> characters) {
+        HashMap<String, ArrayList<String>> interest = new HashMap<>();
+        Set<String> keys = content.keySet();
+        for (String key : keys) {
+            ArrayList<String> array = new ArrayList<>();
+            array.add(content.get(key));
+            interest.put(key, array);
+        }
+        interest.put("characters", characters);
         if (type.equals("movie")) {
-            return addMovie(content, rating, characters);
+            return addMovie(interest);
         } else {
-            return addBook(content, rating, characters);
+            return addBook(interest);
         }
     }
 
-    private boolean addMovie(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        Integer movieId = addInterestToTable(content, rating, characters, "movie");
-        return addToMuseum(movies, movieId, new Interest(movieId, content, rating, characters));
+    private boolean addMovie(HashMap<String, ArrayList<String>> interest) {
+        //Integer movieId = addInterestToTable(content, rating, characters, "movie");
+        Integer movieId = 0;
+        if (!movies.isEmpty()) {
+            movieId = movies.firstKey() - 1;
+        }
+        currentUser.movies.put(movieId.toString(), interest);
+        return addToMuseum(movies, movieId, new Interest(movieId, interest));
     }
 
     boolean removeMovie(Integer movieId) {
+        currentUser.movies.remove(movieId.toString());
         return removeFromMuseum(movies, movieId);
     }
 
     void loadBook(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        books.put(id, new Interest(id, content, rating, characters));
+        //books.put(id, new Interest(id, content, rating, characters));
     }
 
-    private boolean addBook(TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        Integer bookId = addInterestToTable(content, rating, characters, "book");
-        return addToMuseum(books, bookId, new Interest(bookId, content, rating, characters));
+    private boolean addBook(HashMap<String, ArrayList<String>> interest) {
+        //Integer bookId = addInterestToTable(content, rating, characters, "book");
+        Integer bookId = 0;
+        if (!books.isEmpty()) {
+            bookId = books.firstKey() - 1;
+        }
+        currentUser.books.put(bookId.toString(), interest);
+        return addToMuseum(books, bookId, new Interest(bookId, interest));
     }
 
     boolean removeBook(Integer bookId) {
+        currentUser.books.remove(bookId.toString());
         return removeFromMuseum(books, bookId);
     }
 
@@ -492,16 +509,6 @@ public class UserInformation {
         private String review = "";
         private Float rating = 0F;
         private ArrayList<String> characters = new ArrayList<>(); //actors for movies
-
-        private Interest(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-            this.id = id;
-            this.name = content.get("name");
-            this.authorName = content.get("authorName");
-            //this.photo = content.get("photo");
-            this.review = content.get("review");
-            this.characters = characters;
-            this.rating = rating;
-        }
 
         private Interest(Integer id, HashMap<String, ArrayList<String>> interest) {
             this.id = id;
