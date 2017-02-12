@@ -6,7 +6,6 @@ import android.database.sqlite.SQLiteDatabase;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -259,9 +258,19 @@ public class UserInformation {
     }
 
     boolean addGroup(String groupName) {
-        ContentValues contentValues = new ContentValues();
+        /*ContentValues contentValues = new ContentValues();
         contentValues.put("groupName", groupName);
-        Integer groupId = (int) dataBase.insert("userTripsGroups", null, contentValues);
+        Integer groupId = (int) dataBase.insert("userTripsGroups", null, contentValues);*/
+        Integer groupId = 0;
+        if (!trips.isEmpty()) {
+            groupId = trips.firstKey() - 1;
+        }
+        HashMap<String, ArrayList<String>> group = new HashMap<>();
+        ArrayList<String> array = new ArrayList<>();
+        array.add(groupName);
+        group.put("name", array);
+        group.put("places", new ArrayList<String>());
+        currentUser.trips.put(groupId.toString(), group);
         return addToMuseum(trips, groupId, new Trip(groupId, groupName));
     }
 
@@ -269,11 +278,12 @@ public class UserInformation {
         if (trips.isEmpty() || !trips.containsKey(id)) {
             return false;
         }
-        TreeMap<Integer, String> placesIds = trips.get(id).getPlaces();
+        /*TreeMap<Integer, String> placesIds = trips.get(id).getPlaces();
         Set<Map.Entry<Integer, String>> usersEntry = placesIds.entrySet();
         for (Map.Entry<Integer, String> entry : usersEntry) {
             dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{entry.getKey().toString(), id.toString()});
-        }
+        }*/
+        currentUser.trips.remove(id.toString());
         return removeFromMuseum(trips, id);
     }
 
@@ -291,12 +301,19 @@ public class UserInformation {
         if (placeId == -1) {
             return false;
         }
-        ContentValues contentValues = new ContentValues();
+        /*ContentValues contentValues = new ContentValues();
         contentValues.put("placeId", placeId);
         contentValues.put("placeName", placeName);
         contentValues.put("groupId", groupId);
-        dataBase.insert("userTripsPlaces", null, contentValues);
+        dataBase.insert("userTripsPlaces", null, contentValues);*/
         trips.put(groupId, trip);
+        String id = groupId.toString();
+        HashMap<String, ArrayList<String>> hashMap = currentUser.trips.get(id);
+        ArrayList<String> array = hashMap.get("places");
+        array.add(placeName);
+        hashMap.put("places", array);
+        currentUser.trips.put(id, hashMap);
+        updateUserOnServer();
         return true;
     }
 
@@ -305,11 +322,19 @@ public class UserInformation {
             return false;
         }
         Trip trip = trips.get(groupId);
+        String placeName = trip.getPlaceName(placeId);
         if (!trip.removePlace(placeId)) {
             return false;
         }
-        dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{placeId.toString(), groupId.toString()});
+        //dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{placeId.toString(), groupId.toString()});
         trips.put(groupId, trip);
+        String id = groupId.toString();
+        HashMap<String, ArrayList<String>> hashMap = currentUser.trips.get(id);
+        ArrayList<String> array = hashMap.get("places");
+        array.remove(placeName);
+        hashMap.put("places", array);
+        currentUser.trips.put(id, hashMap);
+        updateUserOnServer();
         return true;
     }
 
@@ -449,6 +474,10 @@ public class UserInformation {
 
         String getGroupName() {
             return groupName;
+        }
+
+        String getPlaceName(Integer id) {
+            return places.get(id);
         }
 
         private void loadPlace(Integer placeId, String placeName) {
