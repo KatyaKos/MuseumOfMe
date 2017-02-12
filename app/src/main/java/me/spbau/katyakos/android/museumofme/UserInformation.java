@@ -1,6 +1,5 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.io.IOException;
@@ -33,14 +32,14 @@ public class UserInformation {
     private TreeMap<Integer, Interest> movies = new TreeMap<>();
     private TreeMap<Integer, Interest> books = new TreeMap<>();
 
-    public UserInformation(SQLiteDatabase dataBase, String userId, String userNickname) {
+    /*public UserInformation(SQLiteDatabase dataBase, String userId, String userNickname) {
         this.dataBase = dataBase;
         this.userId = userId;
         this.userNickname = "@" + userNickname;
         this.userName = userNickname;
         userPhoto = "user_photo_default";
         userHeader = "user_header_default";
-    }
+    }*/
 
     public UserInformation(String id, String nickname, String name) {
         userId = id;
@@ -50,7 +49,6 @@ public class UserInformation {
 
     public UserInformation(AllUsersInformation.UserInfo user) {
         currentUser = user;
-
         userId = user.id;
         userName = user.name;
         userNickname = user.nickname;
@@ -142,27 +140,31 @@ public class UserInformation {
         return books;
     }
 
-    private void updateDataBaseColumn(String tableName, String columnName, String value) {
+    /*private void updateDataBaseColumn(String tableName, String columnName, String value) {
         ContentValues contentValues = new ContentValues();
         contentValues.put(columnName, value);
         dataBase.update(tableName, contentValues, "id = ?", new String[]{userId});
-    }
+    }*/
 
     boolean setUserPhoto(String photo) {
         userPhoto = photo;
-        updateDataBaseColumn("userInfo", "photo", photo);
+        //updateDataBaseColumn("userInfo", "photo", photo);
         return true;
     }
 
     boolean setUserHeader(String photo) {
         userHeader = photo;
-        updateDataBaseColumn("userInfo", "header", photo);
+        //updateDataBaseColumn("userInfo", "header", photo);
+        currentUser.photo = photo;
+        updateUserOnServer();
         return true;
     }
 
     boolean setUserBio(String text) {
         userBio = text;
-        updateDataBaseColumn("userInfo", "bio", text);
+        //updateDataBaseColumn("userInfo", "bio", text);
+        currentUser.bio = text;
+        updateUserOnServer();
         return true;
     }
 
@@ -171,19 +173,25 @@ public class UserInformation {
             return false;
         }
         userName = name;
-        updateDataBaseColumn("userInfo", "name", name);
+        //updateDataBaseColumn("userInfo", "name", name);
+        currentUser.name = name;
+        updateUserOnServer();
         return true;
     }
 
     boolean setUserBirth(String birth) {
         userBirth = birth;
-        updateDataBaseColumn("userInfo", "birth", birth);
+        //updateDataBaseColumn("userInfo", "birth", birth);
+        currentUser.birth = birth;
+        updateUserOnServer();
         return true;
     }
 
     boolean setUserAbout(String text) {
         userAbout = text;
-        updateDataBaseColumn("userInfo", "about", text);
+        //updateDataBaseColumn("userInfo", "about", text);
+        currentUser.about = text;
+        updateUserOnServer();
         return true;
     }
 

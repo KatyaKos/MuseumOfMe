@@ -21,9 +21,9 @@ public class LoginActivity extends AbstractLoginActivity {
         activityId = R.layout.activity_login;
         super.onCreate(savedInstanceState);
 
-        UserDataBaseHelper dataBaseHelper = new UserDataBaseHelper(this);
+        /*UserDataBaseHelper dataBaseHelper = new UserDataBaseHelper(this);
         dataBase = dataBaseHelper.getWritableDatabase();
-        AllUsersInformation.loadDataBase(dataBase);
+        AllUsersInformation.loadDataBase(dataBase);*/
 
         AllUsersInformation.downloadBasicInfo();
 

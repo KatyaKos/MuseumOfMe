@@ -52,12 +52,13 @@ public class SignupActivity extends AbstractLoginActivity {
     @Override
     boolean checkFields() {
         String email = getStringTextView(emailText);
-        return !AllUsersInformation.containsByEmail(email);
+        String nickname = getStringTextView(nameText);
+        return !AllUsersInformation.containsByEmail(email) && !AllUsersInformation.containsByNickname(nickname);
     }
 
     @Override
     void onCheckFail() {
-        Toast.makeText(getBaseContext(), "This email already has account", Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "This email or nickname already has account", Toast.LENGTH_LONG).show();
     }
 
     @Override
