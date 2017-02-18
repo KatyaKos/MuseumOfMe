@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
     private SharedPreferences sPref;
 
     private Intent intentMain;
+    private Intent intentLogin;
     private Intent intentProfile;
     private Intent intentFriends;
     private Intent intentDiary;
@@ -57,6 +58,22 @@ public class MainActivity extends Activity {
         registerButton(intentMap, R.id.main_button_map);
         registerButton(intentMovies, R.id.main_button_movies);
         registerButton(intentBooks, R.id.main_button_books);
+
+
+        intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
+        Button logout = (Button) findViewById(R.id.main_button_logout);
+        logout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
+                SharedPreferences.Editor ed = sPref.edit();
+                ed.putString(LOGGED_USER, "-1");
+                ed.apply();
+                finish();
+                startActivity(intentLogin);
+            }
+        });
 
         fieldsInitialization();
     }

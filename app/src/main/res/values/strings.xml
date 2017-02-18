@@ -2,6 +2,7 @@
     <string name="app_name">Museum Of Me</string>
     <string name="app_logo">MOM logo</string>
     <string name="home">Home</string>
+    <string name="logout">Log out</string>
     <string name="user_default_photo">User default photo</string>
     <string name="add_new">Add new</string>
     <string name="minus">—</string>
