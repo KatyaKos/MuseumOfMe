@@ -51,7 +51,7 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
     @Override
     boolean fitsSearch(UserInformation.Interest value, String sortingString) {
         sortingString = sortingString.toLowerCase();
-        return value.getName().contains(sortingString) || value.getAuthor().contains(sortingString);
+        return value.getName().toLowerCase().contains(sortingString) || value.getAuthor()toLowerCase().contains(sortingString);
     }
 
     @Override

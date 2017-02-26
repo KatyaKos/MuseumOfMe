@@ -94,7 +94,5 @@
     </string-array>
     <string-array name="spinner_list">
         <item>Sort by date</item>
-        <item>Sort by name</item>
-        <item>Sort by rating</item>
     </string-array>
 </resources>
