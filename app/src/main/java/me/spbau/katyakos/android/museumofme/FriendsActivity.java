@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 
+import static android.view.View.GONE;
+
 public class FriendsActivity extends AbstractFriendActivity {
 
     @InjectView(R.id.friends_button_add)
@@ -21,6 +23,10 @@ public class FriendsActivity extends AbstractFriendActivity {
         super.onCreate(savedInstanceState);
         ButterKnife.inject(this);
 
+        if (!changeable) {
+            addButton.setVisibility(GONE);
+            return;
+        }
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -52,7 +58,7 @@ public class FriendsActivity extends AbstractFriendActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK || changedInThisActivity) {
             list = user.getUserFriends();
             listLayout.removeAllViews();
             listCreate();

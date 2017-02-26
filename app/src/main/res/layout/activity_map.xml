@@ -1,49 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/user_header_default">
+    android:background="@drawable/user_header_default"
+    android:orientation="vertical">
 
     <Button
         android:id="@+id/map_menu_button"
-        android:text="@string/home"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:layout_margin="15dp" />
+        android:layout_margin="15dp"
+        android:text="@string/home" />
 
     <RelativeLayout
+        android:id="@+id/map_group_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <EditText
             android:id="@+id/map_add_group_field"
-            android:hint="@string/map_add_group_field"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
             android:layout_alignParentStart="true"
-            android:layout_toStartOf="@+id/map_add_group_button" />
+            android:layout_marginStart="15dp"
+            android:layout_toStartOf="@+id/map_add_group_button"
+            android:hint="@string/map_add_group_field" />
 
         <Button
             android:id="@+id/map_add_group_button"
-            android:text="@string/map_add_group_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_gravity="start"
             android:layout_marginEnd="15dp"
-            android:layout_alignParentEnd="true"
+            android:text="@string/map_add_group_button"
             android:visibility="gone" />
     </RelativeLayout>
 
-    <EditText
-        android:id="@+id/map_add_place_field"
-        android:hint="@string/map_add_place_field"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp" />
+    <RelativeLayout
+        android:id="@+id/map_place_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/map_add_place_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:hint="@string/map_add_place_field" />
+
+        <Button
+            android:id="@+id/map_add_place_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="start"
+            android:layout_marginEnd="15dp"
+            android:text="@string/map_add_place_button"
+            android:visibility="gone" />
+    </RelativeLayout>
 
     <ExpandableListView
         android:id="@+id/map_list"

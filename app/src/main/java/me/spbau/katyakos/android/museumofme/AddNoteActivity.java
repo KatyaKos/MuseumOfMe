@@ -92,8 +92,8 @@ public class AddNoteActivity extends Activity {
         boolean valid = true;
 
         String name = getStringEditText(nameText);
-        if (name.length() < 3 || name.length() > 15) {
-            nameText.setError("from 3 to 15 characters");
+        if (name.length() < 3 || name.length() > 30) {
+            nameText.setError("from 3 to 30 characters");
             valid = false;
         }
 

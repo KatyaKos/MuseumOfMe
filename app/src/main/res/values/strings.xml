@@ -55,6 +55,7 @@
     <string name="map_add_group_field">Enter group name:</string>
     <string name="map_add_group_button">Add group</string>
     <string name="map_add_place_field">Enter place and click \'+\'</string>
+    <string name="map_add_place_button">Add geo</string>
 
     <!-- Strings related to Movies and Books -->
     <string name="interest_search">What do you want to find?</string>

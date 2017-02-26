@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 
 import static android.graphics.Color.GRAY;
 import static android.graphics.Color.GREEN;
-import static android.graphics.Color.WHITE;
 
 public class AddFriendActivity extends AbstractFriendActivity {
 
@@ -32,7 +31,7 @@ public class AddFriendActivity extends AbstractFriendActivity {
         Button button = (Button) item.findViewById(R.id.listview_button);
 
         if (userId.equals(currentUser.getUserId())) {
-            button.setBackgroundColor(WHITE);
+            button.setVisibility(View.GONE);
         } else if (user.hasFriend(currentUser.getUserNickname())) {
             button.setBackgroundColor(GRAY);
             button.setText("—");

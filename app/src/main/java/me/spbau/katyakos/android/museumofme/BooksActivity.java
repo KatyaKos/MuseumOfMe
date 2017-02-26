@@ -32,6 +32,10 @@ public class BooksActivity extends AbstractInterestActivity {
         super.setOnCLickListeners(value, item);
 
         Button deleteButton = (Button) item.findViewById(R.id.listview_button);
+        if (!changeable) {
+            deleteButton.setVisibility(View.GONE);
+            return;
+        }
         final Integer bookId = value.getId();
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override

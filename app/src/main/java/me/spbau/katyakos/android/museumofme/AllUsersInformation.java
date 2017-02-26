@@ -31,6 +31,10 @@ class AllUsersInformation {
         return getCredential(email).second;
     }
 
+    static String getIdByNickname(String nickname) {
+        return usersListByNickname.get(nickname).getUserId();
+    }
+
     static boolean containsByEmail(String email) {
         return credentials.containsKey(email);
     }
@@ -125,7 +129,7 @@ class AllUsersInformation {
         }
 
         UserInformation user = new UserInformation(userInfo);
-        usersListById.put(userInfo.id, user);
+        usersListById.put(id, user);
         usersListByNickname.put(userInfo.nickname, user);
     }
 

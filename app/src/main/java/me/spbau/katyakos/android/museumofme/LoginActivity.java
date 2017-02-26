@@ -2,7 +2,6 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
@@ -14,7 +13,7 @@ public class LoginActivity extends AbstractLoginActivity {
     private static final String LOGGED_USER = "logged_user"; //"-1" if no user is in
     private static final String PREF_FILE = "loggedUser";
     private SharedPreferences sPref;
-    private SQLiteDatabase dataBase;
+    //private SQLiteDatabase dataBase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,7 +48,7 @@ public class LoginActivity extends AbstractLoginActivity {
 
     private void loggedUserSuccess(String idString) {
         this.finish();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("userId", idString);
         startActivity(intent);
     }
@@ -74,7 +73,7 @@ public class LoginActivity extends AbstractLoginActivity {
         String email = getStringTextView(emailText);
         String userId = AllUsersInformation.getIdByEmail(email);
         this.finish();
-        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
         intent.putExtra("userId", userId);
         startActivity(intent);
     }

@@ -13,6 +13,7 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class MapActivity extends Activity {
     private TreeMap<Integer, Trip> mapList;
     private String userId;
     private UserInformation user;
+    private Boolean changeable;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,9 @@ public class MapActivity extends Activity {
         userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
         mapList = user.getUserMap();
+        changeable = getIntent().getBooleanExtra("changeable", true);
+
+        mapListCreate();
 
         backButton.setOnClickListener(new View.OnClickListener() {
 
@@ -62,6 +67,13 @@ public class MapActivity extends Activity {
                 finish();
             }
         });
+
+        if (!changeable) {
+            RelativeLayout layout = (RelativeLayout) findViewById(R.id.map_group_layout);
+            layout.setVisibility(View.GONE);
+            layout = (RelativeLayout) findViewById(R.id.map_place_layout);
+            layout.setVisibility(View.GONE);
+        }
 
         addGroupField.addTextChangedListener(new TextWatcher() {
 
@@ -94,8 +106,6 @@ public class MapActivity extends Activity {
                 getWindow().setSoftInputMode(SOFT_INPUT_STATE_ALWAYS_HIDDEN);
             }
         });
-
-        mapListCreate();
     }
 
     private <T extends TextView> String getString(T textView) {
@@ -157,6 +167,10 @@ public class MapActivity extends Activity {
                     Button addButton = (Button) convertView.findViewById(R.id.map_add_place);
                     final EditText addPlaceField = (EditText) findViewById(R.id.map_add_place_field);
 
+                    if (!changeable) {
+                        deleteButton.setVisibility(View.GONE);
+                        addButton.setVisibility(View.GONE);
+                    }
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -214,6 +228,9 @@ public class MapActivity extends Activity {
                     convertView = View.inflate(getApplicationContext(), R.layout.item_expandable_listview_place, null);
                     Button deleteButton = (Button) convertView.findViewById(R.id.map_delete_place);
 
+                    if (!changeable) {
+                        deleteButton.setVisibility(View.GONE);
+                    }
                     deleteButton.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

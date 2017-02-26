@@ -2,7 +2,6 @@ package me.spbau.katyakos.android.museumofme;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -12,21 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
-    private final String LOGGED_USER = "logged_user"; //"-1" if no user is in
-    private final String PREF_FILE = "loggedUser";
-    private SharedPreferences sPref;
 
-    private Intent intentMain;
-    private Intent intentLogin;
-    private Intent intentProfile;
-    private Intent intentFriends;
-    private Intent intentDiary;
-    private Intent intentMap;
-    private Intent intentMovies;
-    private Intent intentBooks;
+    protected Intent intentHome;
+    protected Intent intentProfile;
+    protected Intent intentFriends;
+    protected Intent intentDiary;
+    protected Intent intentMap;
+    protected Intent intentMovies;
+    protected Intent intentBooks;
 
-    private String userId;
-    private UserInformation user;
+    protected String userId;
+    protected UserInformation user;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,12 +33,7 @@ public class MainActivity extends Activity {
         AllUsersInformation.downloadUserById(userId);
         user = AllUsersInformation.getUserById(userId);
 
-        sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-        SharedPreferences.Editor ed = sPref.edit();
-        ed.putString(LOGGED_USER, userId);
-        ed.apply();
-
-        intentMain = registerIntent(MainActivity.class);
+        intentHome = registerIntent(HomeActivity.class);
         intentProfile = registerIntent(ProfileActivity.class);
         intentFriends = registerIntent(FriendsActivity.class);
         intentDiary = registerIntent(DiaryActivity.class);
@@ -51,65 +41,40 @@ public class MainActivity extends Activity {
         intentMovies = registerIntent(MoviesActivity.class);
         intentBooks = registerIntent(BooksActivity.class);
 
-        registerButton(intentMain, R.id.main_button_menu);
-        registerButtonForResult(intentProfile, R.id.main_button_profile);
+        registerButton(intentHome, R.id.main_button_menu);
+        registerButton(intentProfile, R.id.main_button_profile);
         registerButton(intentFriends, R.id.main_button_friends);
         registerButton(intentDiary, R.id.main_button_diary);
         registerButton(intentMap, R.id.main_button_map);
         registerButton(intentMovies, R.id.main_button_movies);
         registerButton(intentBooks, R.id.main_button_books);
 
-
-        intentLogin = new Intent(getApplicationContext(), LoginActivity.class);
-        Button logout = (Button) findViewById(R.id.main_button_logout);
-        logout.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
-                SharedPreferences.Editor ed = sPref.edit();
-                ed.putString(LOGGED_USER, "-1");
-                ed.apply();
-                finish();
-                startActivity(intentLogin);
-            }
-        });
-
         fieldsInitialization();
     }
 
-    private Intent registerIntent(Class clazz) {
+    protected Intent registerIntent(Class clazz) {
         Intent intent = new Intent(getApplicationContext(), clazz);
         intent.putExtra("userId", userId);
+        intent.putExtra("changeable", false);
         return intent;
     }
 
-    private void registerButton(final Intent intent, int id) {
+    protected void registerButton(final Intent intent, int id) {
         Button button = (Button) findViewById(id);
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                if (intent.equals(intentMain)) {
+                if (intent.equals(intentHome)) {
                     finish();
+                } else {
+                    startActivity(intent);
                 }
-                startActivity(intent);
             }
         });
     }
 
-    private void registerButtonForResult(final Intent intent, int id) {
-        Button button = (Button) findViewById(id);
-        button.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                startActivityForResult(intent, 1);
-            }
-        });
-    }
-
-    private void fieldsInitialization() {
+    protected void fieldsInitialization() {
         ImageView userPhoto = (ImageView) findViewById(R.id.main_user_photo);
         userPhoto.setImageBitmap(decodeSampledBitmapFromFile(user.getUserPhoto()));
 
@@ -147,12 +112,5 @@ public class MainActivity extends Activity {
         }
 
         return inSampleSize;
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            fieldsInitialization();
-        }
     }
 }

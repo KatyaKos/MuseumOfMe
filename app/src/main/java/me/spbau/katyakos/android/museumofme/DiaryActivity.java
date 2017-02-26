@@ -32,6 +32,10 @@ public class DiaryActivity extends AbstractListViewActivity<Integer, UserInforma
         TextView userName = (TextView) findViewById(R.id.diary_user_name);
         userName.setText(user.getUserName());
 
+        if (!changeable) {
+            addButton.setVisibility(View.GONE);
+            return;
+        }
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -73,6 +77,9 @@ public class DiaryActivity extends AbstractListViewActivity<Integer, UserInforma
     void setOnCLickListeners(UserInformation.Note note, View item) {
         Button delete = (Button) item.findViewById(R.id.diary_note_delete);
 
+        if (!changeable) {
+            delete.setVisibility(View.GONE);
+        }
         final Integer noteId = note.getId();
         delete.setOnClickListener(new View.OnClickListener() {
             @Override

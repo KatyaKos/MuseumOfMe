@@ -25,6 +25,7 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
 
     protected String userId;
     protected UserInformation user;
+    protected Boolean changeable;
 
     protected int activityId;
     protected int listItemId;
@@ -37,6 +38,7 @@ abstract class AbstractListViewActivity<E, T> extends Activity {
         Intent thisIntent = getIntent();
         userId = thisIntent.getStringExtra("userId");
         user = AllUsersInformation.getUserById(userId);
+        changeable = getIntent().getBooleanExtra("changeable", true);
 
         fieldsInitialization();
 

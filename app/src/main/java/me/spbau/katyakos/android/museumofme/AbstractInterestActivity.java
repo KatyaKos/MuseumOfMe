@@ -26,6 +26,10 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
         adapter.setDropDownViewResource(R.layout.item_dropdown_spinner);
         setSpinner();
 
+        if (!changeable) {
+            addButton.setVisibility(View.GONE);
+            return;
+        }
         addButton.setOnClickListener(new View.OnClickListener() {
 
             @Override

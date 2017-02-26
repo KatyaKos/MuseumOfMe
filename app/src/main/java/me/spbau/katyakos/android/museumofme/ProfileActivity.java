@@ -16,11 +16,19 @@ public class ProfileActivity extends AbstractProfileActivity {
     @InjectView(R.id.profile_user_nickname)
     EditText userNickname;
 
+    private Boolean changeable;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_profile;
         super.onCreate(savedInstanceState);
 
+        changeable = getIntent().getBooleanExtra("changeable", true);
+        if (!changeable) {
+            setsButton.setVisibility(View.GONE);
+            return;
+        }
+        setsButton.setVisibility(View.VISIBLE);
         setsButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
