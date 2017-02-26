@@ -13,7 +13,7 @@ import static android.graphics.Color.GREEN;
 
 abstract class AbstractFriendActivity extends AbstractListViewActivity<String, UserInformation> {
 
-    protected Boolean changedInThisActivity;
+    protected Boolean changedInThisActivity = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,8 +24,9 @@ abstract class AbstractFriendActivity extends AbstractListViewActivity<String, U
     @Override
     protected void setListFields(UserInformation currentUser, View item) {
         ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
-        int id = getResources().getIdentifier(currentUser.getUserPhoto(), "drawable", getPackageName());
-        photo.setImageResource(id);
+        photo.setImageBitmap(currentUser.getUserPhoto());
+        //int id = getResources().getIdentifier(currentUser.getUserPhoto(), "drawable", getPackageName());
+        //photo.setImageResource(id);
 
         TextView nickname = (TextView) item.findViewById(R.id.listview_text1);
         nickname.setText(currentUser.getUserNickname());

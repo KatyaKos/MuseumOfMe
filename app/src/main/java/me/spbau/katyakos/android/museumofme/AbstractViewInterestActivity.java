@@ -66,8 +66,8 @@ abstract class AbstractViewInterestActivity extends Activity {
         registerText(review, reviewDisclaimer, interest.getReview());
     }
 
-    private void registerImage(ImageView image, String name) {
-        image.setImageBitmap(decodeSampledBitmapFromFile(name));
+    private void registerImage(ImageView image, Bitmap photo) {
+        image.setImageBitmap(photo);
     }
 
     private void registerText(TextView view, TextView disclaimer, String content) {

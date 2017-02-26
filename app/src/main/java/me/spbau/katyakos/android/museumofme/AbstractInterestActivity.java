@@ -57,7 +57,7 @@ abstract class AbstractInterestActivity extends AbstractListViewActivity<Integer
     @Override
     void setListFields(UserInformation.Interest value, View item) {
         ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
-        photo.setImageBitmap(decodeSampledBitmapFromFile(value.getPhoto()));
+        photo.setImageBitmap(value.getPhoto());
 
         TextView author = (TextView) item.findViewById(R.id.listview_text2);
         author.setVisibility(View.VISIBLE);

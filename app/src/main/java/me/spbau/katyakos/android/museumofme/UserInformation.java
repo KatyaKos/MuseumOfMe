@@ -1,6 +1,9 @@
 package me.spbau.katyakos.android.museumofme;
 
-import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -17,11 +20,12 @@ public class UserInformation {
     private static UserDataAPI userDataAPI = RetrofitInitializer.getInstance().getAPI();
     private AllUsersInformation.UserInfo currentUser;
 
-    private SQLiteDatabase dataBase;
+    //private SQLiteDatabase dataBase;
+    private Resources resources;
     private String userId;
     private String userNickname;
-    private String userPhoto = "user_photo_default";
-    private String userHeader = "user_header_default";
+    private Bitmap userPhoto;
+    private Bitmap userHeader;
     private String userBio;
     private String userName;
     private String userBirth;
@@ -41,13 +45,20 @@ public class UserInformation {
         userHeader = "user_header_default";
     }*/
 
-    public UserInformation(String id, String nickname, String name) {
+    public UserInformation(String id, String nickname, String name, String photo, Context context) {
+        resources = context.getResources();
         userId = id;
         userNickname = nickname;
         userName = name;
+        if (photo == null) {
+            userPhoto = BitmapFactory.decodeResource(resources, R.drawable.user_photo_default);
+        } else {
+            userPhoto = decodeSampledBitmapFromFile(photo);
+        }
     }
 
-    public UserInformation(AllUsersInformation.UserInfo user) {
+    public UserInformation(AllUsersInformation.UserInfo user, Context context) {
+        resources = context.getResources();
         currentUser = user;
         userId = user.id;
         userName = user.name;
@@ -55,6 +66,16 @@ public class UserInformation {
         userBio = user.bio;
         userBirth = user.birth;
         userAbout = user.about;
+        if (user.photo == null) {
+            userPhoto = BitmapFactory.decodeResource(resources, R.drawable.user_photo_default);
+        } else {
+            userPhoto = decodeSampledBitmapFromFile(user.photo);
+        }
+        if (user.header == null) {
+            userHeader = BitmapFactory.decodeResource(resources, R.drawable.user_header_default);
+        } else {
+            userHeader = decodeSampledBitmapFromFile(user.header);
+        }
         Set<String> keys = user.notes.keySet();
         for (String key : keys) {
             Integer id = Integer.valueOf(key);
@@ -88,6 +109,36 @@ public class UserInformation {
         }
     }
 
+    public static Bitmap decodeSampledBitmapFromFile(String file) {
+        final BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(file, options);
+
+        int reqWidth = 140;
+        int reqHeight = 140;
+        options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeFile(file, options);
+    }
+
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
+    }
+
     String getUserId() {
         return userId;
     }
@@ -96,11 +147,11 @@ public class UserInformation {
         return userNickname;
     }
 
-    String getUserPhoto() {
+    Bitmap getUserPhoto() {
         return userPhoto;
     }
 
-    String getUserHeader() {
+    Bitmap getUserHeader() {
         return userHeader;
     }
 
@@ -147,15 +198,17 @@ public class UserInformation {
     }*/
 
     boolean setUserPhoto(String photo) {
-        userPhoto = photo;
+        userPhoto = decodeSampledBitmapFromFile(photo);
         //updateDataBaseColumn("userInfo", "photo", photo);
+        currentUser.photo = photo;
+        updateUserOnServer();
         return true;
     }
 
     boolean setUserHeader(String photo) {
-        userHeader = photo;
+        userHeader = decodeSampledBitmapFromFile(photo);
         //updateDataBaseColumn("userInfo", "header", photo);
-        currentUser.photo = photo;
+        currentUser.header = photo;
         updateUserOnServer();
         return true;
     }
@@ -542,7 +595,7 @@ public class UserInformation {
         private Integer id;
         private String name;
         private String authorName = ""; //director for movies
-        private String photo = "interest_photo_default";
+        private Bitmap photo;
         private String review = "";
         private Float rating = 0F;
         private ArrayList<String> characters = new ArrayList<>(); //actors for movies
@@ -566,6 +619,12 @@ public class UserInformation {
             if (field != null) {
                 this.rating = Float.valueOf(field.get(0));
             }
+            field = interest.get("photo");
+            if (field == null) {
+                photo = BitmapFactory.decodeResource(resources, R.drawable.interest_photo_default);
+            } else {
+                photo = decodeSampledBitmapFromFile(field.get(0));
+            }
         }
 
         String getName() {
@@ -576,7 +635,7 @@ public class UserInformation {
             return authorName;
         }
 
-        String getPhoto() {
+        Bitmap getPhoto() {
             return photo;
         }
 

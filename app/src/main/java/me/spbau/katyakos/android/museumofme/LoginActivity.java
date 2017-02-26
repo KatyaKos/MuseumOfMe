@@ -24,7 +24,7 @@ public class LoginActivity extends AbstractLoginActivity {
         dataBase = dataBaseHelper.getWritableDatabase();
         AllUsersInformation.loadDataBase(dataBase);*/
 
-        AllUsersInformation.downloadBasicInfo();
+        AllUsersInformation.downloadBasicInfo(getApplicationContext());
 
         sPref = getSharedPreferences(PREF_FILE, MODE_PRIVATE);
         String savedText = sPref.getString(LOGGED_USER, "-1");
@@ -99,7 +99,7 @@ public class LoginActivity extends AbstractLoginActivity {
             String email = data.getStringExtra("email");
             String password = data.getStringExtra("password");
             String nickname = data.getStringExtra("nickname");
-            AllUsersInformation.addUser(nickname, email, password);
+            AllUsersInformation.addUser(getApplicationContext(), nickname, email, password);
             emailText.setText(email);
             passwordText.setText(password);
             onVerificationSuccess();

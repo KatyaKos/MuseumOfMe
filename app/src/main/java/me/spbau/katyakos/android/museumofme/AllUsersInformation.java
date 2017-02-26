@@ -1,5 +1,6 @@
 package me.spbau.katyakos.android.museumofme;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Pair;
 
@@ -99,17 +100,17 @@ class AllUsersInformation {
         }
     }
 
-    static void downloadBasicInfo() {
+    static void downloadBasicInfo(Context context) {
         callForMultipleObjects(userDataAPI.getUsersBasic());
         List<UserInfo> usersBasicList = (List<UserInfo>) listRetrofit;
         for (UserInfo userBasic : usersBasicList) {
-            UserInformation user = new UserInformation(userBasic.id, userBasic.nickname, userBasic.name);
+            UserInformation user = new UserInformation(userBasic.id, userBasic.nickname, userBasic.name, userBasic.photo, context);
             usersListById.put(userBasic.id, user);
             usersListByNickname.put(userBasic.nickname, user);
         }
     }
 
-    static void downloadUserById(String id) {
+    static void downloadUserById(Context context, String id) {
         callForSingleObject(userDataAPI.getUser(id));
         UserInfo userInfo = (UserInfo) userRetrofit;
         if (userInfo.movies == null) {
@@ -128,12 +129,12 @@ class AllUsersInformation {
             userInfo.trips = new HashMap<>();
         }
 
-        UserInformation user = new UserInformation(userInfo);
+        UserInformation user = new UserInformation(userInfo, context);
         usersListById.put(id, user);
         usersListByNickname.put(userInfo.nickname, user);
     }
 
-    static void addUser(String userNickname, String userEmail, String userPassword) {
+    static void addUser(Context context, String userNickname, String userEmail, String userPassword) {
         /*ContentValues contentValues = new ContentValues();
         contentValues.put("email", userEmail);
         contentValues.put("password", userPassword);
@@ -151,7 +152,7 @@ class AllUsersInformation {
         callForSingleObject(userDataAPI.putUserBasic(userId, userNickname, userName));
         callForSingleObject(userDataAPI.putUser(userId, userInfo));
 
-        UserInformation user = new UserInformation(userId, userNickname, userName);
+        UserInformation user = new UserInformation(userId, userNickname, userName, null, context);
         credentials.put(userEmail, new Pair<>(userPassword, userId));
         usersListByNickname.put(userNickname, user);
         usersListById.put(userId, user);

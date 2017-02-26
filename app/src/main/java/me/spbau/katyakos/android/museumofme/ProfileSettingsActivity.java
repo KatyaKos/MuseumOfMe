@@ -30,9 +30,6 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
         activityId = R.layout.activity_profile_settings;
         super.onCreate(savedInstanceState);
 
-        header = user.getUserHeader();
-        photo = user.getUserPhoto();
-
         saveButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -40,8 +37,12 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                 if (!validate()) {
                     return;
                 }
-                user.setUserHeader(header);
-                user.setUserPhoto(photo);
+                if (header != null) {
+                    user.setUserHeader(header);
+                }
+                if (photo != null) {
+                    user.setUserPhoto(photo);
+                }
                 user.setUserBio(getStringEditText(userBio));
                 user.setUserName(getStringEditText(nameField));
                 user.setUserBirth(getStringEditText(birthField));
@@ -83,10 +84,10 @@ public class ProfileSettingsActivity extends AbstractProfileActivity {
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     if (requestCode == 1) {
                         header = cursor.getString(columnIndex);
-                        headerImage.setImageBitmap(decodeSampledBitmapFromFile(header));
+                        headerImage.setImageBitmap(UserInformation.decodeSampledBitmapFromFile(header));
                     } else {
                         photo = cursor.getString(columnIndex);
-                        profileImage.setImageBitmap(decodeSampledBitmapFromFile(photo));
+                        profileImage.setImageBitmap(UserInformation.decodeSampledBitmapFromFile(photo));
                     }
                     cursor.close();
                 }
