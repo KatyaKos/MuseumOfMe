@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/user_header_default">
+
+    <Button
+        android:text="@string/home"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/profile_button_menu"
+        android:layout_gravity="end"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/user_header_default">
+
+            <ImageView
+                android:id="@+id/profile_header"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user_header_default"
+                android:contentDescription="@string/profile_header" />
+
+            <ImageView
+                android:id="@+id/profile_photo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_below="@+id/profile_header"
+                android:layout_marginTop="-90dp"
+                android:elevation="5dp"
+                android:src="@drawable/user_photo_default"
+                android:background="@drawable/photo_border"
+                android:contentDescription="@string/profile_photo" />
+
+            <LinearLayout
+                android:id="@+id/profile_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_header"
+                android:background="@drawable/user_header_default"
+                android:elevation="4dp"
+                android:paddingBottom="24dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/profile_user_nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="75dp"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    android:labelFor="@+id/profile_user_nickname" />
+
+                <EditText
+                    android:id="@+id/profile_user_bio"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:textSize="20sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    android:labelFor="@+id/profile_user_bio" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/profile_layout"
+                android:layout_marginTop="5dp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/profile_name_field"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="#fff"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:padding="10dp"
+                    android:text="@string/profile_name"
+                    android:textSize="19sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    android:labelFor="@+id/profile_name_field" />
+
+                <EditText
+                    android:id="@+id/profile_age_field"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="#fff"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:padding="10dp"
+                    android:text="@string/profile_age"
+                    android:textSize="19sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    android:labelFor="@+id/profile_age_field" />
+
+                <EditText
+                    android:id="@+id/profile_about_field"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:background="#fff"
+                    android:clickable="true"
+                    android:elevation="4dp"
+                    android:padding="10dp"
+                    android:text="@string/profile_about"
+                    android:textSize="19sp"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:inputType="text"
+                    android:labelFor="@+id/profile_about_field" />
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/profile_button_sets"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/profile_settings"
+                android:layout_above="@+id/profile_layout"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

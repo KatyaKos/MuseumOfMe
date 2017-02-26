@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/user_header_default">
+
+    <Button
+        android:id="@+id/view_book_back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:text="@string/add_book_back"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="20dp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_margin="15dp">
+
+            <ImageView
+                android:id="@+id/view_book_photo"
+                android:layout_width="140dp"
+                android:layout_height="140dp"
+                android:elevation="5dp"
+                android:src="@drawable/interest_photo_default"
+                android:contentDescription="@string/profile_photo"
+                android:layout_marginBottom="20dp"
+                android:layout_gravity="center_horizontal" />
+
+            <TextView
+                android:id="@+id/view_book_name_disclaimer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/view_book_name"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/view_book_name"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/view_book_author_disclaimer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/view_book_author"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/view_book_author"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/view_book_characters_disclaimer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/view_book_characters"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/view_book_characters"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/view_book_review_disclaimer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/view_interest_review"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/view_book_review"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/view_book_rating_disclaimer"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="@string/view_interest_rating"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/view_book_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:padding="10dp"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
