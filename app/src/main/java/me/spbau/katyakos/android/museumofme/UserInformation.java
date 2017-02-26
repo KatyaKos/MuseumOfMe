@@ -15,12 +15,10 @@ import retrofit2.Call;
 
 public class UserInformation {
 
-
     //Server
     private static UserDataAPI userDataAPI = RetrofitInitializer.getInstance().getAPI();
     private AllUsersInformation.UserInfo currentUser;
 
-    //private SQLiteDatabase dataBase;
     private Resources resources;
     private String userId;
     private String userNickname;
@@ -35,15 +33,6 @@ public class UserInformation {
     private TreeMap<Integer, Note> notes = new TreeMap<>();
     private TreeMap<Integer, Interest> movies = new TreeMap<>();
     private TreeMap<Integer, Interest> books = new TreeMap<>();
-
-    /*public UserInformation(SQLiteDatabase dataBase, String userId, String userNickname) {
-        this.dataBase = dataBase;
-        this.userId = userId;
-        this.userNickname = "@" + userNickname;
-        this.userName = userNickname;
-        userPhoto = "user_photo_default";
-        userHeader = "user_header_default";
-    }*/
 
     public UserInformation(String id, String nickname, String name, String photo, Context context) {
         resources = context.getResources();
@@ -191,15 +180,8 @@ public class UserInformation {
         return books;
     }
 
-    /*private void updateDataBaseColumn(String tableName, String columnName, String value) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(columnName, value);
-        dataBase.update(tableName, contentValues, "id = ?", new String[]{userId});
-    }*/
-
     boolean setUserPhoto(String photo) {
         userPhoto = decodeSampledBitmapFromFile(photo);
-        //updateDataBaseColumn("userInfo", "photo", photo);
         currentUser.photo = photo;
         updateUserOnServer();
         return true;
@@ -207,7 +189,6 @@ public class UserInformation {
 
     boolean setUserHeader(String photo) {
         userHeader = decodeSampledBitmapFromFile(photo);
-        //updateDataBaseColumn("userInfo", "header", photo);
         currentUser.header = photo;
         updateUserOnServer();
         return true;
@@ -215,7 +196,6 @@ public class UserInformation {
 
     boolean setUserBio(String text) {
         userBio = text;
-        //updateDataBaseColumn("userInfo", "bio", text);
         currentUser.bio = text;
         updateUserOnServer();
         return true;
@@ -226,7 +206,6 @@ public class UserInformation {
             return false;
         }
         userName = name;
-        //updateDataBaseColumn("userInfo", "name", name);
         currentUser.name = name;
         updateUserOnServer();
         return true;
@@ -234,7 +213,6 @@ public class UserInformation {
 
     boolean setUserBirth(String birth) {
         userBirth = birth;
-        //updateDataBaseColumn("userInfo", "birth", birth);
         currentUser.birth = birth;
         updateUserOnServer();
         return true;
@@ -242,7 +220,6 @@ public class UserInformation {
 
     boolean setUserAbout(String text) {
         userAbout = text;
-        //updateDataBaseColumn("userInfo", "about", text);
         currentUser.about = text;
         updateUserOnServer();
         return true;
@@ -308,20 +285,12 @@ public class UserInformation {
         if (museumSection.isEmpty() || !museumSection.containsKey(id)) {
             return false;
         }
-        //dataBase.delete(tableName, "id = " + id, null);
         museumSection.remove(id);
         updateUserOnServer();
         return true;
     }
 
-    void loadGroup(Integer groupId, String groupName) {
-        trips.put(groupId, new Trip(groupId, groupName));
-    }
-
     boolean addGroup(String groupName) {
-        /*ContentValues contentValues = new ContentValues();
-        contentValues.put("groupName", groupName);
-        Integer groupId = (int) dataBase.insert("userTripsGroups", null, contentValues);*/
         Integer groupId = 0;
         if (!trips.isEmpty()) {
             groupId = trips.firstKey() - 1;
@@ -339,18 +308,8 @@ public class UserInformation {
         if (trips.isEmpty() || !trips.containsKey(id)) {
             return false;
         }
-        /*TreeMap<Integer, String> placesIds = trips.get(id).getPlaces();
-        Set<Map.Entry<Integer, String>> usersEntry = placesIds.entrySet();
-        for (Map.Entry<Integer, String> entry : usersEntry) {
-            dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{entry.getKey().toString(), id.toString()});
-        }*/
         currentUser.trips.remove(id.toString());
         return removeFromMuseum(trips, id);
-    }
-
-    void loadPlace(Integer groupId, Integer placeId, String placeName) {
-        Trip trip = trips.get(groupId);
-        trip.loadPlace(placeId, placeName);
     }
 
     boolean addPlace(Integer groupId, String placeName) {
@@ -362,11 +321,6 @@ public class UserInformation {
         if (placeId == -1) {
             return false;
         }
-        /*ContentValues contentValues = new ContentValues();
-        contentValues.put("placeId", placeId);
-        contentValues.put("placeName", placeName);
-        contentValues.put("groupId", groupId);
-        dataBase.insert("userTripsPlaces", null, contentValues);*/
         trips.put(groupId, trip);
         String id = groupId.toString();
         HashMap<String, ArrayList<String>> hashMap = currentUser.trips.get(id);
@@ -387,7 +341,6 @@ public class UserInformation {
         if (!trip.removePlace(placeId)) {
             return false;
         }
-        //dataBase.delete("userTripsPlaces", "placeId = ? AND groupId = ?", new String[]{placeId.toString(), groupId.toString()});
         trips.put(groupId, trip);
         String id = groupId.toString();
         HashMap<String, ArrayList<String>> hashMap = currentUser.trips.get(id);
@@ -399,17 +352,7 @@ public class UserInformation {
         return true;
     }
 
-    void loadNote(Integer id, TreeMap<String, String> note) {
-        notes.put(id, new Note(id, note));
-    }
-
     boolean addNote(TreeMap<String, String> note) {
-        /*ContentValues contentValues = new ContentValues();
-        contentValues.put("name", note.get("name"));
-        contentValues.put("date", note.get("date"));
-        contentValues.put("content", note.get("content"));
-        contentValues.put("tags", note.get("tags"));
-        Integer noteId = (int) dataBase.insert("userNotes", null, contentValues);*/
         Integer noteId = 0;
         if (!notes.isEmpty()) {
             noteId = notes.firstKey() - 1;
@@ -421,39 +364,6 @@ public class UserInformation {
     boolean removeNote(Integer noteId) {
         currentUser.notes.remove(noteId.toString());
         return removeFromMuseum(notes, noteId);
-    }
-
-    /*private byte[] serializeArrayList(ArrayList<String> array) {
-        byte[] result = {};
-        try {
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream out = new ObjectOutputStream(bos);
-            out.writeObject(array);
-            out.flush();
-            result = bos.toByteArray();
-            bos.close();
-            out.close();
-        } catch (Exception e) {
-            Log.d("myLogs", "serialization error");
-        }
-        return result;
-    }
-
-    private Integer addInterestToTable(TreeMap<String, String> content, Float rating, ArrayList<String> characters, String type) {
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("authorName", content.get("authorName"));
-        contentValues.put("name", content.get("name"));
-        contentValues.put("rating", rating);
-        contentValues.put("review", content.get("review"));
-        contentValues.put("photo", content.get("photo"));
-        contentValues.put("type", type);
-        byte[] charactersBytes = serializeArrayList(characters);
-        contentValues.put("characters", charactersBytes);
-        return (int) dataBase.insert("userInterests", null, contentValues);
-    }*/
-
-    void loadMovie(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        //movies.put(id, new Interest(id, content, rating, characters));
     }
 
     boolean addInterest(String type, TreeMap<String, String> content, ArrayList<String> characters) {
@@ -473,7 +383,6 @@ public class UserInformation {
     }
 
     private boolean addMovie(HashMap<String, ArrayList<String>> interest) {
-        //Integer movieId = addInterestToTable(content, rating, characters, "movie");
         Integer movieId = 0;
         if (!movies.isEmpty()) {
             movieId = movies.firstKey() - 1;
@@ -487,12 +396,7 @@ public class UserInformation {
         return removeFromMuseum(movies, movieId);
     }
 
-    void loadBook(Integer id, TreeMap<String, String> content, Float rating, ArrayList<String> characters) {
-        //books.put(id, new Interest(id, content, rating, characters));
-    }
-
     private boolean addBook(HashMap<String, ArrayList<String>> interest) {
-        //Integer bookId = addInterestToTable(content, rating, characters, "book");
         Integer bookId = 0;
         if (!books.isEmpty()) {
             bookId = books.firstKey() - 1;
@@ -539,10 +443,6 @@ public class UserInformation {
 
         String getPlaceName(Integer id) {
             return places.get(id);
-        }
-
-        private void loadPlace(Integer placeId, String placeName) {
-            places.put(placeId, placeName);
         }
 
         private int addPlace(String name) {

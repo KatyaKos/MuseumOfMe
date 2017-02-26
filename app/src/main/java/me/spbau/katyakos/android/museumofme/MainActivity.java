@@ -75,12 +75,6 @@ public class MainActivity extends Activity {
     protected void fieldsInitialization() {
         ImageView userPhoto = (ImageView) findViewById(R.id.main_user_photo);
         userPhoto.setImageBitmap(user.getUserPhoto());
-        //String photo = user.getUserPhoto();
-        //if (photo == null) {
-        //    userPhoto.setImageResource(R.drawable.user_photo_default);
-        //} else {
-        //    userPhoto.setImageBitmap(decodeSampledBitmapFromFile(photo));
-        //}
 
         TextView userNickname = (TextView) findViewById(R.id.main_user_nickname);
         userNickname.setText(user.getUserNickname());

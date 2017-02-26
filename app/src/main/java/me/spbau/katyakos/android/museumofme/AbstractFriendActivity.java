@@ -25,8 +25,6 @@ abstract class AbstractFriendActivity extends AbstractListViewActivity<String, U
     protected void setListFields(UserInformation currentUser, View item) {
         ImageView photo = (ImageView) item.findViewById(R.id.listview_photo);
         photo.setImageBitmap(currentUser.getUserPhoto());
-        //int id = getResources().getIdentifier(currentUser.getUserPhoto(), "drawable", getPackageName());
-        //photo.setImageResource(id);
 
         TextView nickname = (TextView) item.findViewById(R.id.listview_text1);
         nickname.setText(currentUser.getUserNickname());
@@ -59,7 +57,6 @@ abstract class AbstractFriendActivity extends AbstractListViewActivity<String, U
         showUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(getBaseContext(), currentUserNickname, Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 intent.putExtra("userId", AllUsersInformation.getIdByNickname(currentUserNickname));
                 startActivityForResult(intent, 1);

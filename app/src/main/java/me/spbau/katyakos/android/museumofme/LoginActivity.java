@@ -13,16 +13,11 @@ public class LoginActivity extends AbstractLoginActivity {
     private static final String LOGGED_USER = "logged_user"; //"-1" if no user is in
     private static final String PREF_FILE = "loggedUser";
     private SharedPreferences sPref;
-    //private SQLiteDatabase dataBase;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         activityId = R.layout.activity_login;
         super.onCreate(savedInstanceState);
-
-        /*UserDataBaseHelper dataBaseHelper = new UserDataBaseHelper(this);
-        dataBase = dataBaseHelper.getWritableDatabase();
-        AllUsersInformation.loadDataBase(dataBase);*/
 
         AllUsersInformation.downloadBasicInfo(getApplicationContext());
 
